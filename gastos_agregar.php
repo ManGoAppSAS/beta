@@ -1,0 +1,221 @@
+<?php
+//inicio y nombre de la sesion
+include ("sis/nombre_sesion.php");
+
+//verifico si la sesión está creada y si no lo está lo envio al logueo
+if (!isset($_SESSION['correo']))
+{
+    header("location:logueo.php");
+}
+?>
+
+<?php
+//variables de la conexion, sesion y subida
+include ("sis/variables_sesion.php");
+?>
+
+<?php
+//declaro las variables que pasan por formulario o URL
+if(isset($_POST['agregar'])) $agregar = $_POST['agregar']; elseif(isset($_GET['agregar'])) $agregar = $_GET['agregar']; else $agregar = null;
+
+if(isset($_POST['concepto'])) $concepto = $_POST['concepto']; elseif(isset($_GET['concepto'])) $concepto = $_GET['concepto']; else $concepto = null;
+if(isset($_POST['tipo'])) $tipo = $_POST['tipo']; elseif(isset($_GET['tipo'])) $tipo = $_GET['tipo']; else $tipo = null;
+if(isset($_POST['valor'])) $valor = $_POST['valor']; elseif(isset($_GET['valor'])) $valor = $_GET['valor']; else $valor = null;
+if(isset($_POST['local'])) $local = $_POST['local']; elseif(isset($_GET['local'])) $local = $_GET['local']; else $local = 0;
+
+if(isset($_POST['fecha'])) $fecha = $_POST['fecha']; elseif(isset($_GET['fecha'])) $fecha = $_GET['fecha']; else $fecha = date('Y-m-d');
+if(isset($_POST['hora'])) $hora = $_POST['hora']; elseif(isset($_GET['hora'])) $hora = $_GET['hora']; else $hora = date('H:i');
+
+if(isset($_POST['mensaje'])) $mensaje = $_POST['mensaje']; elseif(isset($_GET['mensaje'])) $mensaje = $_GET['mensaje']; else $mensaje = null;
+if(isset($_POST['body_snack'])) $body_snack = $_POST['body_snack']; elseif(isset($_GET['body_snack'])) $body_snack = $_GET['body_snack']; else $body_snack = null;
+if(isset($_POST['mensaje_tema'])) $mensaje_tema = $_POST['mensaje_tema']; elseif(isset($_GET['mensaje_tema'])) $mensaje_tema = $_GET['mensaje_tema']; else $mensaje_tema = null;
+?>
+
+<?php 
+//consulto el local enviado desde el select del formulario
+$consulta_local_g = $conexion->query("SELECT * FROM locales WHERE id = '$local'");           
+
+if ($fila = $consulta_local_g->fetch_assoc()) 
+{    
+    $local_g = ucfirst($fila['local']);
+    $local_tipo_g = ucfirst($fila['tipo']);
+    $local_g = "<option value='$local'>$local_g ($local_tipo_g)</option>";
+}
+else
+{
+    $local_g = "<option value=''></option>";
+    $local_tipo_g = null;
+}
+?>
+
+<?php
+//agregar el gasto
+if ($agregar == 'si')
+{
+    $fecha_gasto = date("$fecha $hora:s");
+    $valor = str_replace('.','',$valor);
+
+    $consulta = $conexion->query("SELECT * FROM gastos WHERE fecha = '$ahora'");
+
+    if ($consulta->num_rows == 0)
+    {
+        $insercion = $conexion->query("INSERT INTO gastos values ('', '$fecha_gasto', '$sesion_id', '$tipo', '$concepto', '$valor', '$local')");
+        
+        $mensaje = "Gasto agregado";
+        $body_snack = 'onLoad="Snackbar()"';
+        $mensaje_tema = "aviso";
+
+        $id = $conexion->insert_id;
+    }
+    else
+    {
+        $mensaje = "El gasto <b>$concepto</b> ya fue agregado, no es posible agregarlo de nuevo";
+        $body_snack = 'onLoad="Snackbar()"';
+        $mensaje_tema = "error";
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>ManGo!</title>    
+    <?php
+    //información del head
+    include ("partes/head.php");
+    //fin información del head
+    ?>
+    <script type="text/javascript">
+        $(document).ready(function () {
+                 
+        }); 
+
+        jQuery(function($) {
+            $('#valor').autoNumeric('init', {aSep: '.', aDec: ',', mDec: '0'}); 
+            
+        });
+    </script>
+</head>
+<body <?php echo $body_snack; ?>>
+
+<header class="rdm-toolbar--contenedor">
+    <div class="rdm-toolbar--fila">
+        <div class="rdm-toolbar--izquierda">
+            <a href="gastos_ver.php"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-arrow-left zmdi-hc-2x"></i></div></a>
+            <h2 class="rdm-toolbar--titulo">Agregar gasto</h2>
+        </div>
+    </div>
+</header>
+
+<main class="rdm--contenedor-toolbar">
+    
+    <section class="rdm-formulario">
+
+        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+
+            <p class="rdm-formularios--label"><label for="fecha">Fecha*</label></p>
+            
+            <div class="rdm-formularios--fecha">
+                <p><input type="date" id="fecha" name="fecha" value="<?php echo "$fecha"; ?>" placeholder="Fecha" required></p>
+                <p class="rdm-formularios--ayuda">Fecha</p>
+            </div>
+            <div class="rdm-formularios--fecha">
+                <p><input type="time" id="hora" name="hora" value="<?php echo "$hora"; ?>" placeholder="Hora" required></p>
+                <p class="rdm-formularios--ayuda">Hora</p>
+            </div>
+
+            <p class="rdm-formularios--label" style="margin-top: 0;"><label for="tipo">Tipo *</label></p>
+            <p><select id="tipo" name="tipo" required autofocus>
+                <option value="<?php echo "$tipo"; ?>"><?php echo ucfirst($tipo) ?></option>
+                <option value=""></option>
+                <option value="administrativo">Administrativo</option>
+                <option value="comercial">Comercial</option>
+                <option value="operativo">Operativo</option>
+            </select></p>
+            <p class="rdm-formularios--ayuda">Tipo de gasto</p>
+
+            <p class="rdm-formularios--label"><label for="concepto">Concepto*</label></p>
+            <p><input type="text" id="concepto" name="concepto" value="<?php echo "$concepto"; ?>" spellcheck="false" required /></p>
+            <p class="rdm-formularios--ayuda">Concepto del gasto</p>
+
+            <p class="rdm-formularios--label"><label for="valor">Valor*</label></p>
+            <p><input type="tel" id="valor" name="valor" id="valor" value="<?php echo "$valor"; ?>" required /></p>
+            <p class="rdm-formularios--ayuda">Valor del gasto</p>            
+
+            <p class="rdm-formularios--label"><label for="local">Local*</label></p>
+            <p><select id="local" name="local" required>
+                <?php
+                //consulto y muestro los locales
+                $consulta = $conexion->query("SELECT * FROM locales ORDER BY local");
+
+                //si solo hay un registro lo muestro por defecto
+                 if ($consulta->num_rows == 1)
+                {
+                    while ($fila = $consulta->fetch_assoc()) 
+                    {
+                        $id_local = $fila['id'];
+                        $local = $fila['local'];
+                        $tipo = $fila['tipo'];
+                        ?>
+
+                        <option value="<?php echo "$id_local"; ?>"><?php echo ucfirst($local) ?> (<?php echo ucfirst($tipo) ?>)</option>
+
+                        <?php
+                    }
+                }
+                else
+                {   
+                    //si hay mas de un registro los muestro todos menos el local que acabe de guardar
+                    $consulta = $conexion->query("SELECT * FROM locales WHERE id != $local ORDER BY local");
+
+                    if (!($consulta->num_rows == 0))
+                    {
+                        ?>
+                            
+                        <?php echo "$local_g"; ?>
+
+                        <?php
+                        while ($fila = $consulta->fetch_assoc()) 
+                        {
+                            $id_local = $fila['id'];
+                            $local = $fila['local'];
+                            $tipo = $fila['tipo'];
+                            ?>
+
+                            <option value="<?php echo "$id_local"; ?>"><?php echo ucfirst($local) ?> (<?php echo ucfirst($tipo) ?>)</option>
+
+                            <?php
+                        }
+                    }
+                    else
+                    {
+                        ?>
+
+                        <option value="">No se han agregado locales</option>
+
+                        <?php
+                    }
+                }
+                ?>
+            </select></p>
+            <p class="rdm-formularios--ayuda">Local al que se relaciona el gasto</p>
+
+            <button type="submit" class="rdm-boton--fab" name="agregar" value="si"><i class="zmdi zmdi-check zmdi-hc-2x"></i></button>
+        </form>
+
+    </section>
+    
+</main>
+
+<div id="rdm-snackbar--contenedor">
+    <div class="rdm-snackbar--fila">
+        <div class="rdm-snackbar--primario-<?php echo $mensaje_tema; ?>">
+            <h2 class="rdm-snackbar--titulo"><?php echo "$mensaje"; ?></h2>
+        </div>
+    </div>
+</div>
+
+<footer></footer>
+
+</body>
+</html>
