@@ -99,7 +99,7 @@ include ("sis/reportes_rangos.php");
 
 
 
-    <h2 class="rdm-lista--titulo-largo">Actividades**</h2>
+    <h2 class="rdm-lista--titulo-largo">Actividades</h2>
 
     <section class="rdm-lista-sencillo">
 
