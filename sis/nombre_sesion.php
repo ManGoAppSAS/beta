@@ -5,7 +5,7 @@ ob_start();
 
 <?php
 //variable de la sesion y la bases de datos
-$sesion_y_bd = "mangoapp_app";
+$sesion_y_bd = "beta_bd";
 
 //nombre de la sesion
 session_name($sesion_y_bd);
