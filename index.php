@@ -66,11 +66,6 @@ include ("sis/reportes_rangos.php");
 
 <main class="rdm--contenedor-toolbar">
 
-
-
-
-
-
     <section class="rdm-tarjeta">
 
 
