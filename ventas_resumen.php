@@ -41,7 +41,9 @@ if ($observacion == "si")
 {    
     $actualizar = $conexion->query("UPDATE ventas_datos SET observaciones = '$observaciones' WHERE id = '$venta_id'");
     
-    $mensaje_o = "<p class='mensaje_exito'>Observaciones actualizadas exitosamente</p>";   
+    $mensaje = 'Observaciones actualizadas';
+    $body_snack = 'onLoad="Snackbar()"';
+    $mensaje_tema = "aviso";  
 }
 ?>
 
@@ -626,24 +628,29 @@ while ($fila_venta_total = $consulta_venta_total->fetch_assoc())
     ?>    
 
     <?php
-    if ($mostrar_observaciones == "sizas")
+    if ($mostrar_observaciones != "sizas")
     {
     ?>
 
-    <article class="bloque">
-        <div class="bloque_margen">
-            <h2>Observaciones del pedido</h2>
-            <?php echo "$mensaje_o"; ?>
-            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-                <input type="hidden" name="venta_id" value="<?php echo $venta_id; ?>">
-                
-                <p><label for="observaciones">Observación:</label></p>
-                <p><textarea id="observaciones" name="observaciones"><?php echo "$observaciones"; ?></textarea></p>
+    <h2 class="rdm-lista--titulo-largo">Observaciones del pedido</h2>
 
-                <p class="alineacion_botonera"><button type="submit" class="proceder" name="observacion" value="si">Actualizar observaciones</button></p>
-            </form>
-        </div>
-    </article>
+    <section class="rdm-formulario">
+    
+        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+            <input type="hidden" name="venta_id" value="<?php echo $venta_id; ?>">
+
+            <p class="rdm-formularios--label"><label for="descripcion">Observación</label></p>
+            <p><textarea id="observaciones" name="observaciones"><?php echo "$observaciones"; ?></textarea></p>
+            <p class="rdm-formularios--ayuda">Escribe una observación para el pedido</p>
+            
+            <div class="rdm-formularios--submit">
+                <button type="submit" class="rdm-boton--plano-resaltado" name="observacion" value="si">Actualizar observación</button>
+            </div>
+        </form>
+
+    </section>
+
+    
 
     <?php
     }

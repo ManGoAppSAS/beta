@@ -168,6 +168,7 @@ else
             if ($fila_venta = $consulta_venta->fetch_assoc()) 
             {                            
                 $cliente_id = $fila_venta['cliente_id'];
+                $observaciones = $fila_venta['observaciones'];
 
                 //consulto el cliente que tiene la venta
                 $consulta_cliente = $conexion->query("SELECT * FROM clientes WHERE id = '$cliente_id'");           
@@ -287,6 +288,8 @@ else
                     <h1 class="rdm-tarjeta--titulo-largo"><?php echo ucfirst("$ubicacion_texto"); ?></h1>
                     <h2 class="rdm-tarjeta--subtitulo-largo">Hace <?php echo "$tiempo_transcurrido"; ?></h2>
                     <h2 class="rdm-tarjeta--subtitulo-largo"><?php echo ucfirst("$cantidad"); ?> Platos</h2>
+                    
+                    <p style="color: #F44336"><b><?php echo ucfirst("$observaciones"); ?></b></p>
                 </div>
 
                 <div class="rdm-tarjeta--cuerpo">
@@ -314,7 +317,7 @@ else
 
                         if ($estado == "entregado")
                         {
-                            $texto_pedido = '<p style="color: #F44336"><strike>' . ucfirst($producto) . ' </strike></p>';                    
+                            $texto_pedido = '<p style="color: #009688"><strike>' . ucfirst($producto) . ' </strike></p>';                    
                         }
                         else
                         {
