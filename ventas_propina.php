@@ -39,7 +39,7 @@ if ($pagar_propina == "si")
     //actualizo el valor de la propina
     $actualizar = $conexion->query("UPDATE ventas_datos SET propina = '$propina' WHERE id = '$venta_id'");
 
-    $mensaje = "Propina agregada";
+    $mensaje = "Propina actualizada";
     $body_snack = 'onLoad="Snackbar()"';
     $mensaje_tema = "aviso";
 }
@@ -251,7 +251,13 @@ else
                     <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($propina_valor, 2, ",", "."); ?> (<?php echo number_format($propina_porcentaje, 2, ",", "."); ?>%)</h2>
                 </div>
             </div>
+
+
         </article>
+
+        <div class="rdm-lista--acciones-izquierda">
+            <a href="<?php echo $_SERVER['PHP_SELF']; ?>?pagar_propina=si&venta_id=<?php echo "$venta_id";?>&propina=0"><button type="button" class="rdm-boton--plano-resaltado">Quitar</button></a>
+        </div>
 
     </section>
 
