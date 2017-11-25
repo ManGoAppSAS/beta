@@ -81,7 +81,7 @@ else
 
 <body style="background: none; margin-top: -10px; margin-bottom: -10px" onload="javascript:window.print(); loaded()">
 
-<section class="rdm-factura--imprimir" style="font-size: 8px;">
+<section class="rdm-factura--imprimir" style="font-size: 10px;">
 
     <article class="rdm-factura--contenedor--imprimir" style="max-width: none;">
 
@@ -247,35 +247,6 @@ else
                 }
 
                 $cambio = $dinero - $venta_total; 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                //cambio de idea
-
-    $total_con_descuento = $impuesto_base_total - $descuento_valor;//total antes de impuestos con el descuento
-
-    $total_con_descuento_mas_impuesto = ($total_con_descuento * $impuesto_porcentaje) / 100 ;
-
-    
-    $nuevo_total = $total_con_descuento + $total_con_descuento_mas_impuesto;
-
-    $venta_total = $nuevo_total;
-    $impuesto_valor_total = $total_con_descuento_mas_impuesto;
-
-
-
-    
 
                 ?>
 
