@@ -263,7 +263,7 @@ else
             <input type="hidden" name="pagar_propina" value="si" />
             <input type="hidden" name="venta_id" value="<?php echo "$venta_id";?>" />
             
-            <p><input class="rdm-formularios--input-grande" type="number" name="propina" value="" placeholder="1% - 100%" min="0" max="100" required></p>
+            <p><input class="rdm-formularios--input-grande" type="number" name="propina" value="<?php echo $propina_porcentaje; ?>" placeholder="0% - 100%" min="0" max="100" required></p>
             
             <div class="rdm-formularios--submit">
                 <button type="submit" class="rdm-boton--plano-resaltado" name="agregar" value="si">Agregar</button>
@@ -280,7 +280,7 @@ else
             <input type="hidden" name="pagar_propina" value="si" />
             <input type="hidden" name="venta_id" value="<?php echo "$venta_id";?>" />
             
-            <p><input class="rdm-formularios--input-grande" type="tel" id="propina" name="propina" value="" placeholder="Propina en valor" required></p>            
+            <p><input class="rdm-formularios--input-grande" type="tel" id="propina" name="propina" value="<?php echo $propina_valor; ?>" placeholder="Propina en valor" required></p>            
             
             <div class="rdm-formularios--submit">
                 <button type="submit" class="rdm-boton--plano-resaltado" name="agregar" value="si">Agregar</button>
