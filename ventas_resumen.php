@@ -153,11 +153,7 @@ while ($fila_venta_total = $consulta_venta_total->fetch_assoc())
     }
     else
     {
-        ?>
-
         
-
-        <?php
     }
     ?>
 
@@ -519,7 +515,7 @@ while ($fila_venta_total = $consulta_venta_total->fetch_assoc())
     }
     else                 
     {        
-        $mostrar_observaciones = "si";
+        
 
         ?>
 
