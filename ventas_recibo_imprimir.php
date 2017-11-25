@@ -84,7 +84,7 @@ else
 
 <body style="background: none; margin-top: -10px; margin-bottom: -10px" onload="javascript:window.print(); loaded()">
 
-<section class="rdm-factura--imprimir" style="font-size: 10px;">
+<section class="rdm-factura--imprimir" style="font-size: 11px;">
 
     <article class="rdm-factura--contenedor--imprimir" style="max-width: none;">
 

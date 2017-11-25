@@ -332,17 +332,7 @@ if ($enviar_correo == "si")
 
 
 
-                                    //cambio de idea
-
-    $total_con_descuento = $impuesto_base_total - $descuento_valor;//total antes de impuestos con el descuento
-
-    $total_con_descuento_mas_impuesto = ($total_con_descuento * $impuesto_porcentaje) / 100 ;
-
-    
-    $nuevo_total = $total_con_descuento + $total_con_descuento_mas_impuesto;
-
-    $venta_total = $nuevo_total;
-    $impuesto_valor_total = $total_con_descuento_mas_impuesto;
+                                    
 
 
 
@@ -539,7 +529,7 @@ if ($enviar_correo == "si")
         <div class="rdm-tarjeta--acciones-izquierda">
             <a href="ventas_recibo_imprimir.php?venta_id=<?php echo "$venta_id"; ?>&dinero=<?php echo "$dinero"; ?>&tipo_pago=<?php echo "$tipo_pago"; ?>" target="_blank"><button type="button" class="rdm-boton--plano-resaltado" autofocus>Imprimir recibo</button></a>
 
-            <a href="ventas_recibo_diseno.php?venta_id=<?php echo "$venta_id"; ?>&dinero=<?php echo "$dinero"; ?>&tipo_pago=<?php echo "$tipo_pago"; ?>" target="_blank"><button type="button" class="rdm-boton--plano-resaltado" autofocus>Imprimir talonario</button></a>
+            
         </div>
 
     </section>
@@ -801,17 +791,7 @@ if ($enviar_correo == "si")
 
 
 
-                    //cambio de idea
-
-    $total_con_descuento = $impuesto_base_total - $descuento_valor;//total antes de impuestos con el descuento
-
-    $total_con_descuento_mas_impuesto = ($total_con_descuento * $impuesto_porcentaje) / 100 ;
-
-    
-    $nuevo_total = $total_con_descuento + $total_con_descuento_mas_impuesto;
-
-    $venta_total = $nuevo_total;
-    $impuesto_valor_total = $total_con_descuento_mas_impuesto;
+                    
 
 
 
