@@ -256,7 +256,7 @@ else
         </article>
 
         <div class="rdm-lista--acciones-izquierda">
-            <a href="<?php echo $_SERVER['PHP_SELF']; ?>?pagar_propina=si&venta_id=<?php echo "$venta_id";?>&propina=0"><button type="button" class="rdm-boton--plano-resaltado">Quitar</button></a>
+            <a href="<?php echo $_SERVER['PHP_SELF']; ?>?pagar_propina=si&venta_id=<?php echo "$venta_id";?>&propina=0"><button type="button" class="rdm-boton--plano-resaltado">Retirar</button></a>
         </div>
 
     </section>
