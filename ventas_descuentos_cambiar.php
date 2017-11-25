@@ -274,7 +274,7 @@ else
 <header class="rdm-toolbar--contenedor">
     <div class="rdm-toolbar--fila">
         <div class="rdm-toolbar--izquierda">
-            <a href="ventas_pagar.php?venta_id=<?php echo "$venta_id";?>"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-arrow-left zmdi-hc-2x"></i></div></a>
+            <a href="ventas_pagar.php?venta_id=<?php echo "$venta_id";?>#descuentos"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-arrow-left zmdi-hc-2x"></i></div></a>
             <h2 class="rdm-toolbar--titulo">Cambiar descuento</h2>
         </div>
     </div>

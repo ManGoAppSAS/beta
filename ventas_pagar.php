@@ -505,20 +505,23 @@ if (strlen($venta_total) == 7 )
 
         
 
-        <article class="rdm-lista--item-sencillo">
-            <div class="rdm-lista--izquierda-sencillo">
-                <div class="rdm-lista--contenedor">
-                    <div class="rdm-lista--icono"><i class="zmdi zmdi-star zmdi-hc-2x"></i></div>
-                </div>
-                <div class="rdm-lista--contenedor">
-                    <h2 class="rdm-lista--titulo">Propina</h2>
-                    <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($propina_valor, 2, ",", "."); ?> (<?php echo number_format($propina_porcentaje, 2, ",", "."); ?>%)</h2>
-                </div>
-            </div>
-            <div class="rdm-lista--derecha">
-                <a href="ventas_propina.php?venta_id=<?php echo "$venta_id";?>"><div class="rdm-lista--icono"><i class="zmdi zmdi-arrow-right zmdi-hc-2x"></i></div></a>
-            </div>
-        </article>
+        <a class="ancla" name="propina"></a>
+
+        <a href="ventas_propina.php?venta_id=<?php echo "$venta_id";?>">
+
+            <article class="rdm-lista--item-sencillo">
+                <div class="rdm-lista--izquierda-sencillo">
+                    <div class="rdm-lista--contenedor">
+                        <div class="rdm-lista--icono"><i class="zmdi zmdi-star zmdi-hc-2x"></i></div>
+                    </div>
+                    <div class="rdm-lista--contenedor">
+                        <h2 class="rdm-lista--titulo">Propina</h2>
+                        <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($propina_valor, 2, ",", "."); ?> (<?php echo number_format($propina_porcentaje, 2, ",", "."); ?>%)</h2>
+                    </div>
+                </div>                
+            </article>
+
+        </a>
 
         <?php
 
@@ -528,32 +531,29 @@ if (strlen($venta_total) == 7 )
         {
             ?>
 
-            <article class="rdm-lista--item-sencillo">
-                <div class="rdm-lista--izquierda-sencillo">
-                    <div class="rdm-lista--contenedor">
-                        <div class="rdm-lista--icono"><i class="zmdi zmdi-card-giftcard zmdi-hc-2x"></i></div>
+            <a class="ancla" name="descuentos"></a>
+
+            <a href="ventas_descuentos_cambiar.php?venta_id=<?php echo "$venta_id";?>">
+
+                <article class="rdm-lista--item-sencillo">
+                    <div class="rdm-lista--izquierda-sencillo">
+                        <div class="rdm-lista--contenedor">
+                            <div class="rdm-lista--icono"><i class="zmdi zmdi-card-giftcard zmdi-hc-2x"></i></div>
+                        </div>
+                        <div class="rdm-lista--contenedor">
+                            <h2 class="rdm-lista--titulo"><?php echo ucfirst($descuento_actual) ?></h2>
+                            <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($descuento_valor, 2, ",", "."); ?> (<?php echo number_format($venta_descuento_porcentaje, 2, ",", "."); ?>%)</h2>
+                        </div>
                     </div>
-                    <div class="rdm-lista--contenedor">
-                        <h2 class="rdm-lista--titulo"><?php echo ucfirst($descuento_actual) ?></h2>
-                        <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($descuento_valor, 2, ",", "."); ?> (<?php echo number_format($venta_descuento_porcentaje, 2, ",", "."); ?>%)</h2>
-                    </div>
-                </div>
-                <div class="rdm-lista--derecha">
-                    <a href="ventas_descuentos_cambiar.php?venta_id=<?php echo "$venta_id";?>"><div class="rdm-lista--icono"><i class="zmdi zmdi-arrow-right zmdi-hc-2x"></i></div></a>
-                </div>
-            </article>
+                    
+                </article>
+            </a>
+
 
             <?php
         }
 
-        ?>
-
-        
-
-
-
-
-               
+        ?>     
 
     </section>
 
@@ -575,20 +575,22 @@ if (strlen($venta_total) == 7 )
 
             <a class="ancla" name="tipos_pagos"></a>
 
-            <article class="rdm-lista--item-sencillo">
-                <div class="rdm-lista--izquierda-sencillo">
-                    <div class="rdm-lista--contenedor">
-                        <?php echo "$imagen_tp"; ?>
+            <a href="ventas_tipos_pagos_cambiar.php?venta_id=<?php echo "$venta_id";?>">
+
+                <article class="rdm-lista--item-sencillo">
+                    <div class="rdm-lista--izquierda-sencillo">
+                        <div class="rdm-lista--contenedor">
+                            <?php echo "$imagen_tp"; ?>
+                        </div>
+                        <div class="rdm-lista--contenedor">
+                            <h2 class="rdm-lista--titulo">Tipo de pago</h2>
+                            <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst($tipo_pago_tp);?> <?php echo ucfirst($tipo_pago);?></h2>
+                        </div>
                     </div>
-                    <div class="rdm-lista--contenedor">
-                        <h2 class="rdm-lista--titulo">Tipo de pago</h2>
-                        <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst($tipo_pago_tp);?> <?php echo ucfirst($tipo_pago);?></h2>
-                    </div>
-                </div>
-                <div class="rdm-lista--derecha">
-                    <a href="ventas_tipos_pagos_cambiar.php?venta_id=<?php echo "$venta_id";?>"><div class="rdm-lista--icono"><i class="zmdi zmdi-arrow-right zmdi-hc-2x"></i></div></a>
-                </div>
-            </article>
+                    
+                </article>
+
+            </a>
 
             <a class="ancla" name="atencion"></a>
 
@@ -599,57 +601,63 @@ if (strlen($venta_total) == 7 )
 
         <a class="ancla" name="pago"></a>
 
-        <article class="rdm-lista--item-sencillo">
-            <div class="rdm-lista--izquierda-sencillo">
-                <div class="rdm-lista--contenedor">
-                    <div class="rdm-lista--icono"><i class="zmdi zmdi-calendar-alt zmdi-hc-2x"></i></div>
-                </div>
-                <div class="rdm-lista--contenedor">
-                    <h2 class="rdm-lista--titulo">Pago</h2>
-                    <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst($pago);?> <?php echo ucfirst($fecha_pago);?></h2>
-                </div>
-            </div>
-            <div class="rdm-lista--derecha">
-                <a href="ventas_pago_cambiar.php?venta_id=<?php echo "$venta_id";?>"><div class="rdm-lista--icono"><i class="zmdi zmdi-arrow-right zmdi-hc-2x"></i></div></a>
-            </div>
-        </article>
+        <a href="ventas_pago_cambiar.php?venta_id=<?php echo "$venta_id";?>">
 
-        <a class="ancla" name="atencion"></a>
+            <article class="rdm-lista--item-sencillo">
+                <div class="rdm-lista--izquierda-sencillo">
+                    <div class="rdm-lista--contenedor">
+                        <div class="rdm-lista--icono"><i class="zmdi zmdi-calendar-alt zmdi-hc-2x"></i></div>
+                    </div>
+                    <div class="rdm-lista--contenedor">
+                        <h2 class="rdm-lista--titulo">Pago</h2>
+                        <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst($pago);?> <?php echo ucfirst($fecha_pago);?></h2>
+                    </div>
+                </div>
+                
+            </article>
+
+        </a>
+
+        
 
         <a class="ancla" name="ubicacion"></a>
         
 
-        <article class="rdm-lista--item-sencillo">
-            <div class="rdm-lista--izquierda-sencillo">
-                <div class="rdm-lista--contenedor">
-                    <div class="rdm-lista--icono"><i class="zmdi zmdi-seat zmdi-hc-2x"></i></div>
+        <a href="ventas_ubicaciones_cambiar.php?venta_id=<?php echo "$venta_id";?>">
+
+            <article class="rdm-lista--item-sencillo">
+                <div class="rdm-lista--izquierda-sencillo">
+                    <div class="rdm-lista--contenedor">
+                        <div class="rdm-lista--icono"><i class="zmdi zmdi-seat zmdi-hc-2x"></i></div>
+                    </div>
+                    <div class="rdm-lista--contenedor">
+                        <h2 class="rdm-lista--titulo">Ubicación</h2>
+                        <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst($ubicacion); ?></h2>
+                    </div>
                 </div>
-                <div class="rdm-lista--contenedor">
-                    <h2 class="rdm-lista--titulo">Ubicación</h2>
-                    <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst($ubicacion); ?></h2>
-                </div>
-            </div>
-            <div class="rdm-lista--derecha">
-                <a href="ventas_ubicaciones_cambiar.php?venta_id=<?php echo "$venta_id";?>"><div class="rdm-lista--icono"><i class="zmdi zmdi-arrow-right zmdi-hc-2x"></i></div></a>
-            </div>
-        </article>
+                
+            </article>
+
+        </a>
 
         <a class="ancla" name="atencion"></a>
 
-        <article class="rdm-lista--item-sencillo">
-            <div class="rdm-lista--izquierda-sencillo">
-                <div class="rdm-lista--contenedor">
-                    <div class="rdm-lista--icono"><i class="zmdi zmdi-account zmdi-hc-2x"></i></div>
+        <a href="ventas_atendido_cambiar.php?venta_id=<?php echo "$venta_id";?>">
+
+            <article class="rdm-lista--item-sencillo">
+                <div class="rdm-lista--izquierda-sencillo">
+                    <div class="rdm-lista--contenedor">
+                        <div class="rdm-lista--icono"><i class="zmdi zmdi-account zmdi-hc-2x"></i></div>
+                    </div>
+                    <div class="rdm-lista--contenedor">
+                        <h2 class="rdm-lista--titulo">Atención</h2>
+                        <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst("$usuario_actual"); ?></h2>
+                    </div>
                 </div>
-                <div class="rdm-lista--contenedor">
-                    <h2 class="rdm-lista--titulo">Atención</h2>
-                    <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst("$usuario_actual"); ?></h2>
-                </div>
-            </div>
-            <div class="rdm-lista--derecha">
-                <a href="ventas_atendido_cambiar.php?venta_id=<?php echo "$venta_id";?>"><div class="rdm-lista--icono"><i class="zmdi zmdi-arrow-right zmdi-hc-2x"></i></div></a>
-            </div>
-        </article>    
+                
+            </article>
+
+        </a>    
 
         <?php
         //le doy acceso a segun el perfil que tenga
@@ -660,20 +668,22 @@ if (strlen($venta_total) == 7 )
 
         <a class="ancla" name="eliminar"></a>    
 
-        <article class="rdm-lista--item-sencillo">
-            <div class="rdm-lista--izquierda-sencillo">
-                <div class="rdm-lista--contenedor">
-                    <div class="rdm-lista--icono"><i class="zmdi zmdi-delete zmdi-hc-2x"></i></div>
+        <a href="ventas_eliminar.php?venta_id=<?php echo "$venta_id";?>">
+
+            <article class="rdm-lista--item-sencillo">
+                <div class="rdm-lista--izquierda-sencillo">
+                    <div class="rdm-lista--contenedor">
+                        <div class="rdm-lista--icono"><i class="zmdi zmdi-delete zmdi-hc-2x"></i></div>
+                    </div>
+                    <div class="rdm-lista--contenedor">
+                        <h2 class="rdm-lista--titulo">Eliminar venta</h2>
+                        <h2 class="rdm-lista--texto-secundario">Eliminar la venta y liberar la ubicación</h2>
+                    </div>
                 </div>
-                <div class="rdm-lista--contenedor">
-                    <h2 class="rdm-lista--titulo">Eliminar venta</h2>
-                    <h2 class="rdm-lista--texto-secundario">Eliminar la venta y liberar la ubicación</h2>
-                </div>
-            </div>
-            <div class="rdm-lista--derecha">
-                <a href="ventas_eliminar.php?venta_id=<?php echo "$venta_id";?>"><div class="rdm-lista--icono"><i class="zmdi zmdi-arrow-right zmdi-hc-2x"></i></div></a>
-            </div>
-        </article>
+                
+            </article>
+
+        </a>
 
         <?php 
         }
