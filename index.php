@@ -774,11 +774,34 @@ include ("sis/reportes_rangos.php");
                 $consulta2 = $conexion->query("SELECT * FROM ventas_datos WHERE local_id = '$local' and fecha BETWEEN '$desde' and '$hasta' and estado = 'liquidado'");       
 
                 $total_local = 0;
+                $total_propinas_hoy_t = 0;
+
                 while ($fila2 = $consulta2->fetch_assoc())
                 {
                     $total_neto = $fila2['total_neto'];
                     $total_local = $total_local + $total_neto;
                     $total_local_t = "$ " . number_format($total_local, 0, ".", ".");
+
+                    //encontrar el total de propinas de hoy
+                    $total_bruto = $fila2['total_bruto'];
+                    $propina = $fila2['propina'];
+
+                    if ($propina <= 100)
+                    {
+                        $propina_valor = ($total_bruto * $propina)/100;
+                        $propina_porcentaje = $propina;
+                    }
+                    else
+                    {
+                        $propina_valor = $propina;
+                        $propina_porcentaje = ($propina_valor * 100) / $total_bruto;
+                    }
+
+                    $total_neto = $total_bruto + $propina_valor;
+
+                    $total_propinas_hoy_t = $total_propinas_hoy_t + $propina_valor;  
+
+
                 }
                
                 //consulto el nombre del local
@@ -797,7 +820,7 @@ include ("sis/reportes_rangos.php");
                     <div>
                         <div class="rdm-lista--izquierda-porcentaje">
                             <h2 class="rdm-lista--titulo-porcentaje"><?php echo ucfirst("$local"); ?></h2>
-                            <h2 class="rdm-lista--texto-secundario-porcentaje"><?php echo "$total_local_t"; ?></h2>
+                            <h2 class="rdm-lista--texto-secundario-porcentaje"><?php echo "$total_local_t"; ?> (Propinas: $ <?php echo number_format($total_propinas_hoy_t, 0, ".", ".");; ?>)</h2>
                         </div>
                         <div class="rdm-lista--derecha-porcentaje">
                             <h2 class="rdm-lista--texto-secundario-porcentaje"><?php echo "$porcentaje_local"; ?>%</h2>
@@ -805,7 +828,7 @@ include ("sis/reportes_rangos.php");
                     </div>
                     
                     <div class="rdm-lista--linea-pocentaje-fondo" style="background-color: #B2DFDB">
-                        <div class="rdm-lista--linea-pocentaje-relleno" style="width: <?php echo "$porcentaje_local"; ?>%; background-color: #009688;"></div>
+                        <div class="rdm-lista--linea-pocentaje-relleno" style="width: <?php echo "$porcentaje_local"; ?>%; background-color: #009688;"> </div>
                     </div>
                 </article>
 
