@@ -116,6 +116,8 @@ if ($eliminar_venta == 'si')
     </div>
 </header>
 
+
+
 <main class="rdm--contenedor-toolbar">
 
     <?php

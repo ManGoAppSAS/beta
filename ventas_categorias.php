@@ -159,11 +159,16 @@ while ($fila_venta_total = $consulta_venta_total->fetch_assoc())
             <a href="ventas_ubicaciones.php"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-arrow-left zmdi-hc-2x"></i></div></a>
             <h2 class="rdm-toolbar--titulo">Productos</h2>
         </div>
+        <div class="rdm-toolbar--centro">
+            <a href="ventas_ubicaciones.php"><h2 class="rdm-toolbar--titulo-centro"><span class="logo_img"></span> ManGo!</h2></a>
+        </div>
         <div class="rdm-toolbar--derecha">
             <h2 class="rdm-toolbar--titulo">$ <?php echo number_format($venta_total, 2, ",", "."); ?></h2>
         </div>
     </div>
 </header>
+
+
 
 <main class="rdm--contenedor-toolbar">
 
