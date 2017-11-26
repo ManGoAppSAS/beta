@@ -35,7 +35,7 @@ if (isset($consultaBusqueda))
         $categoria = null;
     }
 
-    $consulta = mysqli_query($conexion, "SELECT * FROM productos WHERE (producto LIKE '%$consultaBusqueda%' or precio LIKE '%$consultaBusqueda%' or descripcion LIKE '%$consultaBusqueda%' or codigo_barras LIKE '%$consultaBusqueda%' or categoria LIKE '$categoria') and (local = '$sesion_local_id' or local = '0') ORDER BY producto");    
+    $consulta = mysqli_query($conexion, "SELECT * FROM productos WHERE (producto LIKE '%$consultaBusqueda%' or codigo_barras LIKE '%$consultaBusqueda%' or categoria LIKE '$categoria') and (local = '$sesion_local_id' or local = '0') ORDER BY producto LIMIT 10");    
 
 	//Obtiene la cantidad de filas que hay en la consulta
 	$filas = mysqli_num_rows($consulta);

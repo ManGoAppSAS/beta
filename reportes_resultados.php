@@ -72,7 +72,7 @@ include ("sis/variables_sesion.php");
 
     
 
-    <section class="rdm-tarjeta">
+    <section class="rdm-lista--porcentaje">
 
         <div class="rdm-tarjeta--primario-largo">
             <h1 class="rdm-tarjeta--titulo-largo">Ingresos <?php echo ($rango); ?></h1>
@@ -80,7 +80,7 @@ include ("sis/variables_sesion.php");
 
             <?php
             //ingresos de hoy
-            $consulta_ingresos_hoy = $conexion->query("SELECT * FROM ventas_datos WHERE estado = 'liquidado' and fecha BETWEEN '$desde' and '$hasta'");
+            $consulta_ingresos_hoy = $conexion->query("SELECT * FROM ventas_datos WHERE fecha BETWEEN '$desde' and '$hasta'");
 
             if ($consulta_ingresos_hoy->num_rows == 0)
             {
@@ -136,16 +136,7 @@ include ("sis/variables_sesion.php");
             //porcentaje de crecimiento                
             if ($total_dia_ayer == 0)
             {
-                if ($rango == "consulta")
-                {
-                    $porcentaje_crecimiento = "";   # code...
-                }
-                else
-                {
-                    $porcentaje_crecimiento = "<h2 class='rdm-tarjeta--dashboard-subtitulo-neutral'>" . ucfirst($rango_anterior) . " sin ventas</h2>";
-                }
-
-               
+               $porcentaje_crecimiento = "<h2 class='rdm-tarjeta--dashboard-subtitulo-neutral'>" . ucfirst($rango_anterior) . " sin ventas</h2>";
             }
             else
             {
@@ -181,18 +172,124 @@ include ("sis/variables_sesion.php");
         
             <h2 class="rdm-tarjeta--dashboard-titulo-positivo">$ <?php echo number_format($total_dia_hoy, 0, ",", ".");?></h2>
             <h2 class="rdm-tarjeta--titulo-largo">Propinas: $ <?php echo number_format($total_propinas_hoy, 0, ",", ".");?></h2>
+            <?php echo "$porcentaje_crecimiento";?>
         </div>
 
-        
+
+
+
+
+
+
+
+
+
 
         
 
+
+
+
+
         
 
+
+        <?php 
+        if ($total_dia_hoy != 0)
+        {
+        ?>
+
+
+        <?php
+        //ventas por locales
+        $consulta = $conexion->query("SELECT count(local_id), local_id FROM ventas_datos WHERE fecha BETWEEN '$desde' and '$hasta' and estado = 'liquidado' GROUP BY local_id ORDER BY count(local_id) ASC");                
+
+        if ($consulta->num_rows == 1)
+        {
+
+        }
+        else
+        {
+
+
+
+            while ($fila = $consulta->fetch_assoc())
+            {
+                $local = $fila['local_id'];
+
+                //consulto el total para cada local
+                $consulta2 = $conexion->query("SELECT * FROM ventas_datos WHERE local_id = '$local' and fecha BETWEEN '$desde' and '$hasta' and estado = 'liquidado'");       
+
+                $total_local = 0;
+                $total_propinas_hoy_t = 0;
+
+                while ($fila2 = $consulta2->fetch_assoc())
+                {
+                    $total_neto = $fila2['total_neto'];
+                    $total_local = $total_local + $total_neto;
+                    $total_local_t = "$ " . number_format($total_local, 0, ".", ".");
+
+                    //encontrar el total de propinas de hoy
+                    $total_bruto = $fila2['total_bruto'];
+                    $propina = $fila2['propina'];
+
+                    if ($propina <= 100)
+                    {
+                        $propina_valor = ($total_bruto * $propina)/100;
+                        $propina_porcentaje = $propina;
+                    }
+                    else
+                    {
+                        $propina_valor = $propina;
+                        $propina_porcentaje = ($propina_valor * 100) / $total_bruto;
+                    }
+
+                    $total_neto = $total_bruto + $propina_valor;
+
+                    $total_propinas_hoy_t = $total_propinas_hoy_t + $propina_valor;  
+
+
+                }
+               
+                //consulto el nombre del local
+                $consulta3 = $conexion->query("SELECT * FROM locales WHERE id = '$local'");
+                while ($fila3 = $consulta3->fetch_assoc())
+                {
+                    $local = $fila3['local'];
+                }
+
+                $porcentaje_local = ($total_local / $total_dia_hoy) * 100;
+                $porcentaje_local = number_format($porcentaje_local, 0, ".", ".");
+
+                ?>
+
+                <article class="rdm-lista--item-porcentaje">
+                    <div>
+                        <div class="rdm-lista--izquierda-porcentaje">
+                            <h2 class="rdm-lista--titulo-porcentaje"><?php echo ucfirst("$local"); ?></h2>
+                            <h2 class="rdm-lista--texto-secundario-porcentaje"><?php echo "$total_local_t"; ?> (Propinas: $ <?php echo number_format($total_propinas_hoy_t, 0, ".", ".");; ?>)</h2>
+                        </div>
+                        <div class="rdm-lista--derecha-porcentaje">
+                            <h2 class="rdm-lista--texto-secundario-porcentaje"><?php echo "$porcentaje_local"; ?>%</h2>
+                        </div>
+                    </div>
+                    
+                    <div class="rdm-lista--linea-pocentaje-fondo" style="background-color: #B2DFDB">
+                        <div class="rdm-lista--linea-pocentaje-relleno" style="width: <?php echo "$porcentaje_local"; ?>%; background-color: #009688;"> </div>
+                    </div>
+                </article>
+
+                <?php
+            }
+        }
+        ?>
+
+    <?php 
+    }
+    ?>
+
+    
     </section>
-
-
-
 
 
     <section class="rdm-lista--porcentaje">
