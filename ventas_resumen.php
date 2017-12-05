@@ -145,27 +145,7 @@ while ($fila_venta_total = $consulta_venta_total->fetch_assoc())
 
 <main class="rdm--contenedor-toolbar-tabs">
 
-    <?php
-    //consulto y muestro los productos pedidos
 
-    $consulta = $conexion->query("SELECT * FROM ventas_productos WHERE venta_id = '$venta_id' ORDER BY fecha DESC");
-
-    if ($consulta->num_rows == 0)
-    {
-        ?>
-
-        <div class="rdm-vacio--caja">
-            <i class="zmdi zmdi-alert-circle-o zmdi-hc-4x"></i>
-            <p class="rdm-tipografia--subtitulo1">No se han agregado productos o servicios a esta venta</p>
-        </div>
-
-        <?php
-    }
-    else
-    {
-        
-    }
-    ?>
 
     <?php
     //consulto y muestro los productos pedidos
@@ -634,38 +614,49 @@ while ($fila_venta_total = $consulta_venta_total->fetch_assoc())
         
         <?php
     }
-    ?>    
-
-    <?php
-    if ($mostrar_observaciones != "sizas")
-    {
     ?>
 
-    <h2 class="rdm-lista--titulo-largo">Observaciones del pedido</h2>
+    <?php
+    //consulto y muestro los productos pedidos
 
-    <section class="rdm-formulario">
-    
-        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-            <input type="hidden" name="venta_id" value="<?php echo $venta_id; ?>">
+    $consulta = $conexion->query("SELECT * FROM ventas_productos WHERE venta_id = '$venta_id' ORDER BY fecha DESC");
 
-            <p class="rdm-formularios--label"><label for="descripcion">Observación</label></p>
-            <p><textarea id="observaciones" name="observaciones"><?php echo "$observaciones"; ?></textarea></p>
-            <p class="rdm-formularios--ayuda">Escribe una observación para el pedido</p>
-            
-            <div class="rdm-formularios--submit">
-                <button type="submit" class="rdm-boton--plano-resaltado" name="observacion" value="si">Actualizar observación</button>
-            </div>
-        </form>
+    if ($consulta->num_rows == 0)
+    {
+        ?>
 
-    </section>
+        <div class="rdm-vacio--caja">
+            <i class="zmdi zmdi-alert-circle-o zmdi-hc-4x"></i>
+            <p class="rdm-tipografia--subtitulo1">No se han agregado productos o servicios a esta venta</p>
+        </div>
 
-    
+        <?php
+    }
+    else
+    {
+        ?>
+
+        <h2 class="rdm-lista--titulo-largo">Observaciones del pedido</h2>
+
+        <section class="rdm-formulario">
+        
+            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+                <input type="hidden" name="venta_id" value="<?php echo $venta_id; ?>">
+
+                <p class="rdm-formularios--label"><label for="descripcion">Observación</label></p>
+                <p><textarea id="observaciones" name="observaciones"><?php echo "$observaciones"; ?></textarea></p>
+                <p class="rdm-formularios--ayuda">Escribe una observación para el pedido</p>
+                
+                <div class="rdm-formularios--submit">
+                    <button type="submit" class="rdm-boton--plano-resaltado" name="observacion" value="si">Actualizar observación</button>
+                </div>
+            </form>
+
+        </section>
 
     <?php
     }
     ?>
-
-    </section>
 
 </main>
 
