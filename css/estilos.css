@@ -39,11 +39,16 @@ a{
 	outline: none;
 }
 
-.rdm--contenedor{
+.rdm--contenedor-toolbar, .rdm--contenedor-toolbar-tabs{
 	box-sizing: border-box; /*el padding y margin no incrementan el ancho*/	
 	margin: 0 auto; /*espacio entre el contenido y el borde*/
 	max-width: 600px; /*ancho máximo del menú del contenedor*/
 	width: 95%; /*ancho del contenedor*/
+	margin-top: 4.5rem;	
+}
+
+.rdm--contenedor-toolbar-tabs{
+	margin-top: 8.25rem;	
 }
 
 .rdm--contenedor-toolbar, .rdm--contenedor-zona{

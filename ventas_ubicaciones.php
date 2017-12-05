@@ -114,6 +114,8 @@ if ($eliminar_venta == 'si')
             <h2 class="rdm-toolbar--titulo">Ubicaciones</h2>
         </div>
     </div>
+
+    
 </header>
 
 

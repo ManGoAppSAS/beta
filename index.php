@@ -41,7 +41,7 @@ include ("sis/reportes_rangos.php");
 <header class="rdm-toolbar--contenedor">    
     <div class="rdm-toolbar--fila">
         <div class="rdm-toolbar--izquierda">
-            <a href="logueo_salir.php"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-power zmdi-hc-2x"></i></div></a>
+            
         </div>
         <div class="rdm-toolbar--centro">
             <a href="index.php"><h2 class="rdm-toolbar--titulo-centro"><span class="logo_img"></span> ManGo!</h2></a>
@@ -55,16 +55,41 @@ include ("sis/reportes_rangos.php");
 
             ?>
 
-            <a href="ajustes.php"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-settings zmdi-hc-2x"></i></div></a>
+            
 
             <?php
             }
             ?>
         </div>
     </div>
+
+    <div class="rdm-toolbar--fila-tab">
+        <div class="rdm-toolbar--izquierda">
+            <a href="logueo_salir.php"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-power zmdi-hc-2x"></i></div> <span class="rdm-tipografia--leyenda">Salir</span></a>
+        </div>
+        
+        <div class="rdm-toolbar--centro">
+            <a href="ventas_ubicaciones.php"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-inbox zmdi-hc-2x"></i></div> <span class="rdm-tipografia--leyenda">Nueva Venta</span></a>
+        </div>
+
+        <?php
+        //le doy acceso al modulo segun el perfil que tenga
+        if (($sesion_tipo == "administrador") or ($sesion_tipo == "socio"))
+        {
+
+        ?>
+
+        <div class="rdm-toolbar--derecha">
+            <a href="ajustes.php"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-settings zmdi-hc-2x"></i></div> <span class="rdm-tipografia--leyenda">Ajustes</span></a>
+        </div>
+
+        <?php
+        }
+        ?>
+    </div>
 </header>
 
-<main class="rdm--contenedor-toolbar">
+<main class="rdm--contenedor-toolbar-tabs">
 
     <section class="rdm-tarjeta">
 
