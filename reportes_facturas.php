@@ -80,7 +80,7 @@ include ("sis/variables_sesion.php");
 
             <?php
             //ingresos de hoy
-            $consulta_ingresos_hoy = $conexion->query("SELECT * FROM ventas_datos WHERE estado = 'liquidado' and fecha BETWEEN '$desde' and '$hasta'");
+            $consulta_ingresos_hoy = $conexion->query("SELECT * FROM ventas_datos WHERE estado = 'liquidado' and local_id = '$sesion_local_id' and fecha BETWEEN '$desde' and '$hasta'");
 
             if ($consulta_ingresos_hoy->num_rows == 0)
             {
@@ -121,7 +121,7 @@ include ("sis/variables_sesion.php");
 
             <?php
             //ingresos de ayer        
-            $consulta_ingresos_ayer = $conexion->query("SELECT * FROM ventas_datos WHERE estado = 'liquidado' and fecha BETWEEN '$desde_anterior' and '$hasta_anterior'");        
+            $consulta_ingresos_ayer = $conexion->query("SELECT * FROM ventas_datos WHERE estado = 'liquidado' and local_id = '$sesion_local_id' and fecha BETWEEN '$desde_anterior' and '$hasta_anterior'");        
 
             $total_dia_ayer = 0;
 
@@ -199,7 +199,7 @@ include ("sis/variables_sesion.php");
 
         <?php
         //ventas por facturas
-        $consulta = $conexion->query("SELECT count(id), id FROM ventas_datos WHERE fecha BETWEEN '$desde' and '$hasta' and estado = 'liquidado' GROUP BY id ORDER BY fecha ASC");                
+        $consulta = $conexion->query("SELECT count(id), id FROM ventas_datos WHERE local_id = '$sesion_local_id' and fecha BETWEEN '$desde' and '$hasta' and estado = 'liquidado' GROUP BY id ORDER BY fecha ASC");                
 
         if ($consulta->num_rows == 0)
         {
@@ -215,7 +215,7 @@ include ("sis/variables_sesion.php");
                 $venta_id = $fila['id'];
 
                 //consulto el total para cada local
-                $consulta2 = $conexion->query("SELECT * FROM ventas_datos WHERE id = '$venta_id' and fecha BETWEEN '$desde' and '$hasta' and estado = 'liquidado' ORDER by fecha");       
+                $consulta2 = $conexion->query("SELECT * FROM ventas_datos WHERE local_id = '$sesion_local_id' and id = '$venta_id' and fecha BETWEEN '$desde' and '$hasta' and estado = 'liquidado' ORDER by fecha");       
 
                 $total_local = 0;
                 while ($fila2 = $consulta2->fetch_assoc())

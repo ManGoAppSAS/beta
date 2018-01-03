@@ -220,7 +220,7 @@ include ("sis/reportes_rangos.php");
 
         <a class="ancla" name="producciones"></a>
 
-        <a href="producciones_inicio.php">           
+        <a href="producciones_ver.php">           
 
         <article class="rdm-lista--item-sencillo">
             <div class="rdm-lista--izquierda">
@@ -256,24 +256,7 @@ include ("sis/reportes_rangos.php");
 
         </a>
 
-        <a class="ancla" name="inventario_p"></a>
-
-        <a href="inventario_p_ver.php">            
-
-            <article class="rdm-lista--item-sencillo">
-                <div class="rdm-lista--izquierda">
-                    <div class="rdm-lista--contenedor">
-                        <div class="rdm-lista--icono"><i class="zmdi zmdi-storage zmdi-hc-2x"></i></div>
-                    </div>
-                    <div class="rdm-lista--contenedor">
-                        <h2 class="rdm-lista--titulo">Inventario de productos</h2>
-                        <h2 class="rdm-lista--texto-secundario">Ver inventario y recibir producciones</h2>
-                    </div>
-                </div>
-                
-            </article>
-
-        </a>
+        
 
         <a class="ancla" name="reportes"></a>
 
@@ -416,7 +399,7 @@ include ("sis/reportes_rangos.php");
 
             <?php
             //ingresos de hoy
-            $consulta_ingresos_hoy = $conexion->query("SELECT * FROM ventas_datos WHERE fecha BETWEEN '$desde' and '$hasta'");
+            $consulta_ingresos_hoy = $conexion->query("SELECT * FROM ventas_datos WHERE estado = 'liquidado' and local_id = '$sesion_local_id' and fecha BETWEEN '$desde' and '$hasta'");
 
             if ($consulta_ingresos_hoy->num_rows == 0)
             {
@@ -455,9 +438,14 @@ include ("sis/reportes_rangos.php");
             }
             ?>
 
+            <?php 
+            //total sin propina
+            $total_sin_propinas_hoy = $total_dia_hoy - $total_propinas_hoy;
+            ?>
+
             <?php
             //ingresos de ayer        
-            $consulta_ingresos_ayer = $conexion->query("SELECT * FROM ventas_datos WHERE estado = 'liquidado' and fecha BETWEEN '$desde_anterior' and '$hasta_anterior'");        
+            $consulta_ingresos_ayer = $conexion->query("SELECT * FROM ventas_datos WHERE estado = 'liquidado' and local_id = '$sesion_local_id' and fecha BETWEEN '$desde_anterior' and '$hasta_anterior'");        
 
             $total_dia_ayer = 0;
 
@@ -506,7 +494,7 @@ include ("sis/reportes_rangos.php");
             ?>
         
         
-            <h2 class="rdm-tarjeta--dashboard-titulo-positivo">$ <?php echo number_format($total_dia_hoy, 0, ",", ".");?></h2>
+            <h2 class="rdm-tarjeta--dashboard-titulo-positivo">$ <?php echo number_format($total_sin_propinas_hoy, 0, ",", ".");?></h2>
             <h2 class="rdm-tarjeta--titulo-largo">Propinas: $ <?php echo number_format($total_propinas_hoy, 0, ",", ".");?></h2>
             <?php echo "$porcentaje_crecimiento";?>
         </div>
@@ -770,6 +758,8 @@ include ("sis/reportes_rangos.php");
                     $total_propinas_hoy_t = $total_propinas_hoy_t + $propina_valor;  
 
 
+
+
                 }
                
                 //consulto el nombre del local
@@ -784,11 +774,16 @@ include ("sis/reportes_rangos.php");
 
                 ?>
 
+                <?php 
+                //total sin propinas
+                $total_sin_propinas_local = $total_local - $total_propinas_hoy_t;
+                ?>
+
                 <article class="rdm-lista--item-porcentaje">
                     <div>
                         <div class="rdm-lista--izquierda-porcentaje">
                             <h2 class="rdm-lista--titulo-porcentaje"><?php echo ucfirst("$local"); ?></h2>
-                            <h2 class="rdm-lista--texto-secundario-porcentaje"><?php echo "$total_local_t"; ?> (Propinas: $ <?php echo number_format($total_propinas_hoy_t, 0, ".", ".");; ?>)</h2>
+                            <h2 class="rdm-lista--texto-secundario-porcentaje">$ <?php echo number_format($total_sin_propinas_local, 0, ".", "."); ?> (Propinas: $ <?php echo number_format($total_propinas_hoy_t, 0, ".", "."); ?>)</h2>
                         </div>
                         <div class="rdm-lista--derecha-porcentaje">
                             <h2 class="rdm-lista--texto-secundario-porcentaje"><?php echo "$porcentaje_local"; ?>%</h2>
@@ -958,7 +953,7 @@ include ("sis/reportes_rangos.php");
 
         <?php
         //lista de gastos
-        $consulta_gastos = $conexion->query("SELECT * FROM gastos WHERE fecha BETWEEN '$desde' and '$hasta'");
+        $consulta_gastos = $conexion->query("SELECT * FROM gastos WHERE fecha BETWEEN '$desde' and '$hasta' and local = '$sesion_local_id'");
 
         while ($fila_gastos = $consulta_gastos->fetch_assoc())
         {
@@ -1121,7 +1116,7 @@ include ("sis/reportes_rangos.php");
 
         <?php
         //ventas por cada producto
-        $consulta = $conexion->query("SELECT count(producto), producto FROM ventas_productos WHERE local = '$sesion_local_id' and (estado = 'liquidado' or  estado = 'entregado') and fecha BETWEEN '$desde' and '$hasta' GROUP BY producto ORDER BY count(producto) DESC");                
+        $consulta = $conexion->query("SELECT count(producto), producto FROM ventas_productos WHERE local = '$sesion_local_id' and (estado = 'liquidado' or  estado = 'entregado') and fecha BETWEEN '$desde' and '$hasta' GROUP BY producto ORDER BY count(producto) DESC LIMIT 10");                
 
         while ($fila = $consulta->fetch_assoc())
         {
@@ -1460,6 +1455,16 @@ include ("sis/reportes_rangos.php");
         
 
     </section>
+
+
+
+
+
+
+
+
+
+    
 
 
 

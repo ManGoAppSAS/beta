@@ -80,7 +80,7 @@ include ("sis/variables_sesion.php");
 
             <?php
             //ingresos de hoy
-            $consulta_ingresos_hoy = $conexion->query("SELECT * FROM ventas_datos WHERE fecha BETWEEN '$desde' and '$hasta'");
+            $consulta_ingresos_hoy = $conexion->query("SELECT * FROM ventas_datos WHERE estado = 'liquidado' and local_id = '$sesion_local_id' and fecha BETWEEN '$desde' and '$hasta'");
 
             if ($consulta_ingresos_hoy->num_rows == 0)
             {
@@ -119,9 +119,14 @@ include ("sis/variables_sesion.php");
             }
             ?>
 
+            <?php 
+            //total sin propina
+            $total_sin_propinas_hoy = $total_dia_hoy - $total_propinas_hoy;
+            ?>
+
             <?php
             //ingresos de ayer        
-            $consulta_ingresos_ayer = $conexion->query("SELECT * FROM ventas_datos WHERE estado = 'liquidado' and fecha BETWEEN '$desde_anterior' and '$hasta_anterior'");        
+            $consulta_ingresos_ayer = $conexion->query("SELECT * FROM ventas_datos WHERE estado = 'liquidado' and local_id = '$sesion_local_id' and fecha BETWEEN '$desde_anterior' and '$hasta_anterior'");        
 
             $total_dia_ayer = 0;
 
@@ -170,7 +175,7 @@ include ("sis/variables_sesion.php");
             ?>
         
         
-            <h2 class="rdm-tarjeta--dashboard-titulo-positivo">$ <?php echo number_format($total_dia_hoy, 0, ",", ".");?></h2>
+            <h2 class="rdm-tarjeta--dashboard-titulo-positivo">$ <?php echo number_format($total_sin_propinas_hoy, 0, ",", ".");?></h2>
             <h2 class="rdm-tarjeta--titulo-largo">Propinas: $ <?php echo number_format($total_propinas_hoy, 0, ",", ".");?></h2>
             <?php echo "$porcentaje_crecimiento";?>
         </div>
@@ -263,11 +268,16 @@ include ("sis/variables_sesion.php");
 
                 ?>
 
+                <?php 
+                //total sin propinas
+                $total_sin_propinas_local = $total_local - $total_propinas_hoy_t;
+                ?>
+
                 <article class="rdm-lista--item-porcentaje">
                     <div>
                         <div class="rdm-lista--izquierda-porcentaje">
                             <h2 class="rdm-lista--titulo-porcentaje"><?php echo ucfirst("$local"); ?></h2>
-                            <h2 class="rdm-lista--texto-secundario-porcentaje"><?php echo "$total_local_t"; ?> (Propinas: $ <?php echo number_format($total_propinas_hoy_t, 0, ".", ".");; ?>)</h2>
+                            <h2 class="rdm-lista--texto-secundario-porcentaje">$ <?php echo number_format($total_sin_propinas_local, 0, ".", "."); ?> (Propinas: $ <?php echo number_format($total_propinas_hoy_t, 0, ".", "."); ?>)</h2>
                         </div>
                         <div class="rdm-lista--derecha-porcentaje">
                             <h2 class="rdm-lista--texto-secundario-porcentaje"><?php echo "$porcentaje_local"; ?>%</h2>

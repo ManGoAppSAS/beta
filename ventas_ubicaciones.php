@@ -255,7 +255,8 @@ if ($eliminar_venta == 'si')
 
                 if ($consulta_venta_total->num_rows != 0)
                 {
-
+                    $venta_total = 0;
+                    
                     while ($fila_venta_total = $consulta_venta_total->fetch_assoc())
                     {
                         $precio = $fila_venta_total['precio_final'];

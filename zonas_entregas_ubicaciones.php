@@ -292,7 +292,14 @@ else
                     <p style="color: #F44336"><b><?php echo ucfirst("$observaciones"); ?></b></p>
                 </div>
 
+
+
                 <div class="rdm-tarjeta--cuerpo">
+
+                    
+
+                    
+
                     <?php 
                     //consulto y muestro los productos o servicios pedidos en esta zona
                     $consulta_pro = $conexion->query("SELECT * FROM ventas_productos WHERE ubicacion_id = '$ubicacion_id' and local = '$sesion_local_id' and venta_id = '$venta_id' and (estado = 'confirmado' or estado = 'entregado') and zona = '$zona_id' ORDER BY fecha, ubicacion ASC");
@@ -337,6 +344,10 @@ else
                     <?php 
                     }   
                     ?>
+
+                    <div class="rdm-tarjeta--acciones-izquierda">            
+                        <a href="zonas_entregas_ubicaciones.php?entregar=si&venta_id=<?php echo $venta_id ?>&id=<?php echo $id ?>&ubicacion_id=<?php echo $ubicacion_id ?>&ubicacion=<?php echo $ubicacion ?>&zona_id=<?php echo "$zona_id";?>&zona=<?php echo "$zona";?>&atendido=<?php echo "$atendido";?>&producto=<?php echo "$producto";?>"><button class="rdm-boton--resaltado">Listo</button></a>
+                    </div>
 
 
                 </div>
