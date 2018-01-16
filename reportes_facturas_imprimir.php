@@ -20,9 +20,6 @@ if(isset($_POST['venta_id'])) $venta_id = $_POST['venta_id']; elseif(isset($_GET
 if(isset($_POST['dinero'])) $dinero = $_POST['dinero']; elseif(isset($_GET['dinero'])) $dinero = $_GET['dinero']; else $dinero = null;
 ?>
 
-
-
-
 <?php
 //consulto los datos de la plantilla de la factura
 $consulta_plantilla = $conexion->query("SELECT * FROM facturas_plantillas WHERE local = '$sesion_local_id'");
@@ -61,7 +58,7 @@ else
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <title>ManGo! - Venta No <?php echo "$venta_id"; ?></title>
+    <title>ManGo! - Venta No <?php echo $venta_id + 0; ?></title>
     <?php
     //información del head
     include ("partes/head.php");
@@ -82,9 +79,9 @@ else
     </script>    
 </head>
 
-<body style="background: none; margin-top: -10px; margin-bottom: -10px">
+<body style="background: none; margin-top: -10px; margin-bottom: -10px" onload="javascript:window.print(); loaded()">
 
-<section class="rdm-factura--imprimir" style="font-size: 8px;">
+<section class="rdm-factura--imprimir" style="font-size: 11px;">
 
     <article class="rdm-factura--contenedor--imprimir" style="max-width: none;">
 
@@ -101,7 +98,7 @@ else
         include ("sis/ventas_datos.php");
         ?>
 
-        <div class="rdm-factura--izquierda-centro"><b>Venta No <?php echo "$venta_id"; ?></b></div>
+        <div class="rdm-factura--izquierda-centro"><b>Venta No <?php echo $venta_id + 0; ?></b></div>
         <div class="rdm-factura--derecha-centro"><?php echo "$fecha"; ?> <?php echo "$hora"; ?></div>
 
         <div class="rdm-factura--texto">
@@ -293,8 +290,13 @@ else
 
         <section class="rdm-factura--item">
 
+            <?php 
+            //sumo el subtotal y el impuesto
+            $subtotal_ventax = $impuesto_base_total + $impuesto_valor_total;
+            ?>
+
             <div class="rdm-factura--izquierda"><b>Subtotal venta</b></div>
-            <div class="rdm-factura--derecha"><b>$ <?php echo number_format($impuesto_base_total, 0, ",", "."); ?></b></div>
+            <div class="rdm-factura--derecha"><b>$ <?php echo number_format($subtotal_ventax, 0, ",", "."); ?></b></div>
 
             <div class="rdm-factura--izquierda">Propina <?php echo "($propina_porcentaje%)"; ?></div>
             <div class="rdm-factura--derecha">$ <?php echo number_format($propina_valor, 0, ",", "."); ?></div>
