@@ -72,6 +72,82 @@ include ("sis/variables_sesion.php");
                         <h2 class="rdm-lista--titulo">Facturas</h2>
                         <h2 class="rdm-lista--texto-secundario">Consulta las facturas generadas</h2>
                     </div>
+                </div>                
+            </article>
+
+        </a>
+
+        <a class="ancla" name="productos"></a>
+        
+        <a href="reportes_productos.php">
+
+            <article class="rdm-lista--item-sencillo">
+                <div class="rdm-lista--izquierda-sencillo">
+                    <div class="rdm-lista--contenedor">
+                        <div class="rdm-lista--icono"><i class="zmdi zmdi-label zmdi-hc-2x"></i></div>
+                    </div>
+                    <div class="rdm-lista--contenedor">
+                        <h2 class="rdm-lista--titulo">Productos</h2>
+                        <h2 class="rdm-lista--texto-secundario">Consulta los productos vendidos</h2>
+                    </div>
+                </div>
+                
+            </article>
+
+        </a>
+
+        <a class="ancla" name="tipos_pagos"></a>
+        
+        <a href="reportes_tipos_pagos.php">
+
+            <article class="rdm-lista--item-sencillo">
+                <div class="rdm-lista--izquierda-sencillo">
+                    <div class="rdm-lista--contenedor">
+                        <div class="rdm-lista--icono"><i class="zmdi zmdi-card zmdi-hc-2x"></i></div>
+                    </div>
+                    <div class="rdm-lista--contenedor">
+                        <h2 class="rdm-lista--titulo">Tipos de pagos</h2>
+                        <h2 class="rdm-lista--texto-secundario">Consulta los tipos de pagos</h2>
+                    </div>
+                </div>
+                
+            </article>
+
+        </a>
+
+        <a class="ancla" name="ubicaciones"></a>
+        
+        <a href="reportes_ubicaciones.php">
+
+            <article class="rdm-lista--item-sencillo">
+                <div class="rdm-lista--izquierda-sencillo">
+                    <div class="rdm-lista--contenedor">
+                        <div class="rdm-lista--icono"><i class="zmdi zmdi-seat zmdi-hc-2x"></i></div>
+                    </div>
+                    <div class="rdm-lista--contenedor">
+                        <h2 class="rdm-lista--titulo">Ubicaciones</h2>
+                        <h2 class="rdm-lista--texto-secundario">Consulta las ubicaciones</h2>
+                    </div>
+                </div>
+                
+            </article>
+
+        </a>
+
+
+        <a class="ancla" name="usuarios"></a>
+        
+        <a href="reportes_usuarios.php">
+
+            <article class="rdm-lista--item-sencillo">
+                <div class="rdm-lista--izquierda-sencillo">
+                    <div class="rdm-lista--contenedor">
+                        <div class="rdm-lista--icono"><i class="zmdi zmdi-account zmdi-hc-2x"></i></div>
+                    </div>
+                    <div class="rdm-lista--contenedor">
+                        <h2 class="rdm-lista--titulo">Usuarios</h2>
+                        <h2 class="rdm-lista--texto-secundario">Consulta los usuarios</h2>
+                    </div>
                 </div>
                 
             </article>
