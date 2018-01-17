@@ -250,17 +250,11 @@ include ("sis/variables_sesion.php");
             </article>
 
             <?php
-        }
-        
-        ?>
-
-    </section>
-    
-    <?php 
+        }        
     }
     ?>
 
-
+    </section>
 
 
 

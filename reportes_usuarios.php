@@ -254,15 +254,11 @@ include ("sis/variables_sesion.php");
             </article>
 
             <?php
-        }
-        
-        ?>
-
-    </section>
-    
-    <?php 
+        }        
     }
     ?>
+
+    </section>
 
     <h2 class="rdm-lista--titulo-largo">Periodos</h2>
 
