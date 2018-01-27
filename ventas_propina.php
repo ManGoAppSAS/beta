@@ -17,7 +17,6 @@ include ("sis/variables_sesion.php");
 <?php
 //capturo las variables que pasan por URL o formulario
 if(isset($_POST['mensaje'])) $mensaje = $_POST['mensaje']; elseif(isset($_GET['mensaje'])) $mensaje = $_GET['mensaje']; else $mensaje = null;
-if(isset($_POST['cambiar_ubicacion'])) $cambiar_ubicacion = $_POST['cambiar_ubicacion']; elseif(isset($_GET['cambiar_ubicacion'])) $cambiar_ubicacion = $_GET['cambiar_ubicacion']; else $cambiar_ubicacion = null;
 
 if(isset($_POST['venta_id'])) $venta_id = $_POST['venta_id']; elseif(isset($_GET['venta_id'])) $venta_id = $_GET['venta_id']; else $venta_id = null;
 if(isset($_POST['venta_total_bruto'])) $venta_total_bruto = $_POST['venta_total_bruto']; elseif(isset($_GET['venta_total_bruto'])) $venta_total_bruto = $_GET['venta_total_bruto']; else $venta_total_bruto = null;
@@ -256,7 +255,7 @@ else
         </article>
 
         <div class="rdm-lista--acciones-izquierda">
-            <a href="<?php echo $_SERVER['PHP_SELF']; ?>?pagar_propina=si&venta_id=<?php echo "$venta_id";?>&propina=0"><button type="button" class="rdm-boton--plano-resaltado">Retirar</button></a>
+            <a href="ventas_pagar.php?pagar_propina=si&venta_id=<?php echo "$venta_id";?>&propina=0"><button type="button" class="rdm-boton--plano-resaltado">Retirar</button></a>
         </div>
 
     </section>
@@ -265,7 +264,7 @@ else
 
     <section class="rdm-formulario">
     
-        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+        <form action="ventas_pagar.php" method="post">
             <input type="hidden" name="pagar_propina" value="si" />
             <input type="hidden" name="venta_id" value="<?php echo "$venta_id";?>" />
             
@@ -282,7 +281,7 @@ else
 
     <section class="rdm-formulario">
     
-        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+        <form action="ventas_pagar.php" method="post">
             <input type="hidden" name="pagar_propina" value="si" />
             <input type="hidden" name="venta_id" value="<?php echo "$venta_id";?>" />
             

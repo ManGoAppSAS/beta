@@ -186,20 +186,19 @@ else
                 }
                 ?>
                 
-                <article class="rdm-lista--item-sencillo">
-                    <div class="rdm-lista--izquierda-sencillo">
-                        <div class="rdm-lista--contenedor">
-                            <?php echo "$imagen"; ?>
+                <a href="ventas_pagar.php?cambiar_atencion=si&venta_id=<?php echo "$venta_id";?>&usuario_actual_id=<?php echo "$usuario_actual_id";?>&usuario_actual=<?php echo "$usuario_actual";?>&usuario_nuevo_id=<?php echo "$id";?>">
+                    <article class="rdm-lista--item-sencillo">
+                        <div class="rdm-lista--izquierda-sencillo">
+                            <div class="rdm-lista--contenedor">
+                                <?php echo "$imagen"; ?>
+                            </div>
+                            <div class="rdm-lista--contenedor">
+                                <h2 class="rdm-lista--titulo"><?php echo ucwords("$nombres"); ?> <?php echo ucwords("$apellidos"); ?></h2>
+                                <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst("$tipo"); ?></h2>
+                            </div>
                         </div>
-                        <div class="rdm-lista--contenedor">
-                            <h2 class="rdm-lista--titulo"><?php echo ucwords("$nombres"); ?> <?php echo ucwords("$apellidos"); ?></h2>
-                            <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst("$tipo"); ?></h2>
-                        </div>
-                    </div>
-                    <div class="rdm-lista--derecha">
-                        <a href="ventas_atendido_cambiar.php?cambiar_atencion=si&venta_id=<?php echo "$venta_id";?>&usuario_actual_id=<?php echo "$usuario_actual_id";?>&usuario_actual=<?php echo "$usuario_actual";?>&usuario_nuevo_id=<?php echo "$id";?>"><div class="rdm-lista--icono"><i class="zmdi zmdi-swap zmdi-hc-2x"></i></div></a>
-                    </div>
-                </article>
+                    </article>
+                </a>
 
                 <?php
             }

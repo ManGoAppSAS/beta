@@ -67,6 +67,83 @@ if ($eliminar_venta == 'si')
 }
 ?>
 
+<?php 
+if ($eliminar_venta == "si")
+{    
+    //envio el correo electronico al cliente y el ejecutivo
+    $destinatario = "d@mangoappco.co"; 
+    $asunto = "Venta No "; 
+    $asunto .= $venta_id;
+    $asunto .= " eliminada por ";
+    $asunto .= ucfirst($sesion_nombres);
+    $asunto .= " ";
+    $asunto .= ucfirst($sesion_apellidos);
+    
+    $cuerpo = ' 
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <title>Correo</title>
+        <meta charset="utf-8" />        
+    </head>
+    <body style="background: #fff; 
+                color: #333;
+                font-size: 13px;
+                font-weight: 300;">';
+
+
+    $cuerpo .= '<section class="rdm-factura--imprimir" style="background-color: #fff; border: 1px solid #999; box-sizing: border-box; margin: 0 auto; margin-bottom: 1em;
+    width: 100%;
+    max-width: 400px;
+    padding: 1.25em 0em;
+    font-size: 0.9em;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    line-height: 1.75em;
+    box-shadow: none;">
+
+                    
+                <article class="rdm-factura--contenedor--imprimir" style="width: 90%; margin: 0px auto;">
+
+                    <div class="rdm-factura--texto" style="text-align: center;width: 100%;">
+                        <h3>Venta Eliminada</h3>
+                    </div>';
+
+    $cuerpo .= '<div class="rdm-factura--izquierda" style="display: inline-block; text-align: left; width: 69%;"><b>Motivo</b></div>
+                <div class="rdm-factura--derecha" style="display: inline-block; text-align: right; width: 29%;">' . ucfirst($eliminar_motivo) . '</div>';
+
+    $cuerpo .= '<div class="rdm-factura--izquierda" style="display: inline-block; text-align: left; width: 69%;"><b>Valor venta</b></div>
+                <div class="rdm-factura--derecha" style="display: inline-block; text-align: right; width: 29%;">$' . number_format($venta_total, 0, ",", ".") . '</div>';
+                         
+
+    $cuerpo .= '</section>
+    </body>
+    </html>';
+
+    //para el envío en formato HTML 
+    $headers = "MIME-Version: 1.0\r\n"; 
+    $headers .= "Content-type: text/html; charset=utf-8\r\n"; 
+
+    //dirección del remitente 
+    $headers .= "From: ". ucfirst($sesion_local). "<no-reply@hostgator.com>\r\n"; 
+
+    //dirección de respuesta, si queremos que sea distinta que la del remitente 
+    $headers .= "Reply-To:  ". ucfirst($sesion_local). "<no-reply@hostgator.com>\r\n"; 
+
+    //ruta del mensaje desde origen a destino 
+    $headers .= "Return-path:  ". ucfirst($sesion_local). "<info@hostgator.com>\r\n"; 
+
+    /*direcciones que recibián copia 
+    $headers .= "Cc: dannyws69@hotmail.com\r\n"; 
+    */
+
+    //direcciones que recibirán copia oculta 
+    $headers .= "Bcc: maxeventagencia@gmail.com \r\n"; 
+
+    mail($destinatario,$asunto,$cuerpo,$headers);  
+}  
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>

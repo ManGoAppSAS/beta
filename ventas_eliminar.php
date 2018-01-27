@@ -24,15 +24,160 @@ if(isset($_POST['eliminar_motivo'])) $eliminar_motivo = $_POST['eliminar_motivo'
 if(isset($_POST['mensaje'])) $mensaje = $_POST['mensaje']; elseif(isset($_GET['mensaje'])) $mensaje = $_GET['mensaje']; else $mensaje = null;
 if(isset($_POST['body_snack'])) $body_snack = $_POST['body_snack']; elseif(isset($_GET['body_snack'])) $body_snack = $_GET['body_snack']; else $body_snack = null;
 if(isset($_POST['mensaje_tema'])) $mensaje_tema = $_POST['mensaje_tema']; elseif(isset($_GET['mensaje_tema'])) $mensaje_tema = $_GET['mensaje_tema']; else $mensaje_tema = null;
+
+if(isset($_POST['mensaje_tema'])) $mensaje_tema = $_POST['mensaje_tema']; elseif(isset($_GET['mensaje_tema'])) $mensaje_tema = $_GET['mensaje_tema']; else $mensaje_tema = null;
 ?>
+
+
 
 <?php
 //consulto los datos de la venta
 $consulta_venta = $conexion->query("SELECT * FROM ventas_datos WHERE id = '$venta_id' and estado = 'ocupado'");
 
-if ($fila_venta = $consulta_venta->fetch_assoc())
+if ($consulta_venta->num_rows == 0)
 {
-    $ubicacion_id = $fila_venta['ubicacion_id'];
+    header("location:ventas_ubicaciones.php");
+}
+else
+{
+    while ($fila_venta = $consulta_venta->fetch_assoc())
+    {
+        $ubicacion_id = $fila_venta['ubicacion_id'];
+        $ubicacion = $fila_venta['ubicacion'];
+        $tipo_pago = $fila_venta['tipo_pago'];
+        $venta_descuento_porcentaje = $fila_venta['descuento_porcentaje'];
+        $venta_descuento_valor = $fila_venta['descuento_valor'];
+        $venta_propina = $fila_venta['propina'];
+
+        if ($tipo_pago != "efectivo")
+        {
+            $caja_readonly = "readonly";
+            $caja_autofocus = "";
+            $caja_tipo = "hidden";
+        }
+        else
+        {
+            $caja_readonly = "";
+            $caja_autofocus = "autofocus";
+            $caja_tipo = "tel";
+        }
+    }
+}
+?>
+
+<?php
+//consulto los productos agregados a la venta para sacar el impuesto acumulado
+$consulta_pro = $conexion->query("SELECT distinct producto_id FROM ventas_productos WHERE venta_id = '$venta_id'");
+
+if ($consulta_pro->num_rows == 0)
+{
+    
+}
+else
+{    
+    $impuesto_base_total = 0;
+    $impuesto_valor_total = 0;
+    $precio_neto_total = 0;
+
+    while ($fila_pro = $consulta_pro->fetch_assoc())
+    {   
+        $producto_id = $fila_pro['producto_id'];
+
+        //consulto la información del producto
+        $consulta_producto = $conexion->query("SELECT * FROM ventas_productos WHERE producto_id = '$producto_id' and venta_id = '$venta_id'");
+
+        $impuesto_base_subtotal = 0;
+        $impuesto_valor_subtotal = 0;
+        $precio_neto_subtotal = 0;
+
+        while ($fila_producto = $consulta_producto->fetch_assoc())
+        {
+            $producto_venta_id = $fila_producto['id'];
+            $producto_id = $fila_producto['producto_id'];
+            $precio_final = $fila_producto['precio_final'];
+            $porcentaje_impuesto = $fila_producto['porcentaje_impuesto'];
+
+            //consulto los datos del producto
+            $consulta_pro_dat = $conexion->query("SELECT * FROM productos WHERE id = '$producto_id'");
+
+            while ($fila_pro_dat = $consulta_pro_dat->fetch_assoc())
+            {
+                $precio = $fila_pro_dat['precio'];
+                $impuesto_id = $fila_pro_dat['impuesto_id'];
+                $impuesto_incluido = $fila_pro_dat['impuesto_incluido'];
+
+                //consulto el impuesto
+                $consulta_impuesto = $conexion->query("SELECT * FROM impuestos WHERE id = '$impuesto_id'");           
+
+                if ($fila_impuesto = $consulta_impuesto->fetch_assoc()) 
+                {
+                    $impuesto = $fila_impuesto['impuesto'];
+                    $impuesto_porcentaje = $fila_impuesto['porcentaje'];
+                }
+                else
+                {
+                    $impuesto = "No se ha asignado un impuesto";
+                    $impuesto_porcentaje = 0;
+                }
+
+                //calculo el valor del precio bruto y el precio neto
+                $impuesto_valor = $precio * ($impuesto_porcentaje / 100);
+
+                if ($impuesto_incluido == "no")
+                {
+                   $precio_bruto = $precio;
+                }
+                else
+                {
+                   $precio_bruto = $precio - $impuesto_valor;
+                }
+
+                $precio_neto = $precio_bruto + $impuesto_valor;
+                $impuesto_base = $precio_bruto;
+            }
+            
+            $valor_impuesto = $precio_final * ($porcentaje_impuesto / 100);
+            $base_impuesto = $precio_final - $valor_impuesto;
+
+            $cantidad = $consulta_producto->num_rows; //cantidad
+            
+                  
+            $impuesto_porcentaje = $porcentaje_impuesto; //porcentaje del impuesto del producto        
+            $precio_neto = $precio_final; //precio neto del producto (con impuesto ya incluido)
+
+            if ($impuesto_base == $precio_neto)
+            {
+                $impuesto_base = $precio_neto;
+            }
+            
+            $impuesto_base_subtotal = $impuesto_base_subtotal + $impuesto_base; //subtotal de la base del impuesto del producto
+            $impuesto_valor_subtotal = $impuesto_valor_subtotal  + $impuesto_valor; //subtotal del valor del impuesto del producto
+            $precio_neto_subtotal = $precio_neto_subtotal  + $precio_neto; //subtotal del precio neto del producto
+        }
+
+        $impuesto_base_total = $impuesto_base_total + $impuesto_base_subtotal; //total de la base del impuesto de todos los productos
+        $impuesto_valor_total = $impuesto_valor_total + $impuesto_valor_subtotal; //total del valor del impuesto de todos los productos
+        $precio_neto_total = $precio_neto_total  + $precio_neto_subtotal; //total del precio de todos los productos
+    }
+
+    //valor del descuento
+    $descuento_valor = (($venta_descuento_porcentaje * $impuesto_base_total) / 100);
+
+    //propina
+    if (($venta_propina >= 0) and ($venta_propina <= 100))
+    {    
+        $propina_valor = (($venta_propina * $impuesto_base_total) / 100);
+    }
+    else
+    {
+        $propina_valor = $venta_propina;
+    }
+    
+    //porcentaja de la propina
+    $propina_porcentaje = ($propina_valor * 100) / $impuesto_base_total;
+    
+    //total de la venta con descuento y propina
+    $venta_total = $precio_neto_total - $descuento_valor + $propina_valor;
 }
 ?>
 
@@ -63,6 +208,7 @@ if ($fila_venta = $consulta_venta->fetch_assoc())
     <form action="ventas_ubicaciones.php" method="post">
         <input type="hidden" name="venta_id" value="<?php echo $venta_id; ?>">
         <input type="hidden" name="ubicacion_id" value="<?php echo $ubicacion_id; ?>">
+        <input type="hidden" name="venta_total" value="<?php echo $venta_total; ?>">
     
         <section class="rdm-tarjeta">
 

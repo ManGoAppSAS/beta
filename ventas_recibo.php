@@ -497,7 +497,7 @@ if ($enviar_correo == "si")
 
         <div class="rdm-tarjeta--primario-largo">
             <h1 class="rdm-tarjeta--titulo-largo">Cambio</h1>
-            <h2 class="rdm-tarjeta--dashboard-titulo-positivo">$ <?php echo number_format($cambio, 2, ",", "."); ?></h2>
+            <h2 class="rdm-tarjeta--dashboard-titulo-positivo">$<?php echo number_format($cambio, 2, ",", "."); ?></h2>
         </div>
 
         <article class="rdm-lista--item-sencillo">
@@ -507,7 +507,7 @@ if ($enviar_correo == "si")
                 </div>
                 <div class="rdm-lista--contenedor">
                     <h2 class="rdm-lista--titulo">Dinero recibido</h2>
-                    <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($dinero, 2, ",", "."); ?></h2>
+                    <h2 class="rdm-lista--texto-valor">$<?php echo number_format($dinero, 2, ",", "."); ?></h2>
                 </div>
             </div>
         </article>
@@ -519,7 +519,7 @@ if ($enviar_correo == "si")
                 </div>
                 <div class="rdm-lista--contenedor">
                     <h2 class="rdm-lista--titulo">Total pagado</h2>
-                    <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($total_neto, 2, ",", "."); ?></h2>
+                    <h2 class="rdm-lista--texto-valor">$<?php echo number_format($total_neto, 2, ",", "."); ?></h2>
                 </div>
             </div>
         </article>

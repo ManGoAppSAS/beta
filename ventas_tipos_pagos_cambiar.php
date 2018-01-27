@@ -257,20 +257,22 @@ else
                 }
                 ?>
                 
-                <article class="rdm-lista--item-sencillo">
-                    <div class="rdm-lista--izquierda-sencillo">
-                        <div class="rdm-lista--contenedor">
-                            <?php echo "$imagen"; ?>
+                <a href="ventas_pagar.php?cambiar_tipo_pago=si&venta_id=<?php echo "$venta_id";?>&tipo_pago_actual=<?php echo "$tipo_pago_actual";?>&tipo_pago_nuevo_id=<?php echo "$tipo_pago_id";?>&tipo_pago_nuevo=<?php echo "$tipo_pago";?>">
+
+                    <article class="rdm-lista--item-sencillo">
+                        <div class="rdm-lista--izquierda-sencillo">
+                            <div class="rdm-lista--contenedor">
+                                <?php echo "$imagen"; ?>
+                            </div>
+                            <div class="rdm-lista--contenedor">
+                                <h2 class="rdm-lista--titulo"><?php echo ucfirst("$tipo_pago"); ?></h2>
+                                <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst("$tipo"); ?></h2>
+                            </div>
                         </div>
-                        <div class="rdm-lista--contenedor">
-                            <h2 class="rdm-lista--titulo"><?php echo ucfirst("$tipo_pago"); ?></h2>
-                            <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst("$tipo"); ?></h2>
-                        </div>
-                    </div>
-                    <div class="rdm-lista--derecha">
-                        <a href="ventas_tipos_pagos_cambiar.php?cambiar_tipo_pago=si&venta_id=<?php echo "$venta_id";?>&tipo_pago_actual=<?php echo "$tipo_pago_actual";?>&tipo_pago_nuevo_id=<?php echo "$tipo_pago_id";?>&tipo_pago_nuevo=<?php echo "$tipo_pago";?>"><div class="rdm-lista--icono"><i class="zmdi zmdi-swap zmdi-hc-2x"></i></div></a>
-                    </div>
-                </article>
+                        
+                    </article>
+
+                </a>
 
                 <?php
             }

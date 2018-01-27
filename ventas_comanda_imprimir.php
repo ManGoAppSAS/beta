@@ -81,11 +81,9 @@ else
 
 <body style="background: none; margin-top: -10px; margin-bottom: -10px" onload="javascript:window.print(); loaded()">
 
-<section class="rdm-factura--imprimir" style="font-size: 10px;">
+<section class="rdm-factura--imprimir" style="font-size: 11px;">
 
-    <article class="rdm-factura--contenedor--imprimir" style="max-width: none;">
-
-
+    <article class="rdm-factura--contenedor--imprimir" style="max-width: none;">        
 
         <?php
         //datos de la venta
@@ -93,16 +91,9 @@ else
         ?>
 
         <div class="rdm-factura--texto">
-            <p>Comanda No <?php echo "$venta_id"; ?><br>
-                <?php echo "$fecha"; ?> <?php echo "$hora"; ?></p>
+            <h3>Comanda No <?php echo "$venta_id"; ?><br>
+            <?php echo "$fecha"; ?> <?php echo "$hora"; ?></h3>
         </div>
-
-        
-        <div class="rdm-factura--derecha-centro"></div>
-
-        
-
-
 
         <?php
         //consulto y muestro los productos agregados a la venta
@@ -245,11 +236,7 @@ else
                 ?>
 
                 <section class="rdm-factura--item">
-
-                    <div class="rdm-factura--izquierda"><b><?php echo "$cantidad_producto"; ?><?php echo ucfirst("$producto"); ?>, <?php echo ucfirst("$categoria"); ?></b></div>
-                    
-
-                    
+                    <div class="rdm-factura--izquierda"><?php echo "$cantidad_producto"; ?> <?php echo ucfirst("$producto"); ?>, <?php echo ucfirst("$categoria"); ?></div>                    
                 </section>
 
                 <?php

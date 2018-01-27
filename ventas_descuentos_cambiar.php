@@ -329,20 +329,21 @@ else
         {
             ?>
             
-            <article class="rdm-lista--item-sencillo">
-                <div class="rdm-lista--izquierda-sencillo">
-                    <div class="rdm-lista--contenedor">
-                        <div class="rdm-lista--icono"><i class="zmdi zmdi-card-giftcard zmdi-hc-2x"></i></div>
-                    </div>
-                    <div class="rdm-lista--contenedor">
-                        <h2 class="rdm-lista--titulo">Ninguno</h2>
-                        <h2 class="rdm-lista--texto-valor">0,00%</h2>
-                    </div>
-                </div>
-                <div class="rdm-lista--derecha">
-                    <a href="ventas_descuentos_cambiar.php?cambiar_descuento=si&venta_id=<?php echo "$venta_id";?>&descuento_actual_id=<?php echo "$descuento_actual_id";?>&descuento_actual=<?php echo "$descuento_actual";?>&descuento_nuevo_id=0&descuento_nuevo=sin descuento&descuento_nuevo_porcentaje=0"><div class="rdm-lista--icono"><i class="zmdi zmdi-check zmdi-hc-2x"></i></div></a>
-                </div>
-            </article>
+            <a href="ventas_pagar.php?cambiar_descuento=si&venta_id=<?php echo "$venta_id";?>&descuento_actual_id=<?php echo "$descuento_actual_id";?>&descuento_actual=<?php echo "$descuento_actual";?>&descuento_nuevo_id=0&descuento_nuevo=sin descuento&descuento_nuevo_porcentaje=0">
+
+                <article class="rdm-lista--item-sencillo">
+                    <div class="rdm-lista--izquierda-sencillo">
+                        <div class="rdm-lista--contenedor">
+                            <div class="rdm-lista--icono"><i class="zmdi zmdi-card-giftcard zmdi-hc-2x"></i></div>
+                        </div>
+                        <div class="rdm-lista--contenedor">
+                            <h2 class="rdm-lista--titulo">Ninguno</h2>
+                            <h2 class="rdm-lista--texto-valor">0,00%</h2>
+                        </div>
+                    </div>                    
+                </article>
+
+            </a>
 
             <?php
             while ($fila = $consulta->fetch_assoc())
@@ -352,20 +353,21 @@ else
                 $porcentaje = $fila['porcentaje'];
                 ?>
                 
-                <article class="rdm-lista--item-sencillo">
-                    <div class="rdm-lista--izquierda-sencillo">
-                        <div class="rdm-lista--contenedor">
-                            <div class="rdm-lista--icono"><i class="zmdi zmdi-card-giftcard zmdi-hc-2x"></i></div>
-                        </div>
-                        <div class="rdm-lista--contenedor">
-                            <h2 class="rdm-lista--titulo"><?php echo ucfirst("$descuento"); ?></h2>
-                            <h2 class="rdm-lista--texto-valor"><?php echo number_format($porcentaje, 2, ",", "."); ?>%</h2>
-                        </div>
-                    </div>
-                    <div class="rdm-lista--derecha">
-                        <a href="ventas_descuentos_cambiar.php?cambiar_descuento=si&venta_id=<?php echo "$venta_id";?>&descuento_actual_id=<?php echo "$descuento_actual_id";?>&descuento_actual=<?php echo "$descuento_actual";?>&descuento_nuevo_id=<?php echo "$descuento_id";?>&descuento_nuevo=<?php echo "$descuento";?>&descuento_nuevo_porcentaje=<?php echo "$porcentaje";?>"><div class="rdm-lista--icono"><i class="zmdi zmdi-check zmdi-hc-2x"></i></div></a>
-                    </div>
-                </article>
+                <a href="ventas_pagar.php?cambiar_descuento=si&venta_id=<?php echo "$venta_id";?>&descuento_actual_id=<?php echo "$descuento_actual_id";?>&descuento_actual=<?php echo "$descuento_actual";?>&descuento_nuevo_id=<?php echo "$descuento_id";?>&descuento_nuevo=<?php echo "$descuento";?>&descuento_nuevo_porcentaje=<?php echo "$porcentaje";?>">
+
+                    <article class="rdm-lista--item-sencillo">
+                        <div class="rdm-lista--izquierda-sencillo">
+                            <div class="rdm-lista--contenedor">
+                                <div class="rdm-lista--icono"><i class="zmdi zmdi-card-giftcard zmdi-hc-2x"></i></div>
+                            </div>
+                            <div class="rdm-lista--contenedor">
+                                <h2 class="rdm-lista--titulo"><?php echo ucfirst("$descuento"); ?></h2>
+                                <h2 class="rdm-lista--texto-valor"><?php echo number_format($porcentaje, 2, ",", "."); ?>%</h2>
+                            </div>
+                        </div>                        
+                    </article>
+
+                </a>
 
                 <?php
             }
@@ -378,7 +380,7 @@ else
 
     <section class="rdm-formulario">
     
-        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+        <form action="ventas_pagar.php" method="post">
             <input type="hidden" name="venta_id" value="<?php echo "$venta_id";?>" />
             <input type="hidden" name="descuento_actual" value="<?php echo "$descuento_actual";?>" />
             <input type="hidden" name="descuento_nuevo_id" value="99" />

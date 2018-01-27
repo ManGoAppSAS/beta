@@ -313,7 +313,7 @@ if ($editar == "si")
                         </div>
                         <div class="rdm-lista--contenedor">
                             <h2 class="rdm-lista--titulo">Impuesto <?php echo ucfirst($impuesto) ?></h2>
-                            <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($impuesto_valor, 2, ",", "."); ?> (<?php echo ucfirst($impuesto_porcentaje) ?>%)</h2>
+                            <h2 class="rdm-lista--texto-valor">$<?php echo number_format($impuesto_valor, 2, ",", "."); ?> (<?php echo ucfirst($impuesto_porcentaje) ?>%)</h2>
                         </div>
                     </div>
                 </article>
@@ -337,7 +337,7 @@ if ($editar == "si")
                         </div>
                         <div class="rdm-lista--contenedor">
                             <h2 class="rdm-lista--titulo">Precio neto</h2>
-                            <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($precio_neto, 2, ",", "."); ?></h2>
+                            <h2 class="rdm-lista--texto-valor">$<?php echo number_format($precio_neto, 2, ",", "."); ?></h2>
                         </div>
                     </div>
                 </article>
@@ -349,7 +349,7 @@ if ($editar == "si")
                         </div>
                         <div class="rdm-lista--contenedor">
                             <h2 class="rdm-lista--titulo">Costo</h2>
-                            <h2 class="rdm-lista--texto-valor"><span class="rdm-lista--texto-negativo">$ <?php echo number_format($costo, 2, ",", "."); ?></span></h2>
+                            <h2 class="rdm-lista--texto-valor"><span class="rdm-lista--texto-negativo">$<?php echo number_format($costo, 2, ",", "."); ?></span></h2>
                         </div>
                     </div>
                 </article>
@@ -361,7 +361,7 @@ if ($editar == "si")
                         </div>
                         <div class="rdm-lista--contenedor">
                             <h2 class="rdm-lista--titulo">Utilidad</h2>
-                            <h2 class="rdm-lista--texto-valor"><span class="rdm-lista--texto-positivo">$ <?php echo number_format($utilidad, 2, ",", "."); ?> (<?php echo number_format($utilidad_porcentaje, 2, ",", "."); ?>%)</span></h2>
+                            <h2 class="rdm-lista--texto-valor"><span class="rdm-lista--texto-positivo">$<?php echo number_format($utilidad, 2, ",", "."); ?> (<?php echo number_format($utilidad_porcentaje, 2, ",", "."); ?>%)</span></h2>
                         </div>
                     </div>
                 </article>

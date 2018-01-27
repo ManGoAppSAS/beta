@@ -226,6 +226,7 @@ while ($fila_venta_total = $consulta_venta_total->fetch_assoc())
                         <div class="rdm-lista--acciones-izquierda">
                             <a href="ventas_resumen.php?eliminar=si&producto_venta_id=<?php echo "$producto_venta_id";?>&producto=<?php echo "$producto";?>&venta_id=<?php echo "$venta_id";?>"><button type="button" class="rdm-boton--primario"><i class="zmdi zmdi-delete"></i> x 1</button></a>
                         </div>
+
                     </div>
                 </div>
                 <div class="rdm-lista--derecha">
@@ -347,9 +348,20 @@ while ($fila_venta_total = $consulta_venta_total->fetch_assoc())
                         <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($precio_final, 2, ",", "."); ?></h2>
                         <h2 class="rdm-lista--texto-secundario">Enviado a <?php echo ucfirst($zona); ?></h2>
 
+                        <?php
+                        //le doy acceso al modulo segun el perfil que tenga
+                        if (($sesion_tipo == "administrador") or ($sesion_tipo == "socio"))
+                        {
+                        ?>
+
                         <div class="rdm-lista--acciones-izquierda">
                             <a href="ventas_resumen.php?eliminar=si&producto_venta_id=<?php echo "$producto_venta_id";?>&producto=<?php echo "$producto";?>&venta_id=<?php echo "$venta_id";?>"><button type="button" class="rdm-boton--primario"><i class="zmdi zmdi-delete"></i> x 1</button></a>
                         </div>
+
+                        <?php
+                        }
+                        ?>
+
                     </div>
                 </div>
                 <div class="rdm-lista--derecha">
@@ -471,9 +483,19 @@ while ($fila_venta_total = $consulta_venta_total->fetch_assoc())
                         <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($precio_final, 2, ",", "."); ?></h2>
                         <h2 class="rdm-lista--texto-secundario">Entregado a <?php echo "$atendido"; ?></h2>
 
+                        <?php
+                        //le doy acceso al modulo segun el perfil que tenga
+                        if (($sesion_tipo == "administrador") or ($sesion_tipo == "socio"))
+                        {
+                        ?>
+
                         <div class="rdm-lista--acciones-izquierda">
                             <a href="ventas_resumen.php?eliminar=si&producto_venta_id=<?php echo "$producto_venta_id";?>&producto=<?php echo "$producto";?>&venta_id=<?php echo "$venta_id";?>"><button type="button" class="rdm-boton--primario"><i class="zmdi zmdi-delete"></i> x 1</button></a>
                         </div>
+
+                        <?php
+                        }
+                        ?>
                         
                     </div>
 
@@ -617,8 +639,7 @@ while ($fila_venta_total = $consulta_venta_total->fetch_assoc())
     ?>
 
     <?php
-    //consulto y muestro los productos pedidos
-
+    //observaciones del pedidos
     $consulta = $conexion->query("SELECT * FROM ventas_productos WHERE venta_id = '$venta_id' ORDER BY fecha DESC");
 
     if ($consulta->num_rows == 0)

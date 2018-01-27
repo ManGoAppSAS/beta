@@ -59,6 +59,9 @@ if(isset($_POST['mensaje_tema'])) $mensaje_tema = $_POST['mensaje_tema']; elseif
             <a href="index.php#inventario"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-arrow-left zmdi-hc-2x"></i></div></a>
             <h2 class="rdm-toolbar--titulo">Inventario</h2>
         </div>
+        <div class="rdm-toolbar--derecha">
+            <a href="inventario_imprimir.php"><div class="rdm-lista--icono"><i class="zmdi zmdi-print zmdi-hc-2x"></i></div></a>
+        </div>
     </div>
 </header>
 

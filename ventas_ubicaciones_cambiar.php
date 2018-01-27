@@ -266,20 +266,19 @@ else
                 }
                 ?>
                 
-                <article class="rdm-lista--item-sencillo">
-                    <div class="rdm-lista--izquierda-sencillo">
-                        <div class="rdm-lista--contenedor">
-                            <?php echo "$imagen"; ?>
+                <a href="ventas_pagar.php?cambiar_ubicacion=si&venta_id=<?php echo "$venta_id";?>&ubicacion_actual_id=<?php echo "$ubicacion_actual_id";?>&ubicacion_actual=<?php echo "$ubicacion_actual";?>&ubicacion_nueva_id=<?php echo "$ubicacion_id";?>&ubicacion_nueva=<?php echo "$ubicacion";?>">
+                    <article class="rdm-lista--item-sencillo">
+                        <div class="rdm-lista--izquierda-sencillo">
+                            <div class="rdm-lista--contenedor">
+                                <?php echo "$imagen"; ?>
+                            </div>
+                            <div class="rdm-lista--contenedor">
+                                <h2 class="rdm-lista--titulo"><?php echo ucfirst("$ubicacion"); ?></h2>
+                                <h2 class="rdm-lista--texto-secundario">Ubicada en <?php echo ucfirst("$ubicada"); ?></h2>
+                            </div>
                         </div>
-                        <div class="rdm-lista--contenedor">
-                            <h2 class="rdm-lista--titulo"><?php echo ucfirst("$ubicacion"); ?></h2>
-                            <h2 class="rdm-lista--texto-secundario">Ubicada en <?php echo ucfirst("$ubicada"); ?></h2>
-                        </div>
-                    </div>
-                    <div class="rdm-lista--derecha">
-                        <a href="ventas_ubicaciones_cambiar.php?cambiar_ubicacion=si&venta_id=<?php echo "$venta_id";?>&ubicacion_actual_id=<?php echo "$ubicacion_actual_id";?>&ubicacion_actual=<?php echo "$ubicacion_actual";?>&ubicacion_nueva_id=<?php echo "$ubicacion_id";?>&ubicacion_nueva=<?php echo "$ubicacion";?>"><div class="rdm-lista--icono"><i class="zmdi zmdi-swap zmdi-hc-2x"></i></div></a>
-                    </div>
-                </article>
+                    </article>
+                </a>
 
                 <?php
             }

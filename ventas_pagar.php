@@ -19,6 +19,38 @@ include ("sis/variables_sesion.php");
 if(isset($_POST['mensaje'])) $mensaje = $_POST['mensaje']; elseif(isset($_GET['mensaje'])) $mensaje = $_GET['mensaje']; else $mensaje = null;
 if(isset($_POST['caso'])) $caso = $_POST['caso']; elseif(isset($_GET['caso'])) $caso = $_GET['caso']; else $caso = null;
 
+//variables para cambio de tipo de pago
+if(isset($_POST['cambiar_tipo_pago'])) $cambiar_tipo_pago = $_POST['cambiar_tipo_pago']; elseif(isset($_GET['cambiar_tipo_pago'])) $cambiar_tipo_pago = $_GET['cambiar_tipo_pago']; else $cambiar_tipo_pago = null;
+if(isset($_POST['tipo_pago_actual_id'])) $tipo_pago_actual_id = $_POST['tipo_pago_actual_id']; elseif(isset($_GET['tipo_pago_actual_id'])) $tipo_pago_actual_id = $_GET['tipo_pago_actual_id']; else $tipo_pago_actual_id = null;
+if(isset($_POST['tipo_pago_actual'])) $tipo_pago_actual = $_POST['tipo_pago_actual']; elseif(isset($_GET['tipo_pago_actual'])) $tipo_pago_actual = $_GET['tipo_pago_actual']; else $tipo_pago_actual_id = null;
+if(isset($_POST['tipo_pago_nuevo_id'])) $tipo_pago_nuevo_id = $_POST['tipo_pago_nuevo_id']; elseif(isset($_GET['tipo_pago_nuevo_id'])) $tipo_pago_nuevo_id = $_GET['tipo_pago_nuevo_id']; else $tipo_pago_nuevo_id = null;
+
+//variables para cambio de descuento
+if(isset($_POST['cambiar_descuento'])) $cambiar_descuento = $_POST['cambiar_descuento']; elseif(isset($_GET['cambiar_descuento'])) $cambiar_descuento = $_GET['cambiar_descuento']; else $cambiar_descuento = null;
+if(isset($_POST['descuento_actual_id'])) $descuento_actual_id = $_POST['descuento_actual_id']; elseif(isset($_GET['descuento_actual_id'])) $descuento_actual_id = $_GET['descuento_actual_id']; else $descuento_actual_id = null;
+if(isset($_POST['descuento_actual'])) $descuento_actual = $_POST['descuento_actual']; elseif(isset($_GET['descuento_actual'])) $descuento_actual = $_GET['descuento_actual']; else $descuento_actual_id = null;
+if(isset($_POST['descuento_nuevo_id'])) $descuento_nuevo_id = $_POST['descuento_nuevo_id']; elseif(isset($_GET['descuento_nuevo_id'])) $descuento_nuevo_id = $_GET['descuento_nuevo_id']; else $descuento_nuevo_id = null;
+if(isset($_POST['descuento_personal'])) $descuento_personal = $_POST['descuento_personal']; elseif(isset($_GET['descuento_personal'])) $descuento_personal = $_GET['descuento_personal']; else $descuento_personal = null;
+if(isset($_POST['cambiar_descuento_personal'])) $cambiar_descuento_personal = $_POST['cambiar_descuento_personal']; elseif(isset($_GET['cambiar_descuento_personal'])) $cambiar_descuento_personal = $_GET['cambiar_descuento_personal']; else $cambiar_descuento_personal = null;
+if(isset($_POST['impuesto_base_total'])) $impuesto_base_total = $_POST['impuesto_base_total']; elseif(isset($_GET['impuesto_base_total'])) $impuesto_base_total = $_GET['impuesto_base_total']; else $impuesto_base_total = null;
+
+//variables para el cambio de propina
+if(isset($_POST['pagar_propina'])) $pagar_propina = $_POST['pagar_propina']; elseif(isset($_GET['pagar_propina'])) $pagar_propina = $_GET['pagar_propina']; else $pagar_propina = null;
+if(isset($_POST['propina'])) $propina = $_POST['propina']; elseif(isset($_GET['propina'])) $propina = $_GET['propina']; else $propina = null;
+
+//variables para el cambio de ubicacion
+if(isset($_POST['cambiar_ubicacion'])) $cambiar_ubicacion = $_POST['cambiar_ubicacion']; elseif(isset($_GET['cambiar_ubicacion'])) $cambiar_ubicacion = $_GET['cambiar_ubicacion']; else $cambiar_ubicacion = null;
+if(isset($_POST['ubicacion_actual_id'])) $ubicacion_actual_id = $_POST['ubicacion_actual_id']; elseif(isset($_GET['ubicacion_actual_id'])) $ubicacion_actual_id = $_GET['ubicacion_actual_id']; else $ubicacion_actual_id = null;
+if(isset($_POST['ubicacion_actual'])) $ubicacion_actual = $_POST['ubicacion_actual']; elseif(isset($_GET['ubicacion_actual'])) $ubicacion_actual = $_GET['ubicacion_actual']; else $ubicacion_actual_id = null;
+if(isset($_POST['ubicacion_nueva_id'])) $ubicacion_nueva_id = $_POST['ubicacion_nueva_id']; elseif(isset($_GET['ubicacion_nueva_id'])) $ubicacion_nueva_id = $_GET['ubicacion_nueva_id']; else $ubicacion_nueva_id = null;
+
+//variables para el ccambio de atencion
+if(isset($_POST['cambiar_atencion'])) $cambiar_atencion = $_POST['cambiar_atencion']; elseif(isset($_GET['cambiar_atencion'])) $cambiar_atencion = $_GET['cambiar_atencion']; else $cambiar_atencion = null;
+if(isset($_POST['usuario_actual'])) $usuario_actual = $_POST['usuario_actual']; elseif(isset($_GET['usuario_actual'])) $usuario_actual = $_GET['usuario_actual']; else $usuario_actual = null;
+if(isset($_POST['usuario_nuevo_id'])) $usuario_nuevo_id = $_POST['usuario_nuevo_id']; elseif(isset($_GET['usuario_nuevo_id'])) $usuario_nuevo_id = $_GET['usuario_nuevo_id']; else $usuario_nuevo_id = null;
+
+
+
 if(isset($_POST['producto_venta_id'])) $producto_venta_id = $_POST['producto_venta_id']; elseif(isset($_GET['producto_venta_id'])) $producto_venta_id = $_GET['producto_venta_id']; else $producto_venta_id = null;
 if(isset($_POST['producto'])) $producto = $_POST['producto']; elseif(isset($_GET['producto'])) $producto = $_GET['producto']; else $producto = null;
 if(isset($_POST['porcentaje'])) $porcentaje = $_POST['porcentaje']; elseif(isset($_GET['porcentaje'])) $porcentaje = $_GET['porcentaje']; else $porcentaje = null;
@@ -41,25 +73,64 @@ if(isset($_POST['mensaje_tema'])) $mensaje_tema = $_POST['mensaje_tema']; elseif
 ?>
 
 <?php
-//actualizo el descuento de la venta
-if ($caso == "descuentos")
+//cambio la atención
+if ($cambiar_atencion == "si")
 {
-    //actualizo el descuento en los datos de la venta
-    $actualizar = $conexion->query("UPDATE ventas_datos SET descuento_id = '$descuento_id', descuento_porcentaje = '$porcentaje' WHERE id = '$venta_id'");
+    //consulto los datos del nuevo usuario
+    $consulta2 = $conexion->query("SELECT * FROM usuarios WHERE id = $usuario_nuevo_id");
 
-    $mensaje = "Descuento <b>$descuento</b> agregado";
+    if ($filas2 = $consulta2->fetch_assoc())
+    {
+        $usuario_nuevo_id = $filas2['id'];
+        $usuario_nuevo_nombres = $filas2['nombres'];
+        $usuario_nuevo_apellidos = $filas2['apellidos'];
+        $usuario_nuevo = "$usuario_nuevo_nombres $usuario_nuevo_apellidos";
+    }
+    else
+    {
+        $usuario_nuevo_id = "";
+        $ubicacion_nueva = "sin ubicacion";
+    }
+
+    $actualizar = $conexion->query("UPDATE ventas_datos SET usuario_id = '$usuario_nuevo_id' WHERE id = '$venta_id'");
+    $actualizar = $conexion->query("UPDATE ventas_productos SET usuario = '$usuario_nuevo_id' WHERE venta_id = '$venta_id'");
+
+    $mensaje = 'Se cambió la atención de <b>' . ucfirst($usuario_actual) . '</b> a <b>' . ucfirst($usuario_nuevo) . '</b>';
     $body_snack = 'onLoad="Snackbar()"';
     $mensaje_tema = "aviso";
 }
 ?>
 
 <?php
-//actualizo el tipo de pago de la venta
-if ($caso == "tipos")
-{    
-    $actualizar = $conexion->query("UPDATE ventas_datos SET tipo_pago_id = '$tipo_pago_id', tipo_pago = '$tipo_pago' WHERE id = '$venta_id'");
+//cambio la ubicación
+if ($cambiar_ubicacion == "si")
+{
+    //consulto los datos de la nueva ubicacion
+    $consulta2 = $conexion->query("SELECT * FROM ubicaciones WHERE id = $ubicacion_nueva_id");
 
-    $mensaje = "Tipo de pago <b>$tipo $tipo_pago</b> agregado";
+    if ($filas2 = $consulta2->fetch_assoc())
+    {
+        $ubicacion_nueva_id = $filas2['id'];
+        $ubicacion_nueva = $filas2['ubicacion'];
+    }
+    else
+    {
+        $ubicacion_nueva_id = "";
+        $ubicacion_nueva = "sin ubicacion";
+    }
+
+    $actualizar = $conexion->query("UPDATE ventas_datos SET ubicacion_id = '$ubicacion_nueva_id', ubicacion = '$ubicacion_nueva' WHERE id = '$venta_id'");    
+    $actualizar = $conexion->query("UPDATE ventas_productos SET ubicacion_id = '$ubicacion_nueva_id', ubicacion = '$ubicacion_nueva' WHERE venta_id = '$venta_id'");
+
+    $actualizar = $conexion->query("UPDATE ubicaciones SET estado = 'ocupado' WHERE id = '$ubicacion_nueva_id'");
+    $actualizar = $conexion->query("UPDATE ubicaciones SET estado = 'libre' WHERE id = '$ubicacion_actual_id'");
+
+    if ($ubicacion_nueva_id == $ubicacion_actual_id)
+    {
+        $actualizar = $conexion->query("UPDATE ubicaciones SET estado = 'ocupado' WHERE id = '$ubicacion_actual_id'");
+    }    
+
+    $mensaje = 'Se cambió la ubicación de <b>' . ucfirst($ubicacion_actual) . '</b> a <b>' . ucfirst($ubicacion_nueva) . '</b>';
     $body_snack = 'onLoad="Snackbar()"';
     $mensaje_tema = "aviso";
 }
@@ -67,12 +138,42 @@ if ($caso == "tipos")
 
 <?php
 //actualizo la propina
+$propina = str_replace('.','',$propina);
+
 if ($pagar_propina == "si")
 {
     //actualizo el valor de la propina
     $actualizar = $conexion->query("UPDATE ventas_datos SET propina = '$propina' WHERE id = '$venta_id'");
 
-    $mensaje = "Propina agregada";
+    $mensaje = "Propina actualizada";
+    $body_snack = 'onLoad="Snackbar()"';
+    $mensaje_tema = "aviso";
+}
+?>
+
+
+
+<?php
+//cambio tipo de pago
+if ($cambiar_tipo_pago == "si")
+{
+    //consulto los datos del nuevo tipo de pagos
+    $consulta2 = $conexion->query("SELECT * FROM tipos_pagos WHERE id = $tipo_pago_nuevo_id");
+
+    if ($filas2 = $consulta2->fetch_assoc())
+    {
+        $tipo_pago_nuevo_id = $filas2['id'];
+        $tipo_pago_nuevo = $filas2['tipo_pago'];
+    }
+    else
+    {
+        $tipo_pago_nuevo_id = "";
+        $tipo_pago_nuevo = "efectivo";
+    }
+
+    $actualizar = $conexion->query("UPDATE ventas_datos SET tipo_pago_id = '$tipo_pago_nuevo_id', tipo_pago = '$tipo_pago_nuevo' WHERE id = '$venta_id'");
+
+    $mensaje = 'Se cambió el tipo de pago de <b>' . ucfirst($tipo_pago_actual) . '</b> a <b>' . ucfirst($tipo_pago_nuevo) . '</b>';
     $body_snack = 'onLoad="Snackbar()"';
     $mensaje_tema = "aviso";
 }
@@ -82,8 +183,48 @@ if ($pagar_propina == "si")
 
 
 
+<?php
+if ($cambiar_descuento_personal == "si")
+{   
+    $descuento_personal = str_replace('.','',$descuento_personal);
+    
+    $descuento_nuevo_porcentaje = ($descuento_personal * 100) / $impuesto_base_total;
 
+    $actualizar = $conexion->query("UPDATE ventas_datos SET descuento_id = '$descuento_nuevo_id', descuento_porcentaje = '$descuento_nuevo_porcentaje' WHERE id = '$venta_id'");
 
+    $mensaje = 'Se cambió el descuento de <b>' . ucfirst($descuento_actual) . '</b> a <b>Personalizado</b>';
+    $body_snack = 'onLoad="Snackbar()"';
+    $mensaje_tema = "aviso";
+}
+?>
+
+<?php
+//cambio el descuento
+if ($cambiar_descuento == "si")
+{
+    //consulto los datos del nuevo descuento
+    $consulta2 = $conexion->query("SELECT * FROM descuentos WHERE id = $descuento_nuevo_id");
+
+    if ($filas2 = $consulta2->fetch_assoc())
+    {
+        $descuento_nuevo_id = $filas2['id'];
+        $descuento_nuevo = $filas2['descuento'];
+        $descuento_nuevo_porcentaje = $filas2['porcentaje'];
+    }
+    else
+    {
+        $descuento_nuevo_id = "";
+        $descuento_nuevo = "Ninguno";
+        $descuento_nuevo_porcentaje = "0";
+    }
+
+    $actualizar = $conexion->query("UPDATE ventas_datos SET descuento_id = '$descuento_nuevo_id', descuento_porcentaje = '$descuento_nuevo_porcentaje' WHERE id = '$venta_id'");
+
+    $mensaje = 'Se cambió el descuento de <b>' . ucfirst($descuento_actual) . '</b> a <b>' . ucfirst($descuento_nuevo) . '</b>';
+    $body_snack = 'onLoad="Snackbar()"';
+    $mensaje_tema = "aviso";
+}
+?>
 
 <?php
 //consulto los datos de la venta
@@ -322,7 +463,7 @@ else
     }
 
     //valor del descuento
-    $descuento_valor = (($venta_descuento_porcentaje * $impuesto_base_total) / 100);
+    $descuento_valor = (($venta_descuento_porcentaje * $precio_neto_total) / 100);
 
     //propina
     if (($venta_propina >= 0) and ($venta_propina <= 100))
@@ -404,7 +545,7 @@ if (strlen($venta_total) == 7 )
         </div>
         
         <div class="rdm-toolbar--derecha">
-            <h2 class="rdm-toolbar--titulo">$ <?php echo number_format($venta_total, 2, ",", "."); ?></h2>
+            <h2 class="rdm-toolbar--titulo"></h2>
         </div>
     </div>
 
@@ -426,15 +567,10 @@ if (strlen($venta_total) == 7 )
         <div class="rdm-tarjeta--primario-largo">
             <h1 class="rdm-tarjeta--titulo-largo">Total a pagar</h1>
             <h2 class="rdm-tarjeta--subtitulo-largo">Venta No <?php echo "$venta_id"; ?></h2>
-            <h2 class="rdm-tarjeta--dashboard-titulo-positivo">$ <?php echo number_format($venta_total, 2, ",", "."); ?></h2>
+            <h2 class="rdm-tarjeta--dashboard-titulo-positivo">$<?php echo number_format($venta_total, 2, ",", "."); ?></h2>
         </div>
 
-        <?php
-        //le doy acceso a GENERAR RECIBO segun el perfil que tenga
-        if ((($sesion_tipo == "administrador") or ($sesion_tipo == "socio") or ($sesion_tipo == "vendedor")) and ($venta_total != 0 ))
-        {
-
-        ?>
+        
 
         <article class="rdm-formulario" style="border: none; box-shadow: none; padding-top: 0; margin-top: -1em; ">
     
@@ -451,7 +587,6 @@ if (strlen($venta_total) == 7 )
                 //si el pago es de contado pido el dinero entregado
                 if ($pago == "contado")
                 {
-
                 ?>
                 
                 <p><input class="rdm-formularios--input-grande" type="<?php echo "$caja_tipo";?>" id="dinero" name="dinero" min="<?php echo "$venta_total_neto"; ?>" max="<?php echo "$dinero_maximo"; ?>" value="" placeholder="Dinero entregado" required></p>
@@ -466,22 +601,34 @@ if (strlen($venta_total) == 7 )
 
         </article>
 
-        <?php 
-        }
-        ?>
+        
 
     </section>
 
-    <?php 
-    if ($venta_total != 0 )
-    {
-    ?>
+    
 
     <h2 class="rdm-lista--titulo-largo">Valores</h2>
 
     <section class="rdm-lista">        
 
         
+        
+
+        
+
+        <article class="rdm-lista--item-sencillo">
+            <div class="rdm-lista--izquierda-sencillo">
+                <div class="rdm-lista--contenedor">
+                    <div class="rdm-lista--icono"><i class="zmdi zmdi-view-list-alt zmdi-hc-2x"></i></div>
+                </div>
+                <div class="rdm-lista--contenedor">
+                    <h2 class="rdm-lista--titulo">Base</h2>
+                    <h2 class="rdm-lista--texto-valor">$<?php echo number_format($precio_neto_total, 2, ",", "."); ?></h2>
+                </div>
+            </div>
+        </article>
+
+
         <?php 
         if ($impuesto_valor_total != 0)
         {
@@ -494,7 +641,7 @@ if (strlen($venta_total) == 7 )
                     </div>
                     <div class="rdm-lista--contenedor">
                         <h2 class="rdm-lista--titulo">Impuestos</h2>
-                        <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($impuesto_valor_total, 2, ",", "."); ?></h2>
+                        <h2 class="rdm-lista--texto-valor"><span class="rdm-lista--texto-positivo">+$<?php echo number_format($impuesto_valor_total, 2, ",", "."); ?></span></h2>
                     </div>
                 </div>
             </article>
@@ -502,20 +649,6 @@ if (strlen($venta_total) == 7 )
             <?php
         }
         ?>
-
-        
-
-        <article class="rdm-lista--item-sencillo">
-            <div class="rdm-lista--izquierda-sencillo">
-                <div class="rdm-lista--contenedor">
-                    <div class="rdm-lista--icono"><i class="zmdi zmdi-view-list-alt zmdi-hc-2x"></i></div>
-                </div>
-                <div class="rdm-lista--contenedor">
-                    <h2 class="rdm-lista--titulo">Sub Total</h2>
-                    <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($impuesto_base_total, 2, ",", "."); ?></h2>
-                </div>
-            </div>
-        </article>
 
         
 
@@ -530,7 +663,7 @@ if (strlen($venta_total) == 7 )
                     </div>
                     <div class="rdm-lista--contenedor">
                         <h2 class="rdm-lista--titulo">Propina</h2>
-                        <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($propina_valor, 2, ",", "."); ?> (<?php echo number_format($propina_porcentaje, 2, ",", "."); ?>%)</h2>
+                        <h2 class="rdm-lista--texto-valor"><span class="rdm-lista--texto-positivo">+$<?php echo number_format($propina_valor, 2, ",", "."); ?> (<?php echo number_format($propina_porcentaje, 2, ",", "."); ?>%)</span></h2>
                     </div>
                 </div>                
             </article>
@@ -556,7 +689,7 @@ if (strlen($venta_total) == 7 )
                         </div>
                         <div class="rdm-lista--contenedor">
                             <h2 class="rdm-lista--titulo"><?php echo ucfirst($descuento_actual) ?></h2>
-                            <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($descuento_valor, 2, ",", "."); ?> (<?php echo number_format($venta_descuento_porcentaje, 2, ",", "."); ?>%)</h2>
+                            <h2 class="rdm-lista--texto-valor"><span class="rdm-lista--texto-negativo">-$<?php echo number_format($descuento_valor, 2, ",", "."); ?> (<?php echo number_format($venta_descuento_porcentaje, 2, ",", "."); ?>%)</span></h2>
                         </div>
                     </div>
                     
@@ -573,9 +706,7 @@ if (strlen($venta_total) == 7 )
 
     <h2 class="rdm-lista--titulo-largo">Opciones de la venta</h2>
 
-    <?php 
-    }
-    ?>
+    
 
     <section class="rdm-lista">
 
@@ -598,7 +729,7 @@ if (strlen($venta_total) == 7 )
                         </div>
                         <div class="rdm-lista--contenedor">
                             <h2 class="rdm-lista--titulo">Tipo de pago</h2>
-                            <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst($tipo_pago_tp);?> <?php echo ucfirst($tipo_pago);?></h2>
+                            <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst($tipo_pago);?></h2>
                         </div>
                     </div>
                     
