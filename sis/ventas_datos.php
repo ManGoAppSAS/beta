@@ -80,7 +80,7 @@ else
                 }
                 else
                 {
-                    $telefono = "Tel. $telefono<br>";
+                    $telefono = "Tel. $telefono";
                 }
 
                 if (empty($direccion))

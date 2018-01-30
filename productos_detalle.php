@@ -245,22 +245,21 @@ if ($editar == "si")
             if ($fila = $consulta_usuario->fetch_assoc()) 
             {
                 $usuario = $fila['correo'];
-            }                    
+            }
 
             //calculo el valor del precio bruto y el precio neto
-            $impuesto_valor = $precio * ($impuesto_porcentaje / 100);
-
-            if ($impuesto_incluido == "no")
+            if ($impuesto_incluido == "si")
             {
-               $precio_bruto = $precio;
+                $precio_bruto = $precio / ($impuesto_porcentaje / 100 + 1);
+                $impuesto_valor = $precio - $precio_bruto;
+                $precio_neto = $precio_bruto + $impuesto_valor;
             }
             else
             {
-               $precio_bruto = $precio - $impuesto_valor;
+                $precio_bruto = $precio;
+                $impuesto_valor = ($precio * $impuesto_porcentaje) / 100;
+                $precio_neto = $precio_bruto + $impuesto_valor;
             }
-
-            $precio_neto = $precio_bruto + $impuesto_valor;
-            $impuesto_base = $precio_bruto;
 
             //utilidad            
             $utilidad = $precio_bruto - $costo;
@@ -301,7 +300,7 @@ if ($editar == "si")
                         </div>
                         <div class="rdm-lista--contenedor">
                             <h2 class="rdm-lista--titulo">Precio bruto</h2>
-                            <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($precio_bruto, 2, ",", "."); ?></h2>
+                            <h2 class="rdm-lista--texto-valor">$<?php echo number_format($precio_bruto, 2, ",", "."); ?></h2>
                         </div>
                     </div>
                 </article>

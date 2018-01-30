@@ -73,7 +73,7 @@ if ($fila = $consulta->fetch_assoc())
 else
 {
     //si no la hay guardo los datos iniciales de la venta
-    $propina = 10;
+    $propina = 0;
 
     $insercion = $conexion->query("INSERT INTO ventas_datos values ('', '$ahora', '', '$sesion_id', '$sesion_local_id', '$ubicacion_id', '$ubicacion', '0', '1', 'efectivo', 'ocupado', '0', '0', '0', '0', '$propina', '0', '', '', 'contado', '$ahora')");
 

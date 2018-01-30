@@ -17,6 +17,12 @@ Autor: Danny Estrada
 @import "facturas.css";
 @import "https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css";
 
+@media print {
+  @page{
+    margin: 0; 
+  }
+}
+
 /*elementos comunes*/
 body{
 	background-color: rgba(0, 0, 0, 0.05);

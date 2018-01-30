@@ -32,7 +32,7 @@ if(isset($_POST['descuento_actual'])) $descuento_actual = $_POST['descuento_actu
 if(isset($_POST['descuento_nuevo_id'])) $descuento_nuevo_id = $_POST['descuento_nuevo_id']; elseif(isset($_GET['descuento_nuevo_id'])) $descuento_nuevo_id = $_GET['descuento_nuevo_id']; else $descuento_nuevo_id = null;
 if(isset($_POST['descuento_personal'])) $descuento_personal = $_POST['descuento_personal']; elseif(isset($_GET['descuento_personal'])) $descuento_personal = $_GET['descuento_personal']; else $descuento_personal = null;
 if(isset($_POST['cambiar_descuento_personal'])) $cambiar_descuento_personal = $_POST['cambiar_descuento_personal']; elseif(isset($_GET['cambiar_descuento_personal'])) $cambiar_descuento_personal = $_GET['cambiar_descuento_personal']; else $cambiar_descuento_personal = null;
-if(isset($_POST['impuesto_base_total'])) $impuesto_base_total = $_POST['impuesto_base_total']; elseif(isset($_GET['impuesto_base_total'])) $impuesto_base_total = $_GET['impuesto_base_total']; else $impuesto_base_total = null;
+if(isset($_POST['precio_neto_total'])) $precio_neto_total = $_POST['precio_neto_total']; elseif(isset($_GET['precio_neto_total'])) $precio_neto_total = $_GET['precio_neto_total']; else $precio_neto_total = null;
 
 //variables para el cambio de propina
 if(isset($_POST['pagar_propina'])) $pagar_propina = $_POST['pagar_propina']; elseif(isset($_GET['pagar_propina'])) $pagar_propina = $_GET['pagar_propina']; else $pagar_propina = null;
@@ -179,16 +179,12 @@ if ($cambiar_tipo_pago == "si")
 }
 ?>
 
-
-
-
-
 <?php
 if ($cambiar_descuento_personal == "si")
 {   
     $descuento_personal = str_replace('.','',$descuento_personal);
     
-    $descuento_nuevo_porcentaje = ($descuento_personal * 100) / $impuesto_base_total;
+    $descuento_nuevo_porcentaje = ($descuento_personal * 100) / $precio_neto_total;
 
     $actualizar = $conexion->query("UPDATE ventas_datos SET descuento_id = '$descuento_nuevo_id', descuento_porcentaje = '$descuento_nuevo_porcentaje' WHERE id = '$venta_id'");
 
@@ -422,37 +418,26 @@ else
                     $impuesto_porcentaje = 0;
                 }
 
-                //calculo el valor del precio bruto y el precio neto
-                $impuesto_valor = $precio * ($impuesto_porcentaje / 100);
-
-                if ($impuesto_incluido == "no")
-                {
-                   $precio_bruto = $precio;
-                }
-                else
-                {
-                   $precio_bruto = $precio - $impuesto_valor;
-                }
-
-                $precio_neto = $precio_bruto + $impuesto_valor;
-                $impuesto_base = $precio_bruto;
             }
-            
-            $valor_impuesto = $precio_final * ($porcentaje_impuesto / 100);
-            $base_impuesto = $precio_final - $valor_impuesto;
 
-            $cantidad = $consulta_producto->num_rows; //cantidad
+            //calculo el valor del precio bruto y el precio neto
+            if ($impuesto_incluido == "si")
+            {
+                $precio_bruto = $precio / ($impuesto_porcentaje / 100 + 1);
+                $impuesto_valor = $precio - $precio_bruto;
+                $precio_neto = $precio_bruto + $impuesto_valor;
+            }
+            else
+            {
+                $precio_bruto = $precio;
+                $impuesto_valor = ($precio * $impuesto_porcentaje) / 100;
+                $precio_neto = $precio_bruto + $impuesto_valor;
+            }
+
+            $cantidad_producto = $consulta_producto->num_rows; //cantidad
             
                   
-            $impuesto_porcentaje = $porcentaje_impuesto; //porcentaje del impuesto del producto        
-            $precio_neto = $precio_final; //precio neto del producto (con impuesto ya incluido)
-
-            if ($impuesto_base == $precio_neto)
-            {
-                $impuesto_base = $precio_neto;
-            }
-            
-            $impuesto_base_subtotal = $impuesto_base_subtotal + $impuesto_base; //subtotal de la base del impuesto del producto
+            $impuesto_base_subtotal = $impuesto_base_subtotal + $precio_bruto; //subtotal de la base del impuesto del producto
             $impuesto_valor_subtotal = $impuesto_valor_subtotal  + $impuesto_valor; //subtotal del valor del impuesto del producto
             $precio_neto_subtotal = $precio_neto_subtotal  + $precio_neto; //subtotal del precio neto del producto
         }
@@ -463,23 +448,34 @@ else
     }
 
     //valor del descuento
-    $descuento_valor = (($venta_descuento_porcentaje * $precio_neto_total) / 100);
+    $descuento_valor = (($venta_descuento_porcentaje * $precio_neto_total) / 100);    
+    
+    //total de la venta con descuento y propina
+    $venta_total = $precio_neto_total - $descuento_valor;
 
     //propina
     if (($venta_propina >= 0) and ($venta_propina <= 100))
     {    
-        $propina_valor = (($venta_propina * $impuesto_base_total) / 100);
+        $propina_valor = (($venta_propina * $venta_total) / 100);
     }
     else
     {
         $propina_valor = $venta_propina;
     }
-    
+
     //porcentaja de la propina
-    $propina_porcentaje = ($propina_valor * 100) / $impuesto_base_total;
+    if ($venta_total != 0)
+    {
+        $propina_porcentaje = ($propina_valor * 100) / $venta_total;
+    }
+    else
+    {
+        $propina_porcentaje = 0;
+    }
     
-    //total de la venta con descuento y propina
-    $venta_total = $precio_neto_total - $descuento_valor + $propina_valor;
+
+    //total de la venta mas la propina
+    $venta_total = $venta_total + $propina_valor;
 
     //cambio
     if ($dinero == 0)
@@ -487,7 +483,7 @@ else
         $dinero = $venta_total;
     }
 
-    $cambio = $dinero - $venta_total;    
+    $cambio = $dinero - $venta_total;   
 }
 ?>
 
@@ -619,11 +615,23 @@ if (strlen($venta_total) == 7 )
         <article class="rdm-lista--item-sencillo">
             <div class="rdm-lista--izquierda-sencillo">
                 <div class="rdm-lista--contenedor">
+                    <div class="rdm-lista--icono"><i class="zmdi zmdi-money zmdi-hc-2x"></i></div>
+                </div>
+                <div class="rdm-lista--contenedor">
+                    <h2 class="rdm-lista--titulo">Subtotal</h2>
+                    <h2 class="rdm-lista--texto-valor">$<?php echo number_format($precio_neto_total, 2, ",", "."); ?></h2>
+                </div>
+            </div>
+        </article>
+
+        <article class="rdm-lista--item-sencillo">
+            <div class="rdm-lista--izquierda-sencillo">
+                <div class="rdm-lista--contenedor">
                     <div class="rdm-lista--icono"><i class="zmdi zmdi-view-list-alt zmdi-hc-2x"></i></div>
                 </div>
                 <div class="rdm-lista--contenedor">
                     <h2 class="rdm-lista--titulo">Base</h2>
-                    <h2 class="rdm-lista--texto-valor">$<?php echo number_format($precio_neto_total, 2, ",", "."); ?></h2>
+                    <h2 class="rdm-lista--texto-valor">$<?php echo number_format($impuesto_base_total, 2, ",", "."); ?></h2>
                 </div>
             </div>
         </article>
@@ -641,7 +649,7 @@ if (strlen($venta_total) == 7 )
                     </div>
                     <div class="rdm-lista--contenedor">
                         <h2 class="rdm-lista--titulo">Impuestos</h2>
-                        <h2 class="rdm-lista--texto-valor"><span class="rdm-lista--texto-positivo">+$<?php echo number_format($impuesto_valor_total, 2, ",", "."); ?></span></h2>
+                        <h2 class="rdm-lista--texto-valor">$<?php echo number_format($impuesto_valor_total, 2, ",", "."); ?></h2>
                     </div>
                 </div>
             </article>
@@ -650,25 +658,7 @@ if (strlen($venta_total) == 7 )
         }
         ?>
 
-        
 
-        <a class="ancla" name="propina"></a>
-
-        <a href="ventas_propina.php?venta_id=<?php echo "$venta_id";?>">
-
-            <article class="rdm-lista--item-sencillo">
-                <div class="rdm-lista--izquierda-sencillo">
-                    <div class="rdm-lista--contenedor">
-                        <div class="rdm-lista--icono"><i class="zmdi zmdi-star zmdi-hc-2x"></i></div>
-                    </div>
-                    <div class="rdm-lista--contenedor">
-                        <h2 class="rdm-lista--titulo">Propina</h2>
-                        <h2 class="rdm-lista--texto-valor"><span class="rdm-lista--texto-positivo">+$<?php echo number_format($propina_valor, 2, ",", "."); ?> (<?php echo number_format($propina_porcentaje, 2, ",", "."); ?>%)</span></h2>
-                    </div>
-                </div>                
-            </article>
-
-        </a>
 
         <?php
 
@@ -700,7 +690,29 @@ if (strlen($venta_total) == 7 )
             <?php
         }
 
-        ?>     
+        ?>  
+
+        
+
+        <a class="ancla" name="propina"></a>
+
+        <a href="ventas_propina.php?venta_id=<?php echo "$venta_id";?>">
+
+            <article class="rdm-lista--item-sencillo">
+                <div class="rdm-lista--izquierda-sencillo">
+                    <div class="rdm-lista--contenedor">
+                        <div class="rdm-lista--icono"><i class="zmdi zmdi-star zmdi-hc-2x"></i></div>
+                    </div>
+                    <div class="rdm-lista--contenedor">
+                        <h2 class="rdm-lista--titulo">Propina</h2>
+                        <h2 class="rdm-lista--texto-valor"><span class="rdm-lista--texto-positivo">+$<?php echo number_format($propina_valor, 2, ",", "."); ?> (<?php echo number_format($propina_porcentaje, 2, ",", "."); ?>%)</span></h2>
+                    </div>
+                </div>                
+            </article>
+
+        </a>
+
+           
 
     </section>
 

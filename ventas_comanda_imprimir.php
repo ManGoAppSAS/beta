@@ -79,11 +79,11 @@ else
     </script>    
 </head>
 
-<body style="background: none; margin-top: -10px; margin-bottom: -10px" onload="javascript:window.print(); loaded()">
+<body onload="javascript:window.print(); loaded()">
 
-<section class="rdm-factura--imprimir" style="font-size: 11px;">
+<section class="rdm-factura--imprimir">
 
-    <article class="rdm-factura--contenedor--imprimir" style="max-width: none;">        
+    <article class="rdm-factura--contenedor--imprimir">        
 
         <?php
         //datos de la venta
@@ -115,10 +115,6 @@ else
 
             <?php
 
-            $impuesto_base_total = 0;
-            $impuesto_valor_total = 0;
-            $precio_neto_total = 0;
-
             while ($fila_pro = $consulta_pro->fetch_assoc())
             {   
                 $producto_id = $fila_pro['producto_id'];
@@ -126,117 +122,20 @@ else
                 //consulto la información del producto
                 $consulta_producto = $conexion->query("SELECT * FROM ventas_productos WHERE producto_id = '$producto_id' and venta_id = '$venta_id' ORDER BY fecha DESC");
 
-                $impuesto_base_subtotal = 0;
-                $impuesto_valor_subtotal = 0;
-                $precio_neto_subtotal = 0;
+                
 
                 while ($fila_producto = $consulta_producto->fetch_assoc())
-                {
-                    $producto_venta_id = $fila_producto['id'];
-                    $producto = $fila_producto['producto'];
-                    $producto_id = $fila_producto['producto_id'];
-                    $categoria = $fila_producto['categoria'];
-                    $precio_final = $fila_producto['precio_final'];
-                    $porcentaje_impuesto = $fila_producto['porcentaje_impuesto'];
-
-                    //consulto los datos del producto
-                    $consulta_pro_dat = $conexion->query("SELECT * FROM productos WHERE id = '$producto_id'");
-
-                    while ($fila_pro_dat = $consulta_pro_dat->fetch_assoc())
-                    {
-                        $precio = $fila_pro_dat['precio'];
-                        $impuesto_id = $fila_pro_dat['impuesto_id'];
-                        $impuesto_incluido = $fila_pro_dat['impuesto_incluido'];
-
-                        //consulto el impuesto
-                        $consulta_impuesto = $conexion->query("SELECT * FROM impuestos WHERE id = '$impuesto_id'");           
-
-                        if ($fila_impuesto = $consulta_impuesto->fetch_assoc()) 
-                        {
-                            $impuesto = $fila_impuesto['impuesto'];
-                            $impuesto_porcentaje = $fila_impuesto['porcentaje'];
-                        }
-                        else
-                        {
-                            $impuesto = "No se ha asignado un impuesto";
-                            $impuesto_porcentaje = 0;
-                        }
-
-                        //calculo el valor del precio bruto y el precio neto
-                        $impuesto_valor = $precio * ($impuesto_porcentaje / 100);
-
-                        if ($impuesto_incluido == "no")
-                        {
-                           $precio_bruto = $precio;
-                        }
-                        else
-                        {
-                           $precio_bruto = $precio - $impuesto_valor;
-                        }
-
-                        $precio_neto = $precio_bruto + $impuesto_valor;
-                        $impuesto_base = $precio_bruto;
-                    }
-
-
-
-
-                    
-                    $valor_impuesto = $precio_final * ($porcentaje_impuesto / 100);
-                    $base_impuesto = $precio_final - $valor_impuesto;
-
-                    $cantidad_producto = $consulta_producto->num_rows; //cantidad
-                    
-                          
-                    
-                    $impuesto_porcentaje = $porcentaje_impuesto; //porcentaje del impuesto del producto        
-                    $precio_neto = $precio_final; //precio neto del producto (con impuesto ya incluido)
-
-                    if ($impuesto_base == $precio_neto)
-                    {
-                        $impuesto_base = $precio_neto;
-                    }
-                    
-                    $impuesto_base_subtotal = $impuesto_base_subtotal + $impuesto_base; //subtotal de la base del impuesto del producto
-                    $impuesto_valor_subtotal = $impuesto_valor_subtotal  + $impuesto_valor; //subtotal del valor del impuesto del producto
-                    $precio_neto_subtotal = $precio_neto_subtotal  + $precio_neto; //subtotal del precio neto del producto
+                {                    
+                    $producto = $fila_producto['producto'];                    
+                    $categoria = $fila_producto['categoria'];                    
                 }
 
-                $impuesto_base_total = $impuesto_base_total + $impuesto_base_subtotal; //total de la base del impuesto de todos los productos
-                $impuesto_valor_total = $impuesto_valor_total + $impuesto_valor_subtotal; //total del valor del impuesto de todos los productos
-                $precio_neto_total = $precio_neto_total  + $precio_neto_subtotal; //total del precio de todos los productos
-
-                //valor del descuento
-                $descuento_valor = (($venta_descuento_porcentaje * $impuesto_base_total) / 100);
-
-                //propina
-                if (($venta_propina >= 0) and ($venta_propina <= 100))
-                {    
-                    $propina_valor = (($venta_propina * $impuesto_base_total) / 100);
-                }
-                else
-                {
-                    $propina_valor = $venta_propina;
-                }
-                
-                //porcentaja de la propina
-                $propina_porcentaje = ($propina_valor * 100) / $impuesto_base_total;
-                
-                //total de la venta con descuento y propina
-                $venta_total = $precio_neto_total - $descuento_valor + $propina_valor;
-
-                //cambio
-                if ($dinero == 0)
-                {
-                    $dinero = $venta_total;
-                }
-
-                $cambio = $dinero - $venta_total; 
+                $cantidad_producto = $consulta_producto->num_rows; //cantidad
 
                 ?>
 
                 <section class="rdm-factura--item">
-                    <div class="rdm-factura--izquierda"><?php echo "$cantidad_producto"; ?> <?php echo ucfirst("$producto"); ?>, <?php echo ucfirst("$categoria"); ?></div>                    
+                    <b><?php echo "$cantidad_producto"; ?></b> <?php echo ucfirst("$categoria"); ?>, <?php echo ucfirst("$producto"); ?>
                 </section>
 
                 <?php

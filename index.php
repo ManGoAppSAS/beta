@@ -121,26 +121,7 @@ include ("sis/reportes_rangos.php");
 
     <h2 class="rdm-lista--titulo-largo">Actividades</h2>
 
-    <section class="rdm-lista-sencillo">
-
-        <a class="ancla" name="ventas"></a>
-        
-        <a href="ventas_abrir_cajon.php" target="_blank">
-
-            <article class="rdm-lista--item-sencillo">
-                <div class="rdm-lista--izquierda">
-                    <div class="rdm-lista--contenedor">
-                        <div class="rdm-lista--icono"><i class="zmdi zmdi-laptop zmdi-hc-2x"></i></div>
-                    </div>
-                    <div class="rdm-lista--contenedor">
-                        <h2 class="rdm-lista--titulo">Abrir cajón</h2>
-                        <h2 class="rdm-lista--texto-secundario">Abrete sésamo</h2>
-                    </div>
-                </div>
-                
-            </article>
-
-        </a>
+    <section class="rdm-lista-sencillo">        
 
         <a class="ancla" name="ventas"></a>
         

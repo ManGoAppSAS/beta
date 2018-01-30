@@ -36,49 +36,6 @@ if(isset($_POST['mensaje_tema'])) $mensaje_tema = $_POST['mensaje_tema']; elseif
 ?>
 
 <?php
-if ($cambiar_descuento_personal == "si")
-{   
-    $descuento_personal = str_replace('.','',$descuento_personal);
-    
-    $descuento_nuevo_porcentaje = ($descuento_personal * 100) / $impuesto_base_total;
-
-    $actualizar = $conexion->query("UPDATE ventas_datos SET descuento_id = '$descuento_nuevo_id', descuento_porcentaje = '$descuento_nuevo_porcentaje' WHERE id = '$venta_id'");
-
-    $mensaje = 'Se cambió el descuento de <b>' . ucfirst($descuento_actual) . '</b> a <b>Personalizado</b>';
-    $body_snack = 'onLoad="Snackbar()"';
-    $mensaje_tema = "aviso";
-}
-?>
-
-<?php
-//cambio el descuento
-if ($cambiar_descuento == "si")
-{
-    //consulto los datos del nuevo descuento
-    $consulta2 = $conexion->query("SELECT * FROM descuentos WHERE id = $descuento_nuevo_id");
-
-    if ($filas2 = $consulta2->fetch_assoc())
-    {
-        $descuento_nuevo_id = $filas2['id'];
-        $descuento_nuevo = $filas2['descuento'];
-        $descuento_nuevo_porcentaje = $filas2['porcentaje'];
-    }
-    else
-    {
-        $descuento_nuevo_id = "";
-        $descuento_nuevo = "Ninguno";
-        $descuento_nuevo_porcentaje = "0";
-    }
-
-    $actualizar = $conexion->query("UPDATE ventas_datos SET descuento_id = '$descuento_nuevo_id', descuento_porcentaje = '$descuento_nuevo_porcentaje' WHERE id = '$venta_id'");
-
-    $mensaje = 'Se cambió el descuento de <b>' . ucfirst($descuento_actual) . '</b> a <b>' . ucfirst($descuento_nuevo) . '</b>';
-    $body_snack = 'onLoad="Snackbar()"';
-    $mensaje_tema = "aviso";
-}
-?>
-
-<?php
 //consulto los datos de la venta
 $consulta_venta = $conexion->query("SELECT * FROM ventas_datos WHERE id = '$venta_id' and estado = 'ocupado'");
 
@@ -130,7 +87,11 @@ $consulta_pro = $conexion->query("SELECT distinct producto_id FROM ventas_produc
 
 if ($consulta_pro->num_rows == 0)
 {
-    
+    $impuesto_base_total = 0;
+    $impuesto_valor_total = 0;
+    $precio_neto_total = 0;
+    $propina_valor = 0;
+    $propina_porcentaje = 0;
 }
 else
 {    
@@ -179,37 +140,26 @@ else
                     $impuesto_porcentaje = 0;
                 }
 
-                //calculo el valor del precio bruto y el precio neto
-                $impuesto_valor = $precio * ($impuesto_porcentaje / 100);
-
-                if ($impuesto_incluido == "no")
-                {
-                   $precio_bruto = $precio;
-                }
-                else
-                {
-                   $precio_bruto = $precio - $impuesto_valor;
-                }
-
-                $precio_neto = $precio_bruto + $impuesto_valor;
-                $impuesto_base = $precio_bruto;
             }
-            
-            $valor_impuesto = $precio_final * ($porcentaje_impuesto / 100);
-            $base_impuesto = $precio_final - $valor_impuesto;
 
-            $cantidad = $consulta_producto->num_rows; //cantidad
-            
-                    
-            $impuesto_porcentaje = $porcentaje_impuesto; //porcentaje del impuesto del producto        
-            $precio_neto = $precio_final; //precio neto del producto (con impuesto ya incluido)
-
-            if ($impuesto_base == $precio_neto)
+            //calculo el valor del precio bruto y el precio neto
+            if ($impuesto_incluido == "si")
             {
-                $impuesto_base = $precio_neto;
+                $precio_bruto = $precio / ($impuesto_porcentaje / 100 + 1);
+                $impuesto_valor = $precio - $precio_bruto;
+                $precio_neto = $precio_bruto + $impuesto_valor;
             }
+            else
+            {
+                $precio_bruto = $precio;
+                $impuesto_valor = ($precio * $impuesto_porcentaje) / 100;
+                $precio_neto = $precio_bruto + $impuesto_valor;
+            }
+
+            $cantidad_producto = $consulta_producto->num_rows; //cantidad
             
-            $impuesto_base_subtotal = $impuesto_base_subtotal + $impuesto_base; //subtotal de la base del impuesto del producto
+                  
+            $impuesto_base_subtotal = $impuesto_base_subtotal + $precio_bruto; //subtotal de la base del impuesto del producto
             $impuesto_valor_subtotal = $impuesto_valor_subtotal  + $impuesto_valor; //subtotal del valor del impuesto del producto
             $precio_neto_subtotal = $precio_neto_subtotal  + $precio_neto; //subtotal del precio neto del producto
         }
@@ -220,23 +170,34 @@ else
     }
 
     //valor del descuento
-    $descuento_valor = (($venta_descuento_porcentaje * $impuesto_base_total) / 100);
+    $descuento_valor = (($venta_descuento_porcentaje * $precio_neto_total) / 100);    
+    
+    //total de la venta con descuento y propina
+    $venta_total = $precio_neto_total - $descuento_valor;
 
     //propina
     if (($venta_propina >= 0) and ($venta_propina <= 100))
     {    
-        $propina_valor = (($venta_propina * $impuesto_base_total) / 100);
+        $propina_valor = (($venta_propina * $venta_total) / 100);
     }
     else
     {
         $propina_valor = $venta_propina;
     }
-    
+
     //porcentaja de la propina
-    $propina_porcentaje = ($propina_valor * 100) / $impuesto_base_total;
+    if ($venta_total != 0)
+    {
+        $propina_porcentaje = ($propina_valor * 100) / $venta_total;
+    }
+    else
+    {
+        $propina_porcentaje = 0;
+    }
     
-    //total de la venta con descuento y propina
-    $venta_total = $precio_neto_total - $descuento_valor + $propina_valor;
+
+    //total de la venta mas la propina
+    $venta_total = $venta_total + $propina_valor;
 
     //cambio
     if ($dinero == 0)
@@ -244,7 +205,7 @@ else
         $dinero = $venta_total;
     }
 
-    $cambio = $dinero - $venta_total;    
+    $cambio = $dinero - $venta_total;   
 }
 ?>
 
@@ -293,7 +254,7 @@ else
                 </div>
                 <div class="rdm-lista--contenedor">
                     <h2 class="rdm-lista--titulo"><?php echo ucfirst("$descuento_actual"); ?></h2>
-                    <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($descuento_valor, 2, ",", "."); ?> (<?php echo number_format($venta_descuento_porcentaje, 2, ",", "."); ?>%)</h2>
+                    <h2 class="rdm-lista--texto-valor"><span class="rdm-lista--texto-negativo">-$<?php echo number_format($descuento_valor, 2, ",", "."); ?> (<?php echo number_format($venta_descuento_porcentaje, 2, ",", "."); ?>%)</span></h2>
                 </div>
             </div>
         </article>
@@ -384,7 +345,7 @@ else
             <input type="hidden" name="venta_id" value="<?php echo "$venta_id";?>" />
             <input type="hidden" name="descuento_actual" value="<?php echo "$descuento_actual";?>" />
             <input type="hidden" name="descuento_nuevo_id" value="99" />
-            <input type="hidden" name="impuesto_base_total" value="<?php echo ($impuesto_base_total); ?>" />
+            <input type="hidden" name="precio_neto_total" value="<?php echo ($precio_neto_total); ?>" />
             
             <p><input class="rdm-formularios--input-grande" type="tel" id="descuento_per" name="descuento_personal" value="" placeholder="Valor" required></p>
             

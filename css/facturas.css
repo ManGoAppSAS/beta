@@ -8,8 +8,8 @@ Autor: Danny Estrada
     background-color: #fff;
     box-sizing: border-box;
     margin: 0 auto;
-    margin-bottom: 1em;
-    width: 100%;
+    margin-bottom: 0em;
+    width: 100%;    
     padding: 1.25em 0em;
     font-size: 1em;
     font-weight: 400;
@@ -19,7 +19,8 @@ Autor: Danny Estrada
 
 .rdm-factura--imprimir{
     box-shadow: none;
-    font-size: 8px;   
+    font-size: 11px;
+    max-width: 30em;
 }
 
 .rdm-factura--contenedor, .rdm-factura--contenedor--imprimir{
@@ -46,13 +47,13 @@ Autor: Danny Estrada
 .rdm-factura--izquierda, .rdm-factura--izquierda-centro{
     display: inline-block;    
     text-align: left;
-    width: 69%;
+    width: 64%;
 }
 
 .rdm-factura--derecha, .rdm-factura--derecha-centro{
     display: inline-block;    
     text-align: right;
-    width: 29%;
+    width: 34%;
 }
 
 .rdm-factura--izquierda-centro, .rdm-factura--derecha-centro{
