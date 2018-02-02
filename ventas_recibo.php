@@ -77,22 +77,6 @@ $dinero = str_replace('.','',$dinero);
 include ("sis/ventas_datos.php");
 ?>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <?php
 //consulto los datos de la plantilla de la factura
 $consulta_plantilla = $conexion->query("SELECT * FROM facturas_plantillas WHERE local = '$sesion_local_id'");
@@ -150,10 +134,6 @@ if ($enviar_correo == "si")
         $correo_cliente = $correo_cliente;
     }
 
-
-
-
-
     $mail = new PHPMailer(true);                              
     try {
         //configuracion del servidor que envia el correo
@@ -179,7 +159,7 @@ if ($enviar_correo == "si")
         $mail->isHTML(true);
 
         //Asunto
-        $asunto = $ahora . " Recibo de venta No " . $venta_id . " por $" . number_format($total_neto, 0, ",", ".");
+        $asunto = "Recibo de venta No " . $venta_id . " por $" . number_format($total_neto, 0, ",", ".");
 
         //Cuerpo
         $cuerpo = ' 

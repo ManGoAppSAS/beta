@@ -79,7 +79,7 @@ else
     </script>    
 </head>
 
-<body onload="javascript:window.print(); loaded()">
+<body>
 
 <section class="rdm-factura--imprimir">
 

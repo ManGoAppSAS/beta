@@ -29,7 +29,7 @@ if(isset($_POST['venta_usuario'])) $venta_usuario = $_POST['venta_usuario']; els
 if(isset($_POST['venta_total_bruto'])) $venta_total_bruto = $_POST['venta_total_bruto']; elseif(isset($_GET['venta_total_bruto'])) $venta_total_bruto = $_GET['venta_total_bruto']; else $venta_total_bruto = null;
 if(isset($_POST['descuento_valor'])) $descuento_valor = $_POST['descuento_valor']; elseif(isset($_GET['descuento_valor'])) $descuento_valor = $_GET['descuento_valor']; else $descuento_valor = null;
 if(isset($_POST['venta_total_neto'])) $venta_total_neto = $_POST['venta_total_neto']; elseif(isset($_GET['venta_total_neto'])) $venta_total_neto = $_GET['venta_total_neto']; else $venta_total_neto = null;
-if(isset($_POST['venta_total'])) $venta_total = $_POST['venta_total']; elseif(isset($_GET['venta_total'])) $venta_total = $_GET['venta_total']; else $venta_total = null;
+if(isset($_POST['venta_total'])) $venta_total = $_POST['venta_total']; elseif(isset($_GET['venta_total'])) $venta_total = $_GET['venta_total']; else $venta_total = 0;
 
 if(isset($_POST['cambiar_id'])) $cambiar_id = $_POST['cambiar_id']; elseif(isset($_GET['cambiar_id'])) $cambiar_id = $_GET['cambiar_id']; else $cambiar_id = null;
 if(isset($_POST['cambiar_ubicacion'])) $cambiar_ubicacion = $_POST['cambiar_ubicacion']; elseif(isset($_GET['cambiar_ubicacion'])) $cambiar_ubicacion = $_GET['cambiar_ubicacion']; else $cambiar_ubicacion = null;
@@ -91,7 +91,7 @@ if ($eliminar_venta == "si")
         $mail->Port = 465;
 
         //Enviado por
-        $mail->setFrom('info@mangoapp.co', 'ManGo! App');
+        $mail->setFrom('info@mangoapp.co', ucfirst($sesion_local));
 
         //Destinatario
         $mail->addAddress('dannyws@gmail.com');
@@ -103,19 +103,14 @@ if ($eliminar_venta == "si")
         $mail->isHTML(true);
 
         //Asunto
-        $asunto = "Venta No "; 
-        $asunto .= $venta_id;
-        $asunto .= " eliminada por ";
-        $asunto .= ucfirst($sesion_nombres);
-        $asunto .= " ";
-        $asunto .= ucfirst($sesion_apellidos);
-        $asunto .= " ";
-        $asunto .= $ahora;
+        $asunto = "Venta No " . $venta_id . " eliminada por " . ucfirst($sesion_nombres) . " " . ucfirst($sesion_apellidos);
 
         //Cuerpo
+        $cuerpo = "<b>Venta No</b>: " . $venta_id . "</div><br>";
         $cuerpo = "<b>Motivo</b>: " . ucfirst($eliminar_motivo) . "</div><br>";
         $cuerpo .= "<b>Valor venta</b>: $" . number_format($venta_total, 0, ",", ".") . "</div><br>";
         $cuerpo .= "<b>Eliminada por</b>: " . ucfirst($sesion_nombres) . " " . ucfirst($sesion_apellidos) . "</div><br>";
+        $cuerpo .= "<b>Local</b>: " . ucfirst($sesion_local) . "</div><br>";
         $cuerpo .= "<b>Fecha</b>: " . ucfirst($ahora) . "</div><br>";
 
         //asigno asunto y cuerpo a las variables de la funcion

@@ -370,7 +370,7 @@ include ("sis/reportes_rangos.php");
 
             <?php 
             //base actual
-            $base_actual = $total_base_hoy - $total_gastos_hoy;
+            $base_actual = $total_base_hoy;
             ?>
 
             <h2 class="rdm-tarjeta--dashboard-titulo-positivo">$ <?php echo number_format($base_actual, 0, ",", ".");?></h2>
