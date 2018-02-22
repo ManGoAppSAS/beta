@@ -13,14 +13,14 @@
 <script src="https://www.mangoapp.co/a-recursos/js/jquery-3.1.1.min.js"></script>
 <script src="https://www.mangoapp.co/a-recursos/js/snackbar.js"></script>
 
-<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"> </script>
+<script src="https://code.jquery.com/jquery-latest.min.js" type="text/javascript"> </script>
 <script src="https://cdn.jsdelivr.net/autonumeric/2.0.0/autoNumeric.min.js"></script>
 
 <script src="https://www.mangoapp.co/a-recursos/graficos/code/highcharts.js"></script>
 <script src="https://www.mangoapp.co/a-recursos/graficos/code/modules/exporting.js"></script>
 
-<script type="text/javascript" src="http://www.mangoapp.co/a-recursos/js/push.min.js"></script>
-<script type="text/javascript" src="http://www.mangoapp.co/a-recursos/js/serviceWorker.min.js"></script>
+<script type="text/javascript" src="https://www.mangoapp.co/a-recursos/js/push.min.js"></script>
+<script type="text/javascript" src="https://www.mangoapp.co/a-recursos/js/serviceWorker.min.js"></script>
 
 <script>
 //script para desvanecer los divs de mensajes

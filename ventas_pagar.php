@@ -248,7 +248,7 @@ else
 
         if ($venta_descuento == "99")
         {
-            $descuento_actual = "Personalizado";
+            $descuento_actual = "Descuento personalizado";
         }
         else
         {
@@ -257,7 +257,7 @@ else
 
             if ($fila_descuento = $consulta_descuento->fetch_assoc()) 
             {
-                $descuento_actual = $fila_descuento['descuento'];
+                $descuento_actual = "Descuento " . $fila_descuento['descuento'];
             }
             else
             {
@@ -447,16 +447,10 @@ else
         $precio_neto_total = $precio_neto_total  + $precio_neto_subtotal; //total del precio de todos los productos
     }
 
-    //valor del descuento
-    $descuento_valor = (($venta_descuento_porcentaje * $precio_neto_total) / 100);    
-    
-    //total de la venta con descuento y propina
-    $venta_total = $precio_neto_total - $descuento_valor;
-
     //propina
     if (($venta_propina >= 0) and ($venta_propina <= 100))
     {    
-        $propina_valor = (($venta_propina * $venta_total) / 100);
+        $propina_valor = (($venta_propina * $impuesto_base_total) / 100);
     }
     else
     {
@@ -464,18 +458,23 @@ else
     }
 
     //porcentaja de la propina
-    if ($venta_total != 0)
+    if ($impuesto_base_total != 0)
     {
-        $propina_porcentaje = ($propina_valor * 100) / $venta_total;
+        $propina_porcentaje = ($propina_valor * 100) / $impuesto_base_total;
     }
     else
     {
         $propina_porcentaje = 0;
     }
-    
+
+    //valor del descuento
+    $descuento_valor = (($venta_descuento_porcentaje * ($precio_neto_total + $propina_valor) ) / 100);  
 
     //total de la venta mas la propina
-    $venta_total = $venta_total + $propina_valor;
+    $venta_total = $venta_total + $propina_valor;    
+    
+    //total de la venta con descuento y propina
+    $venta_total = ($precio_neto_total + $propina_valor) - $descuento_valor;
 
     //cambio
     if ($dinero == 0)
@@ -579,13 +578,15 @@ if (strlen($venta_total) == 7 )
                 <input type="hidden" name="tipo_pago" value="<?php echo "$tipo_pago";?>" />
                 <input type="hidden" name="ubicacion_id" value="<?php echo "$ubicacion_id";?>" />
 
+
+
                 <?php
                 //si el pago es de contado pido el dinero entregado
                 if ($pago == "contado")
                 {
                 ?>
                 
-                <p><input class="rdm-formularios--input-grande" type="<?php echo "$caja_tipo";?>" id="dinero" name="dinero" min="<?php echo "$venta_total_neto"; ?>" max="<?php echo "$dinero_maximo"; ?>" value="" placeholder="Dinero entregado" required></p>
+                <p><input class="rdm-formularios--input-grande" type="<?php echo "$caja_tipo";?>" id="dinero" name="dinero" min="<?php echo "$venta_total"; ?>" max="<?php echo "$dinero_maximo"; ?>" value="" placeholder="Dinero entregado" required></p>                
 
                 <?php 
                 }
@@ -603,7 +604,7 @@ if (strlen($venta_total) == 7 )
 
     
 
-    <h2 class="rdm-lista--titulo-largo">Valores</h2>
+    <h2 class="rdm-lista--titulo-largo">Opciones del pago</h2>
 
     <section class="rdm-lista">        
 
@@ -612,44 +613,21 @@ if (strlen($venta_total) == 7 )
 
         
 
-        <article class="rdm-lista--item-sencillo">
-            <div class="rdm-lista--izquierda-sencillo">
-                <div class="rdm-lista--contenedor">
-                    <div class="rdm-lista--icono"><i class="zmdi zmdi-money zmdi-hc-2x"></i></div>
-                </div>
-                <div class="rdm-lista--contenedor">
-                    <h2 class="rdm-lista--titulo">Subtotal</h2>
-                    <h2 class="rdm-lista--texto-valor">$<?php echo number_format($precio_neto_total, 2, ",", "."); ?></h2>
-                </div>
-            </div>
-        </article>
-
-        <article class="rdm-lista--item-sencillo">
-            <div class="rdm-lista--izquierda-sencillo">
-                <div class="rdm-lista--contenedor">
-                    <div class="rdm-lista--icono"><i class="zmdi zmdi-view-list-alt zmdi-hc-2x"></i></div>
-                </div>
-                <div class="rdm-lista--contenedor">
-                    <h2 class="rdm-lista--titulo">Base</h2>
-                    <h2 class="rdm-lista--texto-valor">$<?php echo number_format($impuesto_base_total, 2, ",", "."); ?></h2>
-                </div>
-            </div>
-        </article>
-
-
-        <?php 
-        if ($impuesto_valor_total != 0)
+        <?php
+        //muestro el subtotal
+        $mostrar_subtotal = "no";
+        if ($mostrar_subtotal == "si")
         {
             ?>
 
             <article class="rdm-lista--item-sencillo">
                 <div class="rdm-lista--izquierda-sencillo">
                     <div class="rdm-lista--contenedor">
-                        <div class="rdm-lista--icono"><i class="zmdi zmdi-book zmdi-hc-2x"></i></div>
+                        <div class="rdm-lista--icono"><i class="zmdi zmdi-money zmdi-hc-2x"></i></div>
                     </div>
                     <div class="rdm-lista--contenedor">
-                        <h2 class="rdm-lista--titulo">Impuestos</h2>
-                        <h2 class="rdm-lista--texto-valor">$<?php echo number_format($impuesto_valor_total, 2, ",", "."); ?></h2>
+                        <h2 class="rdm-lista--titulo">Subtotal</h2>
+                        <h2 class="rdm-lista--texto-valor">$<?php echo number_format($precio_neto_total, 2, ",", "."); ?></h2>
                     </div>
                 </div>
             </article>
@@ -658,6 +636,106 @@ if (strlen($venta_total) == 7 )
         }
         ?>
 
+        <?php
+        //muestro el subtotal
+        $mostrar_base = "no";
+        if ($mostrar_base == "si")
+        {
+            ?>
+
+            <article class="rdm-lista--item-sencillo">
+                <div class="rdm-lista--izquierda-sencillo">
+                    <div class="rdm-lista--contenedor">
+                        <div class="rdm-lista--icono"><i class="zmdi zmdi-view-list-alt zmdi-hc-2x"></i></div>
+                    </div>
+                    <div class="rdm-lista--contenedor">
+                        <h2 class="rdm-lista--titulo">Base</h2>
+                        <h2 class="rdm-lista--texto-valor">$<?php echo number_format($impuesto_base_total, 2, ",", "."); ?></h2>
+                    </div>
+                </div>
+            </article>
+
+
+            <?php 
+            if ($impuesto_valor_total != 0)
+            {
+                ?>
+
+                <article class="rdm-lista--item-sencillo">
+                    <div class="rdm-lista--izquierda-sencillo">
+                        <div class="rdm-lista--contenedor">
+                            <div class="rdm-lista--icono"><i class="zmdi zmdi-book zmdi-hc-2x"></i></div>
+                        </div>
+                        <div class="rdm-lista--contenedor">
+                            <h2 class="rdm-lista--titulo">Impuestos</h2>
+                            <h2 class="rdm-lista--texto-valor">$<?php echo number_format($impuesto_valor_total, 2, ",", "."); ?></h2>
+                        </div>
+                    </div>
+                </article>
+
+                <?php
+            }
+            ?>
+
+
+
+            <?php
+        }
+        ?>
+
+        
+        <a class="ancla" name="propina"></a>
+
+        <a href="ventas_propina.php?venta_id=<?php echo "$venta_id";?>">
+
+            <article class="rdm-lista--item-sencillo">
+                <div class="rdm-lista--izquierda-sencillo">
+                    <div class="rdm-lista--contenedor">
+                        <div class="rdm-lista--icono"><i class="zmdi zmdi-star zmdi-hc-2x"></i></div>
+                    </div>
+                    <div class="rdm-lista--contenedor">
+                        <h2 class="rdm-lista--titulo">Propina</h2>
+                        <h2 class="rdm-lista--texto-valor"><span class="rdm-lista--texto-positivo">+$<?php echo number_format($propina_valor, 2, ",", "."); ?> (<?php echo number_format($propina_porcentaje, 2, ",", "."); ?>%)</span></h2>
+                    </div>
+                </div>
+            </article>
+
+        </a>
+
+
+        <?php
+
+        $consulta_tp = $conexion->query("SELECT * FROM tipos_pagos");
+
+        if ($consulta_tp->num_rows != 0)
+        {
+            ?>
+
+            <a class="ancla" name="tipos_pagos"></a>
+
+            <a href="ventas_tipos_pagos_cambiar.php?venta_id=<?php echo "$venta_id";?>">
+
+                <article class="rdm-lista--item-sencillo">
+                    <div class="rdm-lista--izquierda-sencillo">
+                        <div class="rdm-lista--contenedor">
+                            <?php echo "$imagen_tp"; ?>
+                        </div>
+                        <div class="rdm-lista--contenedor">
+                            <h2 class="rdm-lista--titulo">Tipo de pago</h2>
+                            <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst($tipo_pago);?></h2>
+                        </div>
+                    </div>
+                    
+                </article>
+
+            </a>
+
+            <a class="ancla" name="atencion"></a>
+
+         <?php
+        }
+
+        ?>
 
 
         <?php
@@ -694,23 +772,7 @@ if (strlen($venta_total) == 7 )
 
         
 
-        <a class="ancla" name="propina"></a>
-
-        <a href="ventas_propina.php?venta_id=<?php echo "$venta_id";?>">
-
-            <article class="rdm-lista--item-sencillo">
-                <div class="rdm-lista--izquierda-sencillo">
-                    <div class="rdm-lista--contenedor">
-                        <div class="rdm-lista--icono"><i class="zmdi zmdi-star zmdi-hc-2x"></i></div>
-                    </div>
-                    <div class="rdm-lista--contenedor">
-                        <h2 class="rdm-lista--titulo">Propina</h2>
-                        <h2 class="rdm-lista--texto-valor"><span class="rdm-lista--texto-positivo">+$<?php echo number_format($propina_valor, 2, ",", "."); ?> (<?php echo number_format($propina_porcentaje, 2, ",", "."); ?>%)</span></h2>
-                    </div>
-                </div>                
-            </article>
-
-        </a>
+        
 
            
 
@@ -722,39 +784,7 @@ if (strlen($venta_total) == 7 )
 
     <section class="rdm-lista">
 
-        <?php
-
-        $consulta_tp = $conexion->query("SELECT * FROM tipos_pagos");
-
-        if ($consulta_tp->num_rows != 0)
-        {
-            ?>
-
-            <a class="ancla" name="tipos_pagos"></a>
-
-            <a href="ventas_tipos_pagos_cambiar.php?venta_id=<?php echo "$venta_id";?>">
-
-                <article class="rdm-lista--item-sencillo">
-                    <div class="rdm-lista--izquierda-sencillo">
-                        <div class="rdm-lista--contenedor">
-                            <?php echo "$imagen_tp"; ?>
-                        </div>
-                        <div class="rdm-lista--contenedor">
-                            <h2 class="rdm-lista--titulo">Tipo de pago</h2>
-                            <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst($tipo_pago);?></h2>
-                        </div>
-                    </div>
-                    
-                </article>
-
-            </a>
-
-            <a class="ancla" name="atencion"></a>
-
-         <?php
-        }
-
-        ?>
+        
 
         <a class="ancla" name="pago"></a>
 

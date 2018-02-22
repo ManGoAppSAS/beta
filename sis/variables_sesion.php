@@ -35,6 +35,7 @@ while ($fila = $consulta->fetch_assoc())
         $sesion_local_telefono = $fila['telefono'];
         $sesion_local_apertura = date('H:i', strtotime($fila['apertura']));
         $sesion_local_cierre = date('H:i', strtotime($fila['cierre']));
+        $sesion_local_propina = $fila['propina'];
         $sesion_local_imagen = $fila['imagen'];
         $sesion_local_imagen_nombre = $fila['imagen_nombre'];
     }

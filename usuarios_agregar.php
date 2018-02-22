@@ -140,6 +140,7 @@ if ($agregar == 'si')
                 <option value="socio">Socio</option>
                 <option value="administrador">Administrador</option>                
                 <option value="">-</option>
+                <option value="barman">Barman</option>
                 <option value="cocinero">Cocinero</option>
                 <option value="domiciliario">Domiciliario</option>
                 <option value="mesero">Mesero</option>

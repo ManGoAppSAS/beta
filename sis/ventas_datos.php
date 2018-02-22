@@ -29,6 +29,7 @@ else
         $total_neto = $fila_venta['total_neto'];
         $estado = $fila_venta['estado'];
         $pago = $fila_venta['pago'];
+        $observaciones = $fila_venta['observaciones'];
         $fecha_pago = date('Y/m/d', strtotime($fila_venta['fecha_pago']));
         $fecha_pago_dia = date('d', strtotime($fila_venta['fecha_pago']));
         $fecha_pago_mes = date('m', strtotime($fila_venta['fecha_pago']));

@@ -11,7 +11,7 @@ $sesion_y_bd = "beta_bd";
 session_name($sesion_y_bd);
 
 //inicio de sesion
-ini_set("session.cookie_lifetime","0");
+include ("tiempo_sesion.php");
 session_start();
 //conexión con la base de datos
 //$conexion_host = "localhost";

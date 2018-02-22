@@ -437,6 +437,7 @@ if ($editar == "si")
                 }
                 else
                 {
+                    $imagen = '<div class="rdm-lista--icono"><i class="zmdi zmdi-widgets zmdi-hc-2x"></i></div>';
                     $unidad = "Sin unidad";
                     $componente = "No se ha asignado un componente";
                 }

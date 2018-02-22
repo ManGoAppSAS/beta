@@ -119,6 +119,11 @@ include ("sis/variables_sesion.php");
             }
             ?>
 
+            <?php 
+            //total sin propina
+            $total_sin_propinas_hoy = $total_dia_hoy - $total_propinas_hoy;
+            ?>
+
             <?php
             //ingresos de ayer        
             $consulta_ingresos_ayer = $conexion->query("SELECT * FROM ventas_datos WHERE estado = 'liquidado' and local_id = '$sesion_local_id' and fecha BETWEEN '$desde_anterior' and '$hasta_anterior'");        

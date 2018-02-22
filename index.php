@@ -1074,9 +1074,7 @@ include ("sis/reportes_rangos.php");
             <div class="rdm-lista--linea-pocentaje-fondo" style="background-color: #FFCDD2">
                 <div class="rdm-lista--linea-pocentaje-relleno" style="width: 100%; background-color: #F44336;"></div>
             </div>
-        </article>
-
-        
+        </article>        
 
     </section>
     
@@ -1100,30 +1098,32 @@ include ("sis/reportes_rangos.php");
     <?php 
     if ($total_dia_hoy != 0)
     {
+
+    $limite_productos = 5;
     ?>
 
     <section class="rdm-lista--porcentaje">
         <div class="rdm-tarjeta--primario-largo">
-            <h1 class="rdm-tarjeta--titulo-largo">Productos vendidos</h1>
+            <h1 class="rdm-tarjeta--titulo-largo"><?php echo "$limite_productos"; ?> productos más vendidos <?php echo ($rango); ?></h1>
         </div>
 
 
         <?php
         //total de productos
-        $consulta_ingresos_hoy = $conexion->query("SELECT * FROM ventas_productos WHERE local = '$sesion_local_id' and (estado = 'liquidado' or  estado = 'entregado') and fecha BETWEEN '$desde' and '$hasta'");
+        $consulta_ingresos_hoy = $conexion->query("SELECT * FROM ventas_productos WHERE local = '$sesion_local_id' and estado = 'liquidado' and fecha BETWEEN '$desde' and '$hasta'");
         $total_productos = $consulta_ingresos_hoy->num_rows;
         ?>
 
         <?php
         //ventas por cada producto
-        $consulta = $conexion->query("SELECT count(producto), producto FROM ventas_productos WHERE local = '$sesion_local_id' and (estado = 'liquidado' or  estado = 'entregado') and fecha BETWEEN '$desde' and '$hasta' GROUP BY producto ORDER BY count(producto) DESC LIMIT 10");                
+        $consulta = $conexion->query("SELECT count(producto), producto FROM ventas_productos WHERE local = '$sesion_local_id' and estado = 'liquidado' and fecha BETWEEN '$desde' and '$hasta' GROUP BY producto ORDER BY count(producto) DESC LIMIT $limite_productos");                
 
         while ($fila = $consulta->fetch_assoc())
         {
             $producto = $fila['producto'];
 
             //consulto el total para cada producto
-            $consulta2 = $conexion->query("SELECT * FROM ventas_productos WHERE local = '$sesion_local_id' and (estado = 'liquidado' or  estado = 'entregado') and producto = '$producto' and fecha BETWEEN '$desde' and '$hasta'");
+            $consulta2 = $conexion->query("SELECT * FROM ventas_productos WHERE local = '$sesion_local_id' and estado = 'liquidado' and producto = '$producto' and fecha BETWEEN '$desde' and '$hasta'");
             $total_producto = $consulta2->num_rows;
 
             $total_precio_final = 0;

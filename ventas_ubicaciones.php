@@ -93,8 +93,24 @@ if ($eliminar_venta == "si")
         //Enviado por
         $mail->setFrom('info@mangoapp.co', ucfirst($sesion_local));
 
-        //Destinatario
-        $mail->addAddress('dannyws@gmail.com');
+        //consulto los correos de los usuarios tipo socio para enviarles el correo
+        $consulta_usuarios = $conexion->query("SELECT * FROM usuarios WHERE tipo = 'socio'");
+
+        if ($consulta_usuarios->num_rows == 0)
+        {
+
+        }
+        else
+        {
+            while ($fila_usuarios = $consulta_usuarios->fetch_assoc())
+            {
+                $correo = $fila_usuarios['correo'];
+
+                //Destinatario
+                $mail->addAddress($correo);
+            }
+        }
+
 
         //Responder a
         $mail->addReplyTo('info@mangoapp.co', 'ManGo! App');        
@@ -116,6 +132,9 @@ if ($eliminar_venta == "si")
         //asigno asunto y cuerpo a las variables de la funcion
         $mail->Subject = $asunto;
         $mail->Body    = $cuerpo;
+
+        // Activo condificacción utf-8
+        $mail->CharSet = 'UTF-8';
 
         //ejecuto la funcion y envio el correo
         $mail->send();
@@ -163,7 +182,7 @@ if ($eliminar_venta == "si")
             }, 3000);
         });
     </script>
-    
+    <meta http-equiv="refresh" content="14;URL=ventas_ubicaciones.php">
 </head>
 
 <body <?php echo $body_snack; ?>>

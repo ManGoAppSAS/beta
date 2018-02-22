@@ -373,6 +373,10 @@ while ($fila_venta_total = $consulta_venta_total->fetch_assoc())
         }
         ?>
 
+        <div class="rdm-lista--acciones-izquierda">
+            <a href="ventas_comanda_imprimir.php?venta_id=<?php echo "$venta_id";?>" target="_blank"><button type="button" class="rdm-boton--plano">Imprimir pedido</button></a>
+        </div>
+
         </section>
 
         <?php

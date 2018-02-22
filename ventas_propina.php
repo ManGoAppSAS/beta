@@ -20,6 +20,7 @@ if(isset($_POST['mensaje'])) $mensaje = $_POST['mensaje']; elseif(isset($_GET['m
 
 if(isset($_POST['venta_id'])) $venta_id = $_POST['venta_id']; elseif(isset($_GET['venta_id'])) $venta_id = $_GET['venta_id']; else $venta_id = null;
 if(isset($_POST['venta_total_bruto'])) $venta_total_bruto = $_POST['venta_total_bruto']; elseif(isset($_GET['venta_total_bruto'])) $venta_total_bruto = $_GET['venta_total_bruto']; else $venta_total_bruto = null;
+if(isset($_POST['venta_total'])) $venta_total = $_POST['venta_total']; elseif(isset($_GET['venta_total'])) $venta_total = $_GET['venta_total']; else $venta_total = null;   
 if(isset($_POST['pagar_propina'])) $pagar_propina = $_POST['pagar_propina']; elseif(isset($_GET['pagar_propina'])) $pagar_propina = $_GET['pagar_propina']; else $pagar_propina = null;
 if(isset($_POST['propina'])) $propina = $_POST['propina']; elseif(isset($_GET['propina'])) $propina = $_GET['propina']; else $propina = null;
 if(isset($_POST['dinero'])) $dinero = $_POST['dinero']; elseif(isset($_GET['dinero'])) $dinero = $_GET['dinero']; else $dinero = null;
@@ -152,16 +153,10 @@ else
         $precio_neto_total = $precio_neto_total  + $precio_neto_subtotal; //total del precio de todos los productos
     }
 
-    //valor del descuento
-    $descuento_valor = (($venta_descuento_porcentaje * $precio_neto_total) / 100);    
-    
-    //total de la venta con descuento y propina
-    $venta_total = $precio_neto_total - $descuento_valor;
-
     //propina
     if (($venta_propina >= 0) and ($venta_propina <= 100))
     {    
-        $propina_valor = (($venta_propina * $venta_total) / 100);
+        $propina_valor = (($venta_propina * $impuesto_base_total) / 100);
     }
     else
     {
@@ -169,18 +164,23 @@ else
     }
 
     //porcentaja de la propina
-    if ($venta_total != 0)
+    if ($impuesto_base_total != 0)
     {
-        $propina_porcentaje = ($propina_valor * 100) / $venta_total;
+        $propina_porcentaje = ($propina_valor * 100) / $impuesto_base_total;
     }
     else
     {
         $propina_porcentaje = 0;
     }
-    
+
+    //valor del descuento
+    $descuento_valor = (($venta_descuento_porcentaje * ($precio_neto_total + $propina_valor) ) / 100);  
 
     //total de la venta mas la propina
-    $venta_total = $venta_total + $propina_valor;
+    $venta_total = $venta_total + $propina_valor;    
+    
+    //total de la venta con descuento y propina
+    $venta_total = ($precio_neto_total + $propina_valor) - $descuento_valor;
 
     //cambio
     if ($dinero == 0)
@@ -236,7 +236,7 @@ else
                     <div class="rdm-lista--icono"><i class="zmdi zmdi-star zmdi-hc-2x"></i></div>
                 </div>
                 <div class="rdm-lista--contenedor">
-                    <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($propina_valor, 2, ",", "."); ?> (<?php echo number_format($propina_porcentaje, 2, ",", "."); ?>%)</h2>
+                    <h2 class="rdm-lista--texto-valor">$<?php echo number_format($propina_valor, 2, ",", "."); ?> (<?php echo number_format($propina_porcentaje, 2, ",", "."); ?>%)</h2>
                 </div>
             </div>
 

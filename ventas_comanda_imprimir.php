@@ -79,7 +79,7 @@ else
     </script>    
 </head>
 
-<body>
+<body onload="javascript:window.print(); loaded()">
 
 <section class="rdm-factura--imprimir">
 
@@ -92,7 +92,10 @@ else
 
         <div class="rdm-factura--texto">
             <h3>Comanda No <?php echo "$venta_id"; ?><br>
-            <?php echo "$fecha"; ?> <?php echo "$hora"; ?></h3>
+            <?php echo "$fecha"; ?> <?php echo "$hora"; ?><br>
+            <?php echo ucwords($ubicacion_texto); ?><br>
+            Atiende:<br>
+            <?php echo ucfirst($nombres); ?> <?php echo ucfirst($apellidos); ?></h3>
         </div>
 
         <?php
@@ -141,7 +144,9 @@ else
                 <?php
             }
         }
-        ?>        
+        ?>    
+
+        <p><b>Observaciones:</b> <?php echo ucfirst("$observaciones"); ?></p>    
 
         
     </article>

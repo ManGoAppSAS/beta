@@ -155,6 +155,12 @@ else
                     Push.Permission.request();
                 }
 
+                Push.config({
+                    serviceWorker: './service-worker.js', // Sets a custom service worker script
+                    fallback: function(payload) {
+                    }
+                });
+
                 Push.create('Notificación', {
                     body: 'Nuevo pedido',
                     icon: 'img/a1.jpg',

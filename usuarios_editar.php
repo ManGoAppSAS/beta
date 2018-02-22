@@ -115,6 +115,7 @@ else
                 <option value="administrador">Administrador</option>                
                 <option value="">-</option>
                 <option value="cocinero">Cocinero</option>
+                <option value="barman">Barman</option>
                 <option value="domiciliario">Domiciliario</option>
                 <option value="mesero">Mesero</option>
                 <option value="">-</option>

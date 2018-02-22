@@ -2,6 +2,12 @@
 //nombre de la sesion, inicio de la sesión y conexion con la base de datos
 include ("sis/nombre_sesion.php");
 
+//funcion de PHPMailer
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+require 'phpmailer/src/PHPMailer.php';
+require 'phpmailer/src/SMTP.php';
+
 //capturo las variables que vienen desde el formulario de logueo
 $correo = $_POST['correo'];
 $contrasena_enviada = $_POST['contrasena'];
@@ -18,16 +24,77 @@ if ($fila = $consulta->fetch_assoc())
 	{
 		$_SESSION['id'] = $fila['id'];
 		$_SESSION['correo'] = $fila['correo'];
-		$_SESSION['tipo'] = $fila['tipo'];
+		$nombres = $fila['nombres'];
+		$apellidos = $fila['apellidos'];
+		$tipo = $fila['tipo'];
+		$local = $fila['local'];
 
-		if ((($_SESSION['tipo'] == "barbero") or ($_SESSION['tipo'] == "estilista") or ($_SESSION['tipo'] == "mesero")) or ($_SESSION['tipo'] == "manicurista"))
-		{
-			header("location:ventas_ubicaciones.php");
-		}
-		else
-		{
-			header("location:index.php");
-		}		
+		//consulto el local
+        $consulta_local = $conexion->query("SELECT * FROM locales WHERE id = '$local'");           
+
+        if ($fila = $consulta_local->fetch_assoc()) 
+        {
+            $local = $fila['local'];
+        }
+        else
+        {
+            $local = "No se ha asignado un local";
+        }		
+
+		//si es solicitado envio el correo
+		date_default_timezone_set('America/Bogota');
+		$ahora = date("Y-m-d H:i:s");
+		
+	    $mail = new PHPMailer(true);
+	    try {
+	        //configuracion del servidor que envia el correo
+	        $mail->SMTPDebug = 0;
+	        $mail->isSMTP();
+	        $mail->Host = 'mangoapp.co;mail.mangoapp.co';
+	        $mail->SMTPAuth = true;
+	        $mail->Username = 'info@mangoapp.co';
+	        $mail->Password = 'renacimiento';
+	        $mail->SMTPSecure = 'ssl';
+	        $mail->Port = 465;
+
+	        //Enviado por
+	        $mail->setFrom('info@mangoapp.co', ucfirst($local));
+
+	        //Destinatario
+	        $mail->addAddress('dannyws@gmail.com');
+
+	        //Responder a
+	        $mail->addReplyTo('info@mangoapp.co', 'ManGo! App');
+
+	        //Contenido del correo
+	        $mail->isHTML(true);
+
+	        //Asunto
+	        $asunto = ucfirst($nombres) . " " . ucfirst($apellidos) . " ha iniciado sesion ";
+
+	        //Cuerpo
+	        $cuerpo = "<b>Usuario</b>: " . ucfirst($nombres) . " " . ucfirst($apellidos) . "</div><br>";
+	        $cuerpo .= "<b>Tipo</b>: " . ucfirst($tipo) . "</div><br>";
+	        $cuerpo .= "<b>Local</b>: " . ucfirst($local) . "</div><br>";
+	        $cuerpo .= "<b>Fecha</b>: " . ucfirst($ahora) . "</div><br>";
+
+	        //asigno asunto y cuerpo a las variables de la funcion
+	        $mail->Subject = $asunto;
+	        $mail->Body    = $cuerpo;
+
+	        // Activo condificacción utf-8
+			$mail->CharSet = 'UTF-8';
+
+	        //ejecuto la funcion y envio el correo
+	        $mail->send();
+	    
+	    }
+	    catch (Exception $e)
+	    {
+	        echo 'Mensaje no pudo ser enviado: ', $mail->ErrorInfo;
+	    }
+		
+		header("location:index.php");
 	}
 	else
 	{

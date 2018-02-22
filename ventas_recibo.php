@@ -20,6 +20,7 @@ if(isset($_POST['pagar'])) $pagar = $_POST['pagar']; elseif(isset($_GET['pagar']
 
 if(isset($_POST['venta_id'])) $venta_id = $_POST['venta_id']; elseif(isset($_GET['venta_id'])) $venta_id = $_GET['venta_id']; else $venta_id = null;
 if(isset($_POST['venta_total_bruto'])) $venta_total_bruto = $_POST['venta_total_bruto']; elseif(isset($_GET['venta_total_bruto'])) $venta_total_bruto = $_GET['venta_total_bruto']; else $venta_total_bruto = null;
+if(isset($_POST['venta_total'])) $venta_total = $_POST['venta_total']; elseif(isset($_GET['venta_total'])) $venta_total = $_GET['venta_total']; else $venta_total = null;   
 if(isset($_POST['descuento_valor'])) $descuento_valor = $_POST['descuento_valor']; elseif(isset($_GET['descuento_valor'])) $descuento_valor = $_GET['descuento_valor']; else $descuento_valor = null;
 if(isset($_POST['venta_total_neto'])) $venta_total_neto = $_POST['venta_total_neto']; elseif(isset($_GET['venta_total_neto'])) $venta_total_neto = $_GET['venta_total_neto']; else $venta_total_neto = null;
 if(isset($_POST['tipo_pago'])) $tipo_pago = $_POST['tipo_pago']; elseif(isset($_GET['tipo_pago'])) $tipo_pago = $_GET['tipo_pago']; else $tipo_pago = null;
@@ -292,16 +293,10 @@ if ($enviar_correo == "si")
                                         $impuesto_valor_total = $impuesto_valor_total + $impuesto_valor_subtotal; //total del valor del impuesto de todos los productos
                                         $precio_neto_total = $precio_neto_total  + $precio_neto_subtotal; //total del precio de todos los productos
 
-                                        //valor del descuento
-                                        $descuento_valor = (($venta_descuento_porcentaje * $precio_neto_total) / 100);    
-                                        
-                                        //total de la venta con descuento y propina
-                                        $venta_total = $precio_neto_total - $descuento_valor;
-
                                         //propina
                                         if (($venta_propina >= 0) and ($venta_propina <= 100))
                                         {    
-                                            $propina_valor = (($venta_propina * $venta_total) / 100);
+                                            $propina_valor = (($venta_propina * $impuesto_base_total) / 100);
                                         }
                                         else
                                         {
@@ -309,18 +304,23 @@ if ($enviar_correo == "si")
                                         }
 
                                         //porcentaja de la propina
-                                        if ($venta_total != 0)
+                                        if ($impuesto_base_total != 0)
                                         {
-                                            $propina_porcentaje = ($propina_valor * 100) / $venta_total;
+                                            $propina_porcentaje = ($propina_valor * 100) / $impuesto_base_total;
                                         }
                                         else
                                         {
                                             $propina_porcentaje = 0;
                                         }
-                                        
+
+                                        //valor del descuento
+                                        $descuento_valor = (($venta_descuento_porcentaje * ($precio_neto_total + $propina_valor) ) / 100);  
 
                                         //total de la venta mas la propina
-                                        $venta_total = $venta_total + $propina_valor;
+                                        $venta_total = $venta_total + $propina_valor;    
+                                        
+                                        //total de la venta con descuento y propina
+                                        $venta_total = ($precio_neto_total + $propina_valor) - $descuento_valor;
 
                                         //cambio
                                         if ($dinero == 0)
@@ -328,14 +328,14 @@ if ($enviar_correo == "si")
                                             $dinero = $venta_total;
                                         }
 
-                                        $cambio = $dinero - $venta_total;
+                                        $cambio = $dinero - $venta_total;  
 
 
 
                                         $cuerpo .= '<section class="rdm-factura--item" style="border-bottom: dashed 1px #555; display: block; padding: 0.2em 0em 0em 0em;">
 
-                                                        <div class="rdm-factura--izquierda" style="display: inline-block; text-align: left; width: 69%;">' . ucfirst("$producto") . '</div>
-                                                        <div class="rdm-factura--derecha" style="display: inline-block; text-align: right; width: 29%;">$' . number_format($precio_neto, 0, ",", ".") . '</div>';                                            
+                                                        <div class="rdm-factura--izquierda" style="display: inline-block; text-align: left; width: 69%;">' . ucfirst("$producto") . ' x ' . ucfirst($cantidad_producto) . '</div>
+                                                        <div class="rdm-factura--derecha" style="display: inline-block; text-align: right; width: 29%;">$' . number_format($impuesto_base_subtotal, 0, ",", ".") . '</div>';                                            
                                                         
                                                         //muestro los datos de base e impuesto en cada articulo
                                                         $impuesto_mostrar = "no";
@@ -348,11 +348,7 @@ if ($enviar_correo == "si")
                                                         <div class="rdm-factura--derecha" style="display: inline-block; text-align: right; width: 29%;">$' . number_format($impuesto_valor, 0, ",", ".") . '</div>';
                                                         }
 
-                                                        if ($cantidad_producto != "1")
-                                                        {
-                                            $cuerpo .= '<div class="rdm-factura--izquierda" style="display: inline-block; text-align: left; width: 69%;">Cantidad ' . ucfirst($cantidad_producto) . '</div>
-                                                        <div class="rdm-factura--derecha" style="display: inline-block; text-align: right; width: 29%;">$' . number_format($precio_neto_subtotal, 0, ",", ".") . '</div>';                                            
-                                                        }
+                                                        
 
                                         $cuerpo .= '</section>';
 
@@ -373,12 +369,14 @@ if ($enviar_correo == "si")
 
                                             <section class="rdm-factura--item" style="border-bottom: dashed 1px #555; display: block; padding: 0.2em 0em 0em 0em;">
 
-                                                <div class="rdm-factura--izquierda" style="display: inline-block; text-align: left; width: 69%;">Total Base</div>
-                                                <div class="rdm-factura--derecha" style="display: inline-block; text-align: right; width: 29%;">$' . number_format($impuesto_base_total, 0, ",", ".") . '</div>';
+                                                ';
 
                                                 if ($impuesto_valor_total != 0)
                                                 {
-                                    $cuerpo .= '<div class="rdm-factura--izquierda" style="display: inline-block; text-align: left; width: 69%;">Total Impuestos</div>
+                                    $cuerpo .= '<div class="rdm-factura--izquierda" style="display: inline-block; text-align: left; width: 69%;">Total Base</div>
+                                                <div class="rdm-factura--derecha" style="display: inline-block; text-align: right; width: 29%;">$' . number_format($impuesto_base_total, 0, ",", ".") . '</div>
+
+                                                <div class="rdm-factura--izquierda" style="display: inline-block; text-align: left; width: 69%;">Total Impuestos</div>
                                                 <div class="rdm-factura--derecha" style="display: inline-block; text-align: right; width: 29%;">$' . number_format($impuesto_valor_total, 0, ",", ".") . '</div>';
                                                 }
 
@@ -401,16 +399,18 @@ if ($enviar_correo == "si")
 
                                             <section class="rdm-factura--item" style="border-bottom: dashed 1px #555; display: block; padding: 0.2em 0em 0em 0em;">';
 
+                                                
+                                    $cuerpo .= '<div class="rdm-factura--izquierda" style="display: inline-block; text-align: left; width: 69%;">Propina (' . $propina_porcentaje . '%)</div>
+                                                <div class="rdm-factura--derecha" style="display: inline-block; text-align: right; width: 29%;">+$' . number_format($propina_valor, 0, ",", ".") . '</div>';
+
+
                                                 if ($descuento_valor != 0)
                                                 {
                                     $cuerpo .= '<div class="rdm-factura--izquierda" style="display: inline-block; text-align: left; width: 69%;">Descuento (' . number_format($venta_descuento_porcentaje, 0, ",", ".") . '%)</div>
                                                 <div class="rdm-factura--derecha" style="display: inline-block; text-align: right; width: 29%;">-$' . number_format($descuento_valor, 0, ",", ".") . '</div>';
-                                                }
-
-                                    $cuerpo .= '<div class="rdm-factura--izquierda" style="display: inline-block; text-align: left; width: 69%;">Propina (' . $propina_porcentaje . '%)</div>
-                                                <div class="rdm-factura--derecha" style="display: inline-block; text-align: right; width: 29%;">+$' . number_format($propina_valor, 0, ",", ".") . '</div>
+                                                }                                    
                                                 
-                                            </section>';
+                                    $cuerpo .= '</section>';
 
 
 
@@ -515,6 +515,9 @@ if ($enviar_correo == "si")
         //asigno asunto y cuerpo a las variables de la funcion
         $mail->Subject = $asunto;
         $mail->Body    = $cuerpo;
+
+        // Activo condificacción utf-8
+        $mail->CharSet = 'UTF-8';
 
         //ejecuto la funcion y envio el correo
         $mail->send();
@@ -828,16 +831,10 @@ if ($enviar_correo == "si")
                     $impuesto_valor_total = $impuesto_valor_total + $impuesto_valor_subtotal; //total del valor del impuesto de todos los productos
                     $precio_neto_total = $precio_neto_total  + $precio_neto_subtotal; //total del precio de todos los productos
 
-                    //valor del descuento
-                    $descuento_valor = (($venta_descuento_porcentaje * $precio_neto_total) / 100);    
-                    
-                    //total de la venta con descuento y propina
-                    $venta_total = $precio_neto_total - $descuento_valor;
-
                     //propina
                     if (($venta_propina >= 0) and ($venta_propina <= 100))
                     {    
-                        $propina_valor = (($venta_propina * $venta_total) / 100);
+                        $propina_valor = (($venta_propina * $impuesto_base_total) / 100);
                     }
                     else
                     {
@@ -845,18 +842,23 @@ if ($enviar_correo == "si")
                     }
 
                     //porcentaja de la propina
-                    if ($venta_total != 0)
+                    if ($impuesto_base_total != 0)
                     {
-                        $propina_porcentaje = ($propina_valor * 100) / $venta_total;
+                        $propina_porcentaje = ($propina_valor * 100) / $impuesto_base_total;
                     }
                     else
                     {
                         $propina_porcentaje = 0;
                     }
-                    
+
+                    //valor del descuento
+                    $descuento_valor = (($venta_descuento_porcentaje * ($precio_neto_total + $propina_valor) ) / 100);  
 
                     //total de la venta mas la propina
-                    $venta_total = $venta_total + $propina_valor;
+                    $venta_total = $venta_total + $propina_valor;    
+                    
+                    //total de la venta con descuento y propina
+                    $venta_total = ($precio_neto_total + $propina_valor) - $descuento_valor;
 
                     //cambio
                     if ($dinero == 0)
@@ -864,14 +866,14 @@ if ($enviar_correo == "si")
                         $dinero = $venta_total;
                     }
 
-                    $cambio = $dinero - $venta_total;
+                    $cambio = $dinero - $venta_total;   
 
                     ?>
 
                     <section class="rdm-factura--item">
 
-                        <div class="rdm-factura--izquierda"><?php echo ucfirst("$producto"); ?></div>
-                        <div class="rdm-factura--derecha">$<?php echo number_format($precio_neto, 0, ",", "."); ?></div>
+                        <div class="rdm-factura--izquierda"><?php echo ucfirst("$producto"); ?> x <?php echo ucfirst("$cantidad_producto"); ?></div>
+                        <div class="rdm-factura--derecha">$<?php echo number_format($impuesto_base_subtotal, 0, ",", "."); ?></div>
                         
                         <?php
                         //muestro los datos de base e impuesto en cada articulo
@@ -888,19 +890,7 @@ if ($enviar_correo == "si")
 
                         <?php
                         }
-                        ?>
-
-                        <?php 
-                        if ($cantidad_producto != "1")
-                        {
-                        ?>
-                        
-                        <div class="rdm-factura--izquierda">Cantidad <?php echo ucfirst("$cantidad_producto"); ?></div>
-                        <div class="rdm-factura--derecha">$<?php echo number_format($precio_neto_subtotal, 0, ",", "."); ?></div>
-
-                        <?php
-                        }
-                        ?>
+                        ?>                        
 
                     </section>
 
@@ -911,15 +901,15 @@ if ($enviar_correo == "si")
 
             <br>
 
-            <section class="rdm-factura--item">
-
-                <div class="rdm-factura--izquierda">Total Base</div>
-                <div class="rdm-factura--derecha">$<?php echo number_format($impuesto_base_total, 0, ",", "."); ?></div>
+            <section class="rdm-factura--item">                
 
                 <?php 
                 if ($impuesto_valor_total != 0)
                 {
                 ?>
+
+                <div class="rdm-factura--izquierda">Total Base</div>
+                <div class="rdm-factura--derecha">$<?php echo number_format($impuesto_base_total, 0, ",", "."); ?></div>
 
                 <div class="rdm-factura--izquierda">Total Impuestos</div>
                 <div class="rdm-factura--derecha">$<?php echo number_format($impuesto_valor_total, 0, ",", "."); ?></div>
@@ -937,6 +927,9 @@ if ($enviar_correo == "si")
 
             <section class="rdm-factura--item">            
 
+                <div class="rdm-factura--izquierda">Propina <?php echo "($propina_porcentaje%)"; ?></div>
+                <div class="rdm-factura--derecha">+$<?php echo number_format($propina_valor, 0, ",", "."); ?></div>
+
                 <?php 
                 if ($descuento_valor != 0)
                 {
@@ -947,10 +940,7 @@ if ($enviar_correo == "si")
 
                 <?php
                 }
-                ?>
-
-                <div class="rdm-factura--izquierda">Propina <?php echo "($propina_porcentaje%)"; ?></div>
-                <div class="rdm-factura--derecha">+$<?php echo number_format($propina_valor, 0, ",", "."); ?></div>
+                ?>                
                 
             </section>
 

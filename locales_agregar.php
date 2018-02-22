@@ -29,6 +29,7 @@ if(isset($_POST['telefono'])) $telefono = $_POST['telefono']; elseif(isset($_GET
 if(isset($_POST['tipo'])) $tipo = $_POST['tipo']; elseif(isset($_GET['tipo'])) $tipo = $_GET['tipo']; else $tipo = null;
 if(isset($_POST['apertura'])) $apertura = $_POST['apertura']; elseif(isset($_GET['apertura'])) $apertura = $_GET['apertura']; else $apertura = null;
 if(isset($_POST['cierre'])) $cierre = $_POST['cierre']; elseif(isset($_GET['cierre'])) $cierre = $_GET['cierre']; else $cierre = null;
+if(isset($_POST['propina'])) $propina = $_POST['propina']; elseif(isset($_GET['propina'])) $propina = $_GET['propina']; else $propina = 0;
 
 if(isset($_POST['mensaje'])) $mensaje = $_POST['mensaje']; elseif(isset($_GET['mensaje'])) $mensaje = $_GET['mensaje']; else $mensaje = null;
 if(isset($_POST['body_snack'])) $body_snack = $_POST['body_snack']; elseif(isset($_GET['body_snack'])) $body_snack = $_GET['body_snack']; else $body_snack = null;
@@ -53,7 +54,7 @@ if ($agregar == 'si')
     if ($consulta->num_rows == 0)
     {
         $imagen_ref = "locales";
-        $insercion = $conexion->query("INSERT INTO locales values ('', '$ahora', '$sesion_id', '$local', '$direccion', '$telefono', '$tipo', '$apertura', '$cierre', '$imagen', '$ahora_img')");
+        $insercion = $conexion->query("INSERT INTO locales values ('', '$ahora', '$sesion_id', '$local', '$direccion', '$telefono', '$tipo', '$apertura', '$cierre', '$propina', '$imagen', '$ahora_img')");
 
         $mensaje = "Local <b>" . ucfirst($local) . "</b> agregado";
         $body_snack = 'onLoad="Snackbar()"';
@@ -130,6 +131,10 @@ if ($agregar == 'si')
                 <p><input type="time" id="cierre" name="cierre" value="<?php echo "$cierre"; ?>" required></p>
                 <p class="rdm-formularios--ayuda">Cierre</p>
             </div>
+
+            <p class="rdm-formularios--label"><label for="propina">Propina*</label></p>
+            <p><input type="number" id="propina" name="propina" value="<?php echo "$propina"; ?>" spellcheck="false" required /></p>
+            <p class="rdm-formularios--ayuda">Valor del porcentaje de la propina sin símbolos o guiones</p>
 
             <p class="rdm-formularios--label" style="margin-top: 0"><label for="archivo">Imagen</label></p>
             <p><input type="file" id="archivo" name="archivo" /></p>

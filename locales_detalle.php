@@ -30,6 +30,7 @@ if(isset($_POST['telefono'])) $telefono = $_POST['telefono']; elseif(isset($_GET
 if(isset($_POST['tipo'])) $tipo = $_POST['tipo']; elseif(isset($_GET['tipo'])) $tipo = $_GET['tipo']; else $tipo = null;
 if(isset($_POST['apertura'])) $apertura = $_POST['apertura']; elseif(isset($_GET['apertura'])) $apertura = $_GET['apertura']; else $apertura = null;
 if(isset($_POST['cierre'])) $cierre = $_POST['cierre']; elseif(isset($_GET['cierre'])) $cierre = $_GET['cierre']; else $cierre = null;
+if(isset($_POST['propina'])) $propina = $_POST['propina']; elseif(isset($_GET['propina'])) $propina = $_GET['propina']; else $propina = null;
 if(isset($_POST['imagen'])) $imagen = $_POST['imagen']; elseif(isset($_GET['imagen'])) $imagen = $_GET['imagen']; else $imagen = null;
 if(isset($_POST['imagen_nombre'])) $imagen_nombre = $_POST['imagen_nombre']; elseif(isset($_GET['imagen_nombre'])) $imagen_nombre = $_GET['imagen_nombre']; else $imagen_nombre = null;
 
@@ -57,7 +58,7 @@ if ($editar == "si")
         $imagen_nombre = $imagen_nombre;
     }
 
-    $actualizar = $conexion->query("UPDATE locales SET fecha = '$ahora', usuario = '$sesion_id', local = '$local', direccion = '$direccion', telefono = '$telefono', tipo = '$tipo', apertura = '$apertura', cierre = '$cierre', imagen = '$imagen', imagen_nombre = '$imagen_nombre' WHERE id = '$id'");
+    $actualizar = $conexion->query("UPDATE locales SET fecha = '$ahora', usuario = '$sesion_id', local = '$local', direccion = '$direccion', telefono = '$telefono', tipo = '$tipo', apertura = '$apertura', cierre = '$cierre', propina = '$propina', imagen = '$imagen', imagen_nombre = '$imagen_nombre' WHERE id = '$id'");
 
     if ($actualizar)
     {
@@ -120,6 +121,7 @@ if ($editar == "si")
             $tipo = $fila['tipo'];
             $apertura = date('h:i a', strtotime($fila['apertura']));
             $cierre = date('h:i a', strtotime($fila['cierre']));
+            $propina = $fila['propina'];
             $imagen = $fila['imagen'];
             $imagen_nombre = $fila['imagen_nombre'];
 
@@ -154,6 +156,7 @@ if ($editar == "si")
                 <div class="rdm-tarjeta--cuerpo">
                     <p><b>Teléfono</b> <br><?php echo ucfirst($telefono) ?></p>
                     <p><b>Horario de atención</b> <br><?php echo ucfirst($apertura) ?> - <?php echo ucfirst($cierre) ?></p>
+                    <p><b>Propina</b> <br><?php echo ucfirst($propina) ?>%</p>
                     <p><b>Última modificación</b> <br><?php echo ucfirst("$fecha"); ?> - <?php echo ucfirst("$hora"); ?></p>
                     <p><b>Modificado por</b> <br><?php echo ("$usuario"); ?></p>
                 </div>

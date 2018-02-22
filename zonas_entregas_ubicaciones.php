@@ -287,18 +287,14 @@ else
                 <div class="rdm-tarjeta--primario-largo">
                     <h1 class="rdm-tarjeta--titulo-largo"><?php echo ucfirst("$ubicacion_texto"); ?></h1>
                     <h2 class="rdm-tarjeta--subtitulo-largo">Hace <?php echo "$tiempo_transcurrido"; ?></h2>
-                    <h2 class="rdm-tarjeta--subtitulo-largo"><?php echo ucfirst("$cantidad"); ?> Platos</h2>
+                    <h2 class="rdm-tarjeta--subtitulo-largo"><b><?php echo ucfirst("$atendido"); ?></b></h2>
                     
                     <p style="color: #F44336"><b><?php echo ucfirst("$observaciones"); ?></b></p>
                 </div>
 
 
 
-                <div class="rdm-tarjeta--cuerpo">
-
-                    
-
-                    
+                <div class="rdm-tarjeta--cuerpo">                    
 
                     <?php 
                     //consulto y muestro los productos o servicios pedidos en esta zona
@@ -328,7 +324,7 @@ else
                         }
                         else
                         {
-                            $texto_pedido = '<p style="color: none">' . ucfirst($producto) . '</p>';
+                            $texto_pedido = '<p style="color: none"><b>' . ucfirst($producto) . '</b></p>';
                         }
 
                         
@@ -346,7 +342,7 @@ else
                     ?>
 
                     <div class="rdm-tarjeta--acciones-izquierda">            
-                        <a href="zonas_entregas_ubicaciones.php?entregar=si&venta_id=<?php echo $venta_id ?>&id=<?php echo $id ?>&ubicacion_id=<?php echo $ubicacion_id ?>&ubicacion=<?php echo $ubicacion ?>&zona_id=<?php echo "$zona_id";?>&zona=<?php echo "$zona";?>&atendido=<?php echo "$atendido";?>&producto=<?php echo "$producto";?>"><button class="rdm-boton--resaltado">Listo</button></a>
+                        <a href="zonas_entregas_ubicaciones.php?entregar=si&venta_id=<?php echo $venta_id ?>&id=<?php echo $id ?>&ubicacion_id=<?php echo $ubicacion_id ?>&ubicacion=<?php echo $ubicacion ?>&zona_id=<?php echo "$zona_id";?>&zona=<?php echo "$zona";?>&atendido=<?php echo "$atendido";?>&producto=<?php echo "$producto";?>"><button class="rdm-boton--resaltado">Pedido listo</button></a>
                     </div>
 
 

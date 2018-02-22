@@ -33,6 +33,7 @@ if ($fila = $consulta->fetch_assoc())
     $tipo = $fila['tipo'];
     $apertura = $fila['apertura'];
     $cierre = $fila['cierre'];
+    $propina = $fila['propina'];
     $imagen = $fila['imagen'];
     $imagen_nombre = $fila['imagen_nombre'];
 }
@@ -106,6 +107,10 @@ else
                 <p><input type="time" id="cierre" name="cierre" value="<?php echo "$cierre"; ?>" required></p>
                 <p class="rdm-formularios--ayuda">Cierre</p>
             </div>
+
+            <p class="rdm-formularios--label"><label for="propina">Propina*</label></p>
+            <p><input type="number" id="propina" name="propina" value="<?php echo "$propina"; ?>" spellcheck="false" required /></p>
+            <p class="rdm-formularios--ayuda">Valor del porcentaje de la propina sin símbolos o guiones</p>
 
             <p class="rdm-formularios--label"><label for="archivo">Imagen</label></p>
             <p><input type="file" id="archivo" name="archivo" /></p>
