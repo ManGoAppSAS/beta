@@ -161,7 +161,7 @@ while ($fila_venta_total = $consulta_venta_total->fetch_assoc())
         </div>
         
         <div class="rdm-toolbar--derecha">
-            <h2 class="rdm-toolbar--titulo">$ <?php echo number_format($venta_total, 2, ",", "."); ?></h2>
+            <h2 class="rdm-toolbar--titulo">$<?php echo number_format($venta_total, 2, ",", "."); ?></h2>
         </div>
     </div>
 

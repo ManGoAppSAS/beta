@@ -85,13 +85,13 @@ if ($eliminar_venta == "si")
         $mail->isSMTP();                                      
         $mail->Host = 'mangoapp.co;mail.mangoapp.co';
         $mail->SMTPAuth = true;
-        $mail->Username = 'info@mangoapp.co';
+        $mail->Username = 'notificaciones@mangoapp.co';
         $mail->Password = 'renacimiento';
         $mail->SMTPSecure = 'ssl';
         $mail->Port = 465;
 
         //Enviado por
-        $mail->setFrom('info@mangoapp.co', ucfirst($sesion_local));
+        $mail->setFrom('notificaciones@mangoapp.co', ucfirst($sesion_local));
 
         //consulto los correos de los usuarios tipo socio para enviarles el correo
         $consulta_usuarios = $conexion->query("SELECT * FROM usuarios WHERE tipo = 'socio'");
@@ -113,7 +113,7 @@ if ($eliminar_venta == "si")
 
 
         //Responder a
-        $mail->addReplyTo('info@mangoapp.co', 'ManGo! App');        
+        $mail->addReplyTo('notificaciones@mangoapp.co', 'ManGo! App');        
 
         //Contenido del correo
         $mail->isHTML(true);
@@ -343,11 +343,11 @@ if ($eliminar_venta == "si")
 
                         $venta_total = $venta_total + $precio;
                     }
-                    $venta_total = "$ ".number_format($venta_total, 2, ",", ".")."";
+                    $venta_total = "$".number_format($venta_total, 2, ",", ".")."";
                 }
                 else
                 {
-                   $venta_total = "$ 0,00"; 
+                   $venta_total = "$0,00"; 
                 }
 
                 $estilo_sencillo = "";
@@ -393,7 +393,7 @@ if ($eliminar_venta == "si")
                         <div class="rdm-lista--contenedor">
                             <h2 class="rdm-lista--titulo"><?php echo ucfirst("$ubicacion_texto"); ?></h2>
                             <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst("$atendido"); ?></h2>
-                            <h2 class="rdm-lista--texto-valor"><?php echo ("$venta_total"); ?></h2>
+                            <h2 class="rdm-lista--texto-valor"><?php echo ($venta_total); ?></h2>
                         </div>
                     </div>
                     <div class="rdm-lista--derecha">

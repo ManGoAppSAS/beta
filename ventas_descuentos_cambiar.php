@@ -345,7 +345,7 @@ else
             <input type="hidden" name="venta_id" value="<?php echo "$venta_id";?>" />
             <input type="hidden" name="descuento_actual" value="<?php echo "$descuento_actual";?>" />
             <input type="hidden" name="descuento_nuevo_id" value="99" />
-            <input type="hidden" name="precio_neto_total" value="<?php echo ($precio_neto_total); ?>" />
+            <input type="text" name="precio_neto_total" value="<?php echo ($precio_neto_total); ?>" />
             
             <p><input class="rdm-formularios--input-grande" type="tel" id="descuento_per" name="descuento_personal" value="" placeholder="Valor" required></p>
             

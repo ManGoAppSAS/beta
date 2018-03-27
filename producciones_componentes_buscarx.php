@@ -133,13 +133,13 @@ if (isset($consultaBusqueda))
                         <h2 class="rdm-lista--texto-valor">$<?php echo number_format($costo_unidad, 2, ",", "."); ?></h2>
 
 
-                        <form action="producciones_detalle.php" method="post" enctype="multipart/form-data">
+                        <form action="producciones_produccion.php" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="produccion_id" value="<?php echo "$produccion_id"; ?>">
-                            <input type="hidden" name="componente_id" value="<?php echo "$componente_id"; ?>">
+                            <input type="hidden" name="id" value="<?php echo "$componente_id"; ?>">
                             <input type="hidden" name="destino" value="<?php echo "$destino"; ?>">
+                            <input type="hidden" name="componente" value="<?php echo "$componente"; ?>">
 
-                            <p><input class="rdm-formularios--input-cantidad" type="number" name="cantidad" placeholder="Cantidad" value=""/> <button type="submit" class="rdm-boton--resaltado" name="agregar" value="si"><i class="zmdi zmdi-check"></i></button>                           
-
+                            <p><button type="submit" class="rdm-boton--resaltado" name="agregar" value="si">Comenzar producción</i></button>
                             
                         </form>
 

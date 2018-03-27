@@ -52,7 +52,7 @@ if ($agregar == 'si')
 
     if ($consulta->num_rows == 0)
     {
-        $insercion = $conexion->query("INSERT INTO componentes values ('', '$ahora', '$sesion_id', '$unidad', '$componente', '0', '0', '$local', 'producido')");
+        $insercion = $conexion->query("INSERT INTO componentes values ('', '$ahora', '$sesion_id', 'unid', '$componente', '0', '0', '$local', 'producido')");
 
         $mensaje = "Componente <b>" . ucfirst($componente) . "</b> agregado";
         $body_snack = 'onLoad="Snackbar()"';
@@ -158,16 +158,7 @@ if ($agregar == 'si')
             </select></p>
             <p class="rdm-formularios--ayuda">Local que produce el componente</p>
             
-            <p class="rdm-formularios--label"><label for="unidad">Unidad*</label></p>
-            <p><select id="unidad" name="unidad" required>
-                <option value="<?php echo "$unidad"; ?>"><?php echo $unidad ?></option>
-                <option value=""></option>
-                <option ="gr">gr</option>
-                <option ="ml">ml</option>
-                <option ="mts">mts</option>
-                <option ="unid">unid</option>
-            </select></p>
-            <p class="rdm-formularios--ayuda">Unidad de medida del componente</p>            
+                       
             
             <button type="submit" class="rdm-boton--fab" name="agregar" value="si"><i class="zmdi zmdi-check zmdi-hc-2x"></i></button>
         </form>

@@ -105,7 +105,7 @@ if (isset($consultaBusqueda))
                     <div class="rdm-lista--contenedor">
                         <h2 class="rdm-lista--titulo"><?php echo ucfirst(preg_replace("/$consultaBusqueda/i", "<span class='rdm-resaltado'>\$0</span>", ucfirst($componente))); ?></h2>
                         <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst(preg_replace("/$consultaBusqueda/i", "<span class='rdm-resaltado'>\$0</span>", $proveedor)); ?></h2>
-                        <h2 class="rdm-lista--texto-valor">$ <?php echo ($costo_unidad); ?> x <?php echo ucfirst("$unidad"); ?></h2>
+                        <h2 class="rdm-lista--texto-valor">$<?php echo number_format($costo_unidad, 2, ",", "."); ?> x <?php echo ("$unidad"); ?></h2>
 
                         <form action="componentes_producidos_componentes.php" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="id_componente_producido" value="<?php echo "$id_componente_producido"; ?>">

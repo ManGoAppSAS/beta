@@ -176,7 +176,7 @@ if ($agregar == 'si')
         var textoBusqueda = $("input#busqueda").val();
      
          if (textoBusqueda != "") {
-            $.post("producciones_componentes_buscar.php?produccion_id=<?php echo "$produccion_id"; ?>&destino=<?php echo "$destino"; ?>", {valorBusqueda: textoBusqueda}, function(mensaje) {
+            $.post("producciones_componentes_buscarx.php?produccion_id=<?php echo "$produccion_id"; ?>&destino=<?php echo "$destino"; ?>", {valorBusqueda: textoBusqueda}, function(mensaje) {
                 $("#resultadoBusqueda").html(mensaje);
              }); 
          } else { 

@@ -20,8 +20,10 @@ if(isset($_POST['editar'])) $editar = $_POST['editar']; elseif(isset($_GET['edit
 
 if(isset($_POST['id'])) $id = $_POST['id']; elseif(isset($_GET['id'])) $id = $_GET['id']; else $id = null;
 if(isset($_POST['unidad'])) $unidad = $_POST['unidad']; elseif(isset($_GET['unidad'])) $unidad = $_GET['unidad']; else $unidad = null;
+if(isset($_POST['unidad_compra'])) $unidad_compra = $_POST['unidad_compra']; elseif(isset($_GET['unidad_compra'])) $unidad_compra = $_GET['unidad_compra']; else $unidad_compra = null;
 if(isset($_POST['componente'])) $componente = $_POST['componente']; elseif(isset($_GET['componente'])) $componente = $_GET['componente']; else $componente = null;
 if(isset($_POST['costo_unidad'])) $costo_unidad = $_POST['costo_unidad']; elseif(isset($_GET['costo_unidad'])) $costo_unidad = $_GET['costo_unidad']; else $costo_unidad = null;
+if(isset($_POST['costo_unidad_compra'])) $costo_unidad_compra = $_POST['costo_unidad_compra']; elseif(isset($_GET['costo_unidad_compra'])) $costo_unidad_compra = $_GET['costo_unidad_compra']; else $costo_unidad_compra = null;
 if(isset($_POST['proveedor'])) $proveedor = $_POST['proveedor']; elseif(isset($_GET['proveedor'])) $proveedor = $_GET['proveedor']; else $proveedor = null;
 
 if(isset($_POST['mensaje'])) $mensaje = $_POST['mensaje']; elseif(isset($_GET['mensaje'])) $mensaje = $_GET['mensaje']; else $mensaje = null;
@@ -33,7 +35,69 @@ if(isset($_POST['mensaje_tema'])) $mensaje_tema = $_POST['mensaje_tema']; elseif
 //actualizo la información del componente
 if ($editar == "si")
 {
-    $actualizar = $conexion->query("UPDATE componentes SET fecha = '$ahora', usuario = '$sesion_id', unidad = '$unidad', componente = '$componente', costo_unidad = '$costo_unidad', proveedor = '$proveedor' WHERE id = '$id'");
+    //calculo la unidad con base a la unidad de compra
+    if ($unidad_compra == "k")
+    {
+        $unidad = "g";
+    }
+    else
+    {
+        if (($unidad_compra == "l") or ($unidad_compra == "botella 375 ml") or ($unidad_compra == "botella 750 ml") or ($unidad_compra == "botella 1500 ml") or ($unidad_compra == "garrafa 2000 ml"))
+        {
+            $unidad = "ml";
+        }
+        else
+        {
+            if ($unidad_compra == "m")
+            {
+                $unidad = "mm";
+            }
+            else
+            {
+                $unidad = $unidad_compra;
+            }
+        }
+    }
+
+    //si la unidad es kilos, litros o metros se divide por mil para obtener la unidad minima
+    if (($unidad_compra == "k") or ($unidad_compra == "l") or ($unidad_compra == "m"))
+    {
+        $costo_unidad = $costo_unidad_compra / 1000;
+    }
+    else
+    {
+        if ($unidad_compra == "botella 375 ml")
+        {
+            $costo_unidad = $costo_unidad_compra / 375;
+        }
+        else
+        {
+            if ($unidad_compra == "botella 750 ml")
+            {
+                $costo_unidad = $costo_unidad_compra / 750;
+            }
+            else
+            {
+                if ($unidad_compra == "botella 1500 ml")
+                {
+                    $costo_unidad = $costo_unidad_compra / 1500;
+                }
+                else
+                {
+                    if ($unidad_compra == "garrafa 2000 ml")
+                    {
+                        $costo_unidad = $costo_unidad_compra / 2000;
+                    }
+                    else
+                    {
+                        $costo_unidad = $costo_unidad_compra;
+                    }
+                }
+            }
+        }
+    } 
+        
+    $actualizar = $conexion->query("UPDATE componentes SET fecha = '$ahora', usuario = '$sesion_id', unidad = '$unidad', unidad_compra = '$unidad_compra', componente = '$componente', costo_unidad = '$costo_unidad', costo_unidad_compra = '$costo_unidad_compra', proveedor = '$proveedor' WHERE id = '$id'");
 
     if ($actualizar)
     {
@@ -91,9 +155,21 @@ if ($editar == "si")
             $hora = date('h:i a', strtotime($fila['fecha']));
             $usuario = $fila['usuario'];
             $unidad = $fila['unidad'];
+            $unidad_compra = $fila['unidad_compra'];
             $componente = $fila['componente'];
             $costo_unidad = $fila['costo_unidad'];
-            $proveedor = $fila['proveedor'];
+            $costo_unidad_compra = $fila['costo_unidad_compra'];
+            $proveedor = $fila['proveedor'];            
+
+            //calculo el costro de la unidad maxima con base en el costo de la unidad
+            if ($unidad == "unid")
+            {
+                $costo_unidad_maxima = $costo_unidad;
+            }
+            else
+            {
+                $costo_unidad_maxima = $costo_unidad * 1000;
+            } 
 
             //consulto el proveedor
             $consulta_proveedor = $conexion->query("SELECT * FROM proveedores WHERE id = '$proveedor'");           
@@ -119,10 +195,14 @@ if ($editar == "si")
             <section class="rdm-tarjeta">
 
                 <div class="rdm-tarjeta--primario-largo">
-                    <h1 class="rdm-tarjeta--titulo-largo">$ <?php echo number_format($costo_unidad, 2, ",", "."); ?> x <?php echo ucfirst("$unidad"); ?></h1>
+                    <h1 class="rdm-tarjeta--titulo-largo"><?php echo ucfirst("$componente"); ?></h1>
                     <h2 class="rdm-tarjeta--subtitulo-largo"><?php echo ucfirst($proveedor) ?></h2>                </div>
 
                 <div class="rdm-tarjeta--cuerpo">
+                    
+                    <p><b>Costo unidad de compra</b> <br>$<?php echo number_format($costo_unidad_compra, 2, ",", "."); ?> x <?php echo ("$unidad_compra"); ?></p>
+                    <p><b>Costo unidad</b> <br>$<?php echo number_format($costo_unidad, 2, ",", "."); ?> x <?php echo ("$unidad"); ?></p>
+                    <p><b>Proveedor</b> <br><?php echo ucfirst("$proveedor"); ?></p>
                     <p><b>Última modificación</b> <br><?php echo ucfirst("$fecha"); ?> - <?php echo ucfirst("$hora"); ?></p>
                     <p><b>Modificado por</b> <br><?php echo ("$usuario"); ?></p>
                 </div>

@@ -27,8 +27,10 @@ if ($fila = $consulta->fetch_assoc())
 {
     $id = $fila['id'];
     $unidad = $fila['unidad'];
+    $unidad_compra = $fila['unidad_compra'];
     $componente = $fila['componente'];
     $costo_unidad = $fila['costo_unidad'];
+    $costo_unidad_compra = $fila['costo_unidad_compra'];
     $proveedor = $fila['proveedor'];
 
     //consulto el proveedor
@@ -147,19 +149,29 @@ else
             <p class="rdm-formularios--ayuda">Proveedor que suministra o vende el componente</p>            
 
             <p class="rdm-formularios--label"><label for="unidad">Unidad*</label></p>
-            <p><select id="unidad" name="unidad" required>
-                <option value="<?php echo "$unidad"; ?>"><?php echo $unidad ?></option>
-                <option value=""></option>
-                <option ="gr">gr</option>
-                <option ="ml">ml</option>
-                <option ="mts">mts</option>
-                <option ="unid">unid</option>
+            <p><select id="unidad_compra" name="unidad_compra" required>
+                <option value="<?php echo "$unidad_compra"; ?>"><?php echo $unidad_compra ?></option>
+                <option value="">---------</option>
+                <option value="g">g</option>
+                <option value="ml">ml</option>
+                <option value="mm">mm</option>
+                <option value="">---------</option>
+                <option value="k">k</option>
+                <option value="l">l</option>
+                <option value="m">m</option>
+                <option value="">---------</option>             
+                <option value="botella 375 ml">botella 375 ml</option>
+                <option value="botella 750 ml">botella 750 ml</option>
+                <option value="botella 1500 ml">botella 1500 ml</option>
+                <option value="garrafa 2000 ml">garrafa 2000 ml</option>
+                <<option value="">---------</option>
+                <option value="unid">unid</option>
             </select></p>
-            <p class="rdm-formularios--ayuda">Unidad de medida del componente</p>
+            <p class="rdm-formularios--ayuda">Unidad de compra del componente</p>
 
-            <p class="rdm-formularios--label"><label for="costo_unidad">Costo*</label></p>
-            <p><input type="tel" id="costo_unidad" name="costo_unidad" value="<?php echo "$costo_unidad"; ?>" step="any" required /></p>
-            <p class="rdm-formularios--ayuda">Costo de la unidad de medida</p>
+            <p class="rdm-formularios--label"><label for="costo_unidad_compra">Costo unidad de compra*</label></p>
+            <p><input type="number" id="costo_unidad_compra" name="costo_unidad_compra" value="<?php echo "$costo_unidad_compra"; ?>" step="any" required /></p>
+            <p class="rdm-formularios--ayuda">Costo de la unidad de compra</p>
             
             <button type="submit" class="rdm-boton--fab" name="editar" value="si"><i class="zmdi zmdi-check zmdi-hc-2x"></i></button>
         </form>

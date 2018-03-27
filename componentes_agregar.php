@@ -18,9 +18,11 @@ include ("sis/variables_sesion.php");
 //declaro las variables que pasan por formulario o URL
 if(isset($_POST['agregar'])) $agregar = $_POST['agregar']; elseif(isset($_GET['agregar'])) $agregar = $_GET['agregar']; else $agregar = null;
 
+if(isset($_POST['unidad_compra'])) $unidad_compra = $_POST['unidad_compra']; elseif(isset($_GET['unidad_compra'])) $unidad_compra = $_GET['unidad_compra']; else $unidad_compra = null;
 if(isset($_POST['unidad'])) $unidad = $_POST['unidad']; elseif(isset($_GET['unidad'])) $unidad = $_GET['unidad']; else $unidad = null;
 if(isset($_POST['componente'])) $componente = $_POST['componente']; elseif(isset($_GET['componente'])) $componente = $_GET['componente']; else $componente = null;
 if(isset($_POST['costo_unidad'])) $costo_unidad = $_POST['costo_unidad']; elseif(isset($_GET['costo_unidad'])) $costo_unidad = $_GET['costo_unidad']; else $costo_unidad = null;
+if(isset($_POST['costo_unidad_compra'])) $costo_unidad_compra = $_POST['costo_unidad_compra']; elseif(isset($_GET['costo_unidad_compra'])) $costo_unidad_compra = $_GET['costo_unidad_compra']; else $costo_unidad_compra = null;
 if(isset($_POST['proveedor'])) $proveedor = $_POST['proveedor']; elseif(isset($_GET['proveedor'])) $proveedor = $_GET['proveedor']; else $proveedor = 0;
 
 if(isset($_POST['mensaje'])) $mensaje = $_POST['mensaje']; elseif(isset($_GET['mensaje'])) $mensaje = $_GET['mensaje']; else $mensaje = null;
@@ -28,7 +30,7 @@ if(isset($_POST['body_snack'])) $body_snack = $_POST['body_snack']; elseif(isset
 if(isset($_POST['mensaje_tema'])) $mensaje_tema = $_POST['mensaje_tema']; elseif(isset($_GET['mensaje_tema'])) $mensaje_tema = $_GET['mensaje_tema']; else $mensaje_tema = null;
 ?>
 
-<?php 
+<?php
 //consulto el proveedor enviado desde el select del formulario
 $consulta_proveedor_g = $conexion->query("SELECT * FROM proveedores WHERE id = '$proveedor'");           
 
@@ -51,7 +53,69 @@ if ($agregar == 'si')
 
     if ($consulta->num_rows == 0)
     {
-        $insercion = $conexion->query("INSERT INTO componentes values ('', '$ahora', '$sesion_id', '$unidad', '$componente', '$costo_unidad', '$proveedor', '0', 'comprado')");
+        //calculo la unidad con base a la unidad de compra
+        if ($unidad_compra == "k")
+        {
+            $unidad = "g";
+        }
+        else
+        {
+            if (($unidad_compra == "l") or ($unidad_compra == "botella 375 ml") or ($unidad_compra == "botella 750 ml") or ($unidad_compra == "botella 1500 ml") or ($unidad_compra == "garrafa 2000 ml"))
+            {
+                $unidad = "ml";
+            }
+            else
+            {
+                if ($unidad_compra == "m")
+                {
+                    $unidad = "mm";
+                }
+                else
+                {
+                    $unidad = $unidad_compra;
+                }
+            }
+        }
+
+        //si la unidad es kilos, litros o metros se divide por mil para obtener la unidad minima
+        if (($unidad_compra == "k") or ($unidad_compra == "l") or ($unidad_compra == "m"))
+        {
+            $costo_unidad = $costo_unidad_compra / 1000;
+        }
+        else
+        {
+            if ($unidad_compra == "botella 375 ml")
+            {
+                $costo_unidad = $costo_unidad_compra / 375;
+            }
+            else
+            {
+                if ($unidad_compra == "botella 750 ml")
+                {
+                    $costo_unidad = $costo_unidad_compra / 750;
+                }
+                else
+                {
+                    if ($unidad_compra == "botella 1500 ml")
+                    {
+                        $costo_unidad = $costo_unidad_compra / 1500;
+                    }
+                    else
+                    {
+                        if ($unidad_compra == "garrafa 2000 ml")
+                        {
+                            $costo_unidad = $costo_unidad_compra / 2000;
+                        }
+                        else
+                        {
+                            $costo_unidad = $costo_unidad_compra;
+                        }
+                    }
+                }
+            }
+        }        
+
+        $insercion = $conexion->query("INSERT INTO componentes values ('', '$ahora', '$sesion_id', '$unidad', '$unidad_compra', '$componente', '$costo_unidad', '$costo_unidad_compra', '$proveedor', '0', 'comprado')");
 
         $mensaje = "Componente <b>" . ucfirst($componente) . "</b> agregado";
         $body_snack = 'onLoad="Snackbar()"';
@@ -157,20 +221,32 @@ if ($agregar == 'si')
             </select></p>
             <p class="rdm-formularios--ayuda">Proveedor que suministra o vende el componente</p>
             
-            <p class="rdm-formularios--label"><label for="unidad">Unidad*</label></p>
-            <p><select id="unidad" name="unidad" required>
-                <option value="<?php echo "$unidad"; ?>"><?php echo $unidad ?></option>
-                <option value=""></option>
-                <option ="gr">gr</option>
-                <option ="ml">ml</option>
-                <option ="mts">mts</option>
-                <option ="unid">unid</option>
+            <p class="rdm-formularios--label"><label for="unidad_compra">Unidad de compra*</label></p>
+            <p><select id="unidad_compra" name="unidad_compra" required>
+                <option value="<?php echo "$unidad_compra"; ?>"><?php echo $unidad_compra ?></option>
+                <option value="">---------</option>
+                <option value="g">g</option>
+                <option value="ml">ml</option>
+                <option value="mm">mm</option>
+                <option value="">---------</option>
+                <option value="k">k</option>
+                <option value="l">l</option>
+                <option value="m">m</option>
+                <option value="">---------</option>             
+                <option value="botella 375 ml">botella 375 ml</option>
+                <option value="botella 750 ml">botella 750 ml</option>
+                <option value="botella 1500 ml">botella 1500 ml</option>
+                <option value="garrafa 2000 ml">garrafa 2000 ml</option>
+                <<option value="">---------</option>
+                <option value="unid">unid</option>
             </select></p>
-            <p class="rdm-formularios--ayuda">Unidad de medida del componente</p>
+            <p class="rdm-formularios--ayuda">Unidad de compra del componente</p>
 
-            <p class="rdm-formularios--label"><label for="costo_unidad">Costo*</label></p>
-            <p><input type="number" id="costo_unidad" name="costo_unidad" value="<?php echo "$costo_unidad"; ?>" step="any" required /></p>
-            <p class="rdm-formularios--ayuda">Costo de la unidad de medida</p>
+            <p class="rdm-formularios--label"><label for="costo_unidad_compra">Costo unidad de compra*</label></p>
+            <p><input type="number" id="costo_unidad_compra" name="costo_unidad_compra" value="<?php echo "$costo_unidad_compra"; ?>" step="any" required /></p>
+            <p class="rdm-formularios--ayuda">Costo de la unidad de compra</p>
+
+            
             
             <button type="submit" class="rdm-boton--fab" name="agregar" value="si"><i class="zmdi zmdi-check zmdi-hc-2x"></i></button>
         </form>

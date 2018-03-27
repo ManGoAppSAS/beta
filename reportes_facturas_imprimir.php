@@ -249,7 +249,7 @@ else
                     
                     <?php
                     //muestro los datos de base e impuesto en cada articulo
-                    $impuesto_mostrar = "no";
+                    $impuesto_mostrar = "si";
                     if (($impuesto_valor != 0) && ($impuesto_mostrar == "si"))
                     {
                     ?>

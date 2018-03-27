@@ -142,19 +142,19 @@ if ($enviar_correo == "si")
         $mail->isSMTP();                                      
         $mail->Host = 'mangoapp.co;mail.mangoapp.co';
         $mail->SMTPAuth = true;
-        $mail->Username = 'info@mangoapp.co';
+        $mail->Username = 'notificaciones@mangoapp.co';
         $mail->Password = 'renacimiento';
         $mail->SMTPSecure = 'ssl';
         $mail->Port = 465;
 
         //Enviado por
-        $mail->setFrom('info@mangoapp.co', ucfirst($sesion_local));
+        $mail->setFrom('notificaciones@mangoapp.co', ucfirst($sesion_local));
 
         //Destinatario
         $mail->addAddress($correo_cliente);
 
         //Responder a
-        $mail->addReplyTo('info@mangoapp.co', 'ManGo! App');        
+        $mail->addReplyTo('notificaciones@mangoapp.co', 'ManGo! App');        
 
         //Contenido del correo
         $mail->isHTML(true);

@@ -74,6 +74,40 @@ if (isset($consultaBusqueda))
             $proveedor = $fila['proveedor'];
             $costo_unidad = $fila['costo_unidad'];
 
+            //calculo la unidad maxima con base en la unidad
+            if ($unidad == "g")
+            {
+                $unidad_maxima = "k";
+            }
+            else
+            {
+                if ($unidad == "ml")
+                {
+                    $unidad_maxima = "l";
+                }
+                else
+                {
+                    if ($unidad == "mm")
+                    {
+                        $unidad_maxima = "m";
+                    }
+                    else
+                    {
+                        $unidad_maxima = "unid";
+                    }
+                }
+            }
+
+            //calculo el costro de la unidad maxima con base en el costo de la unidad
+            if ($unidad == "unid")
+            {
+                $costo_unidad_maxima = $costo_unidad;
+            }
+            else
+            {
+                $costo_unidad_maxima = $costo_unidad * 1000;
+            }
+
              //consulto el proveedor
             $consulta2 = $conexion->query("SELECT * FROM proveedores WHERE id = $proveedor");
 
@@ -98,7 +132,7 @@ if (isset($consultaBusqueda))
                         <div class="rdm-lista--contenedor">
                             <h2 class="rdm-lista--titulo"><?php echo preg_replace("/$consultaBusqueda/i", "<span class='rdm-resaltado'>\$0</span>", ucfirst($componente)); ?></h2>
                             <h2 class="rdm-lista--texto-secundario"><?php echo preg_replace("/$consultaBusqueda/i", "<span class='rdm-resaltado'>\$0</span>", ucfirst($proveedor)); ?></h2>
-                            <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($costo_unidad, 2, ",", "."); ?> x <?php echo ucfirst("$unidad"); ?></h2>
+                            <h2 class="rdm-lista--texto-valor">$<?php echo number_format($costo_unidad, 2, ",", "."); ?> x <?php echo ("$unidad"); ?></h2>
                         </div>
                     </div>
                     

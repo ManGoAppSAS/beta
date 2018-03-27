@@ -138,18 +138,18 @@ if ($agregar == 'si')
             <p><select id="tipo" name="tipo" required>
                 <option value="<?php echo "$tipo"; ?>"><?php echo ucfirst($tipo) ?></option>
                 <option value="socio">Socio</option>
-                <option value="administrador">Administrador</option>                
-                <option value="">-</option>
+                <option value="administrador">Administrador</option>
+                <option value="">---</option>
                 <option value="barman">Barman</option>
                 <option value="cocinero">Cocinero</option>
                 <option value="domiciliario">Domiciliario</option>
                 <option value="mesero">Mesero</option>
-                <option value="">-</option>
+                <option value="">---</option>
                 <option value="ayudante cocina">Ayudante cocina</option>
                 <option value="barbero">Barbero</option>
                 <option value="estilista">Estilista</option>
                 <option value="manicurista">Manicurista</option>
-                <option value="">-</option>
+                <option value="">---</option>
                 <option value="vendedor">Vendedor</option>
             </select></p>
             <p class="rdm-formularios--ayuda">Tipo de usuario, socio, administrador, vendedor, etc.</p>

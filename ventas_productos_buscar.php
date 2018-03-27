@@ -175,7 +175,7 @@ if (isset($consultaBusqueda))
                         <h2 class="rdm-lista--titulo"><?php echo ucfirst(preg_replace("/$consultaBusqueda/i", "<span class='rdm-resaltado'>\$0</span>", ucfirst($producto))); ?></h2>
                         <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst(preg_replace("/$consultaBusqueda/i", "<span class='rdm-resaltado'>\$0</span>", ucfirst($categoria))); ?></h2>
                         
-                        <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($precio_neto, 2, ",", "."); ?></h2>
+                        <h2 class="rdm-lista--texto-valor">$<?php echo number_format($precio_neto, 2, ",", "."); ?></h2>
 
                         <form action="ventas_categorias.php#<?php echo $producto_id; ?>" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="venta_id" value="<?php echo $venta_id; ?>">

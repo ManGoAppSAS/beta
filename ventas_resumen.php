@@ -126,7 +126,7 @@ while ($fila_venta_total = $consulta_venta_total->fetch_assoc())
         </div>
         
         <div class="rdm-toolbar--derecha">
-            <h2 class="rdm-toolbar--titulo">$ <?php echo number_format($venta_total, 2, ",", "."); ?></h2>
+            <h2 class="rdm-toolbar--titulo">$<?php echo number_format($venta_total, 2, ",", "."); ?></h2>
         </div>
     </div>
 
@@ -145,7 +145,7 @@ while ($fila_venta_total = $consulta_venta_total->fetch_assoc())
 
 <main class="rdm--contenedor-toolbar-tabs">
 
-
+    
 
     <?php
     //consulto y muestro los productos pedidos
@@ -158,6 +158,8 @@ while ($fila_venta_total = $consulta_venta_total->fetch_assoc())
     else
     {
         ?>
+
+        <h2 class="rdm-lista--titulo-largo">Pedidos</h2>
 
         <section class="rdm-lista">
 
@@ -221,7 +223,7 @@ while ($fila_venta_total = $consulta_venta_total->fetch_assoc())
                     <div class="rdm-lista--contenedor">
                         <h2 class="rdm-lista--titulo"><?php echo ucfirst("$producto"); ?></h2>
                         <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst("$categoria"); ?></h2>
-                        <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($precio_final, 2, ",", "."); ?></h2>
+                        <h2 class="rdm-lista--texto-valor">$<?php echo number_format($precio_final, 2, ",", "."); ?></h2>
 
                         <div class="rdm-lista--acciones-izquierda">
                             <a href="ventas_resumen.php?eliminar=si&producto_venta_id=<?php echo "$producto_venta_id";?>&producto=<?php echo "$producto";?>&venta_id=<?php echo "$venta_id";?>"><button type="button" class="rdm-boton--primario"><i class="zmdi zmdi-delete"></i> x 1</button></a>
@@ -244,7 +246,7 @@ while ($fila_venta_total = $consulta_venta_total->fetch_assoc())
             ?>
 
             <div class="rdm-lista--acciones-izquierda">
-                <a href="ventas_resumen.php?confirmar=si&venta_id=<?php echo "$venta_id";?>"><button type="button" class="rdm-boton--plano-resaltado">Confirmar pedido</button></a>
+                <a href="ventas_resumen.php?confirmar=si&venta_id=<?php echo "$venta_id";?>"><button class="rdm-boton--fab" ><i class="zmdi zmdi-check zmdi-hc-2x"></i></button></a>
 
                 <a href="ventas_comanda_imprimir.php?venta_id=<?php echo "$venta_id";?>" target="_blank"><button type="button" class="rdm-boton--plano">Imprimir pedido</button></a>
             </div>
@@ -254,7 +256,7 @@ while ($fila_venta_total = $consulta_venta_total->fetch_assoc())
             <?php
         }
     }
-    ?>        
+    ?>
         
 
     <?php
@@ -268,6 +270,8 @@ while ($fila_venta_total = $consulta_venta_total->fetch_assoc())
     else                 
     {
         ?>
+
+        <h2 class="rdm-lista--titulo-largo">Confirmados</h2>
 
         <section class="rdm-lista">
 
@@ -345,7 +349,7 @@ while ($fila_venta_total = $consulta_venta_total->fetch_assoc())
                     <div class="rdm-lista--contenedor">
                         <h2 class="rdm-lista--titulo"><?php echo ucfirst("$producto"); ?></h2>
                         <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst("$categoria"); ?></h2>
-                        <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($precio_final, 2, ",", "."); ?></h2>
+                        <h2 class="rdm-lista--texto-valor">$<?php echo number_format($precio_final, 2, ",", "."); ?></h2>
                         <h2 class="rdm-lista--texto-secundario">Enviado a <?php echo ucfirst($zona); ?></h2>
 
                         <?php
@@ -484,7 +488,7 @@ while ($fila_venta_total = $consulta_venta_total->fetch_assoc())
                     <div class="rdm-lista--contenedor">
                         <h2 class="rdm-lista--titulo"><?php echo ucfirst("$producto"); ?></h2>
                         <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst("$categoria"); ?></h2>
-                        <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($precio_final, 2, ",", "."); ?></h2>
+                        <h2 class="rdm-lista--texto-valor">$<?php echo number_format($precio_final, 2, ",", "."); ?></h2>
                         <h2 class="rdm-lista--texto-secundario">Entregado a <?php echo "$atendido"; ?></h2>
 
                         <?php
@@ -695,7 +699,7 @@ while ($fila_venta_total = $consulta_venta_total->fetch_assoc())
     
 <footer>
     
-    <a href="ventas_pagar.php?venta_id=<?php echo "$venta_id";?>"><button class="rdm-boton--fab" ><i class="zmdi zmdi-money zmdi-hc-2x"></i></button></a>
+    
 
 </footer>
 

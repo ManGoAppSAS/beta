@@ -200,8 +200,8 @@ else
                             <div class="rdm-lista--icono"><i class="zmdi zmdi-shape zmdi-hc-2x"></i></div>
                         </div>
                         <div class="rdm-lista--contenedor">
-                            <h2 class="rdm-lista--titulo">Costo de este componente producido</h2>
-                            <h2 class="rdm-lista--texto-valor">$ <?php echo number_format(0, 2, ",", "."); ?> x <?php echo ucfirst($unidad_c); ?></h2>
+                            <h2 class="rdm-lista--titulo">Costo total</h2>
+                            <h2 class="rdm-lista--texto-valor">$<?php echo number_format(0, 2, ",", "."); ?></h2>
                         </div>
                     </div>
                 </article>
@@ -255,8 +255,8 @@ else
                         </div>
                         <div class="rdm-lista--contenedor">
                             <h2 class="rdm-lista--titulo"><?php echo ucfirst("$componente"); ?></h2>
-                            <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst("$cantidad"); ?> <?php echo ucfirst("$unidad"); ?></h2>
-                            <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($subtotal_costo_unidad, 2, ",", "."); ?></h2>
+                            <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst("$cantidad"); ?> <?php echo ("$unidad"); ?></h2>
+                            <h2 class="rdm-lista--texto-valor">$<?php echo number_format($subtotal_costo_unidad, 2, ",", "."); ?></h2>
                         </div>
                     </div>
                     <div class="rdm-lista--derecha-sencillo">
@@ -284,8 +284,8 @@ else
                             <div class="rdm-lista--icono"><i class="zmdi zmdi-shape zmdi-hc-2x"></i></div>
                         </div>
                         <div class="rdm-lista--contenedor">
-                            <h2 class="rdm-lista--titulo">Costo de este componente producido</h2>
-                            <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($total_costo, 2, ",", "."); ?> x <?php echo ucfirst($unidad_c); ?></h2>
+                            <h2 class="rdm-lista--titulo">Costo total</h2>
+                            <h2 class="rdm-lista--texto-valor"><span class="rdm-lista--texto-negativo">$<?php echo number_format($total_costo, 2, ",", "."); ?></span></h2>
                         </div>
                     </div>
                 </article>

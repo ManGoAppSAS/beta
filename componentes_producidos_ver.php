@@ -142,6 +142,23 @@ if ($eliminar == "si")
             
             //consulto la composición de este componente producido
             $consulta_composicion = $conexion->query("SELECT * FROM composiciones_componentes_producidos WHERE componente_producido = '$id' ORDER BY fecha DESC");
+            $total_composicion = $consulta_composicion->num_rows;
+
+            if ($total_composicion == 0)
+            {
+                $componentes = "sin composicion";
+            }
+            else
+            {
+                if ($total_composicion == 1)
+                {
+                    $componentes = "";
+                }
+                else
+                {
+                    $componentes = "";
+                }
+            }
 
             if ($consulta_composicion->num_rows == 0)
             {
@@ -187,7 +204,8 @@ if ($eliminar == "si")
                         <div class="rdm-lista--contenedor">
                             <h2 class="rdm-lista--titulo"><?php echo ucfirst("$componente_producido"); ?></h2>
                             <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst("$productor"); ?></h2>
-                            <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($total_costo, 2, ",", "."); ?> x <?php echo ucfirst("$unidad"); ?></h2>
+                            <h2 class="rdm-lista--texto-valor">$<?php echo number_format($total_costo, 2, ",", "."); ?></h2>
+                            <h2 class="rdm-lista--texto-secundario"><span class="rdm-lista--texto-negativo"><?php echo ucfirst($componentes) ?></span></h2>
                         </div>
                     </div>
                 </article>

@@ -28,21 +28,6 @@ if(isset($_POST['body_snack'])) $body_snack = $_POST['body_snack']; elseif(isset
 if(isset($_POST['mensaje_tema'])) $mensaje_tema = $_POST['mensaje_tema']; elseif(isset($_GET['mensaje_tema'])) $mensaje_tema = $_GET['mensaje_tema']; else $mensaje_tema = null;
 ?>
 
-<?php
-//actualizo la información del componente producido
-if ($editar == "si")
-{
-    $actualizar = $conexion->query("UPDATE componentes SET fecha = '$ahora', usuario = '$sesion_id', unidad = 'unid', componente = '$componente', productor = '$local' WHERE id = '$id'");
-
-    if ($actualizar)
-    {
-        $mensaje = "Cambios guardados";
-        $body_snack = 'onLoad="Snackbar()"';
-        $mensaje_tema = "aviso";
-    }
-}
-?>
-
 <?php 
 //consulto la composición de este componente producido
 $consulta_composicion = $conexion->query("SELECT * FROM composiciones_componentes_producidos WHERE componente_producido = '$id' ORDER BY fecha DESC");
@@ -99,8 +84,8 @@ else
 <header class="rdm-toolbar--contenedor">
     <div class="rdm-toolbar--fila">
         <div class="rdm-toolbar--izquierda">
-            <a href="componentes_producidos_ver.php"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-arrow-left zmdi-hc-2x"></i></div></a>
-            <h2 class="rdm-toolbar--titulo"><?php echo ucfirst("$componente"); ?></h2>
+            <a href="producciones_detallex.php"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-arrow-left zmdi-hc-2x"></i></div></a>
+            <h2 class="rdm-toolbar--titulo"><?php echo ucfirst($componente) ?></h2>
         </div>
     </div>
 </header>
@@ -158,46 +143,18 @@ else
             }
             ?>
 
-            <section class="rdm-tarjeta">
-
-                <div class="rdm-tarjeta--primario-largo">                    
-                    <h1 class="rdm-tarjeta--titulo-largo">$<?php echo number_format($total_costo, 2, ",", "."); ?></h1>
-                    <h2 class="rdm-tarjeta--subtitulo-largo"><?php echo ucfirst($productor) ?></h2>
-                </div>
-
-                <div class="rdm-tarjeta--cuerpo">
-                    <p><b>Última modificación</b> <br><?php echo ucfirst("$fecha"); ?> - <?php echo ucfirst("$hora"); ?></p>
-                    <p><b>Modificado por</b> <br><?php echo ("$usuario"); ?></p>
-                </div>
-
-            </section>
+            
             
             <?php
         }
     }
     ?>
 
-    <h2 class="rdm-lista--titulo-largo">Valores</h2>
-            
-            <section class="rdm-lista">                
-
-                <article class="rdm-lista--item-sencillo">
-                    <div class="rdm-lista--izquierda-sencillo">
-                        <div class="rdm-lista--contenedor">
-                            <div class="rdm-lista--icono"><i class="zmdi zmdi-shape zmdi-hc-2x"></i></div>
-                        </div>
-                        <div class="rdm-lista--contenedor">
-                            <h2 class="rdm-lista--titulo">Costo</h2>
-                            <h2 class="rdm-lista--texto-valor"><span class="rdm-lista--texto-negativo">$<?php echo number_format($total_costo, 2, ",", "."); ?></span></h2>
-                        </div>
-                    </div>
-                </article>
-
-        </section>
+        
 
     <a class="ancla" name="composicion"></a>
 
-    <h2 class="rdm-lista--titulo-largo">Composición</h2>
+    <h2 class="rdm-lista--titulo-largo">Ingredientes</h2>
 
     <section class="rdm-lista">
         
@@ -262,8 +219,20 @@ else
                         </div>
                         <div class="rdm-lista--contenedor">
                             <h2 class="rdm-lista--titulo"><?php echo ucfirst("$componente"); ?></h2>
-                            <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst("$cantidad"); ?> <?php echo ("$unidad"); ?></h2>
                             <h2 class="rdm-lista--texto-valor">$<?php echo number_format($subtotal_costo_unidad, 2, ",", "."); ?></h2>
+                            <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst("$cantidad"); ?> <?php echo ("$unidad"); ?></h2>
+
+                            <form action="producciones_produccion.php" method="post" enctype="multipart/form-data">
+                                <input type="hidden" name="produccion_id" value="<?php echo "$produccion_id"; ?>">
+                                <input type="hidden" name="id" value="<?php echo "$componente_id"; ?>">
+                                <input type="hidden" name="destino" value="<?php echo "$destino"; ?>">
+                                <input type="hidden" name="componente" value="<?php echo "$componente"; ?>">
+
+                                <p><input class="rdm-formularios--input-cantidad" type="number" name="cantidad" placeholder="Cantidad" value=""/> <button type="submit" class="rdm-boton--resaltado" name="agregar" value="si"><i class="zmdi zmdi-check"></i></button> 
+                                
+                            </form>
+
+                        
                         </div>
                     </div>
                 </article>
@@ -274,12 +243,41 @@ else
         ?>
 
         <div class="rdm-tarjeta--acciones-izquierda">
-            <a href="componentes_producidos_componentes.php?id_componente_producido=<?php echo "$id_componente_producido"; ?>"><button class="rdm-boton--plano-resaltado">Editar composición</button></a>
+            <a href="componentes_producidos_componentes.php?id_componente_producido=<?php echo "$id_componente_producido"; ?>"><button class="rdm-boton--plano-resaltado">Producir</button></a>
         </div>
 
 
 
     </section>
+
+
+
+
+
+
+    <h2 class="rdm-lista--titulo-largo">Valores</h2>
+            
+    <section class="rdm-lista">                
+
+        <article class="rdm-lista--item-sencillo">
+            <div class="rdm-lista--izquierda-sencillo">
+                <div class="rdm-lista--contenedor">
+                    <div class="rdm-lista--icono"><i class="zmdi zmdi-shape zmdi-hc-2x"></i></div>
+                </div>
+                <div class="rdm-lista--contenedor">
+                    <h2 class="rdm-lista--titulo">Costo</h2>
+                    <h2 class="rdm-lista--texto-valor"><span class="rdm-lista--texto-negativo">$<?php echo number_format($total_costo, 2, ",", "."); ?></span></h2>
+                </div>
+            </div>
+        </article>
+
+    </section>
+
+
+
+
+
+
 
 </main>
 

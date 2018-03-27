@@ -156,8 +156,8 @@ Autor: Danny Estrada
     width: 2.8em;
 }
 
-.rdm-lista--titulo, .rdm-lista--texto-secundario, .rdm-lista--texto-valor, .rdm-lista--titulo-amplio, .rdm-lista--mensaje, .rdm-lista--texto-secundario-porcentaje, .rdm-lista--titulo-porcentaje, .rdm-lista--texto-unidad{
-    font-size: 1em;
+.rdm-lista--titulo, .rdm-lista--texto-secundario, .rdm-lista--texto-valor, .rdm-lista--titulo-amplio, .rdm-lista--mensaje, .rdm-lista--texto-secundario-porcentaje, .rdm-lista--texto-valor-porcentaje, .rdm-lista--texto-porcentaje, .rdm-lista--titulo-porcentaje, .rdm-lista--texto-unidad{
+    font-size: 1em; 
     font-weight: 400;
     letter-spacing: 0.05em;
     line-height: 1.5em;
@@ -195,10 +195,20 @@ Autor: Danny Estrada
 
 .rdm-lista--titulo-porcentaje{
     margin: 0;
+    font-weight: 600;
 }
 
 .rdm-lista--texto-secundario-porcentaje{
-    color: rgba(0, 0, 0, 0.6);
+    margin: 0;
+}
+
+.rdm-lista--texto-porcentaje{
+    margin: 0;
+}
+
+.rdm-lista--texto-valor-porcentaje{
+    color: #009688;
+    font-weight: 600;
     margin: 0;
 }
 

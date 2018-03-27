@@ -120,9 +120,11 @@ if ($eliminar == "si")
         {
             $id = $fila['id'];
             $unidad = $fila['unidad'];
+            $unidad_compra = $fila['unidad_compra'];
             $componente = $fila['componente'];
             $proveedor = $fila['proveedor'];
             $costo_unidad = $fila['costo_unidad'];
+            $costo_unidad_compra = $fila['costo_unidad_compra'];            
 
             //consulto el proveedor
             $consulta2 = $conexion->query("SELECT * FROM proveedores WHERE id = $proveedor");
@@ -147,7 +149,7 @@ if ($eliminar == "si")
                         <div class="rdm-lista--contenedor">
                             <h2 class="rdm-lista--titulo"><?php echo ucfirst("$componente"); ?></h2>
                             <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst("$proveedor"); ?></h2>
-                            <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($costo_unidad, 2, ",", "."); ?> x <?php echo ucfirst("$unidad"); ?></h2>
+                            <h2 class="rdm-lista--texto-valor">$<?php echo number_format($costo_unidad_compra, 2, ",", "."); ?> x <?php echo ("$unidad_compra"); ?></h2>
                         </div>
                     </div>
                 </article>

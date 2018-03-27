@@ -160,18 +160,7 @@ else
                 }
                 ?>
             </select></p>
-            <p class="rdm-formularios--ayuda">Local que produce el componente</p>         
-
-            <p class="rdm-formularios--label"><label for="unidad">Unidad*</label></p>
-            <p><select id="unidad" name="unidad" required>
-                <option value="<?php echo "$unidad"; ?>"><?php echo $unidad ?></option>
-                <option value=""></option>
-                <option ="gr">gr</option>
-                <option ="ml">ml</option>
-                <option ="mts">mts</option>
-                <option ="unid">unid</option>
-            </select></p>
-            <p class="rdm-formularios--ayuda">Unidad de medida del componente</p>
+            <p class="rdm-formularios--ayuda">Local que produce el componente</p>            
             
             <button type="submit" class="rdm-boton--fab" name="editar" value="si"><i class="zmdi zmdi-check zmdi-hc-2x"></i></button>
         </form>
