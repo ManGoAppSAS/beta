@@ -14,6 +14,11 @@ if (!isset($_SESSION['correo']))
 include ("sis/variables_sesion.php");
 ?>
 
+<?php
+//capturo las variables que pasan por URL o formulario
+if(isset($_POST['pago_vencido'])) $pago_vencido = $_POST['pago_vencido']; elseif(isset($_GET['pago_vencido'])) $pago_vencido = $_GET['pago_vencido']; else $pago_vencido = "si";
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -802,13 +807,69 @@ include ("sis/variables_sesion.php");
                     
                 </div>
             </article>
-        </a>        
+        </a>
 
     </section>
 
     <?php
     }
     ?>
+
+    <?php
+    //le doy acceso al boton paga
+    if (($pago_vencido == "si"))
+    {
+
+    ?>
+
+    <a id="reestablecer">
+    <h2 class="rdm-lista--titulo-largo">Suscripción y pago</h2>
+
+    <section class="rdm-lista">
+
+        <a class="ancla" name="datos"></a>
+        <a href="cuenta_datos.php">
+            <article class="rdm-lista--item-sencillo">
+                <div class="rdm-lista--izquierda-sencillo">
+                    <div class="rdm-lista--contenedor">
+                        <div class="rdm-lista--icono"><i class="zmdi zmdi-account-box-mail zmdi-hc-2x"></i></div>
+                    </div>
+                    <div class="rdm-lista--contenedor">
+                        <h2 class="rdm-lista--titulo">Mis datos</h2>
+                        <h2 class="rdm-lista--texto-secundario">Editar mi perfil de ManGo!</h2>
+                    </div>
+                </div>
+                <div class="rdm-lista--derecha">
+                    
+                </div>
+            </article>
+        </a>
+
+        <a class="ancla" name="pago"></a>
+        <a href="cuenta_pagar.php">
+            <article class="rdm-lista--item-sencillo">
+                <div class="rdm-lista--izquierda-sencillo">
+                    <div class="rdm-lista--contenedor">
+                        <div class="rdm-lista--icono"><i class="zmdi zmdi-card zmdi-hc-2x"></i></div>
+                    </div>
+                    <div class="rdm-lista--contenedor">
+                        <h2 class="rdm-lista--titulo">Hacer mi pago</h2>
+                        <h2 class="rdm-lista--texto-secundario">Hacer el pago de mi servicio</h2>
+                    </div>
+                </div>
+                <div class="rdm-lista--derecha">
+                    
+                </div>
+            </article>
+        </a>
+
+    </section>
+
+    <?php
+    }
+    ?>
+
+
 
 
 

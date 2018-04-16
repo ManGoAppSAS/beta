@@ -80,7 +80,7 @@ if(isset($_POST['mensaje_tema'])) $mensaje_tema = $_POST['mensaje_tema']; elseif
     {   
         ?>
 
-        <h2 class="rdm-lista--titulo-largo">Despachos por recibir</h2>
+        <h2 class="rdm-lista--titulo-largo">Compras por recibir</h2>
 
         <section class="rdm-lista">
 

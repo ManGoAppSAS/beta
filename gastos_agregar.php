@@ -12,11 +12,16 @@ if (!isset($_SESSION['correo']))
 <?php
 //variables de la conexion, sesion y subida
 include ("sis/variables_sesion.php");
+include('sis/subir.php');
+
+$carpeta_destino = (isset($_GET['dir']) ? $_GET['dir'] : 'img/avatares');
+$dir_pics = (isset($_GET['pics']) ? $_GET['pics'] : $carpeta_destino);
 ?>
 
 <?php
 //declaro las variables que pasan por formulario o URL
 if(isset($_POST['agregar'])) $agregar = $_POST['agregar']; elseif(isset($_GET['agregar'])) $agregar = $_GET['agregar']; else $agregar = null;
+if(isset($_POST['archivo'])) $archivo = $_POST['archivo']; elseif(isset($_GET['archivo'])) $archivo = $_GET['archivo']; else $archivo = null;
 
 if(isset($_POST['concepto'])) $concepto = $_POST['concepto']; elseif(isset($_GET['concepto'])) $concepto = $_GET['concepto']; else $concepto = null;
 if(isset($_POST['tipo'])) $tipo = $_POST['tipo']; elseif(isset($_GET['tipo'])) $tipo = $_GET['tipo']; else $tipo = null;
@@ -52,6 +57,15 @@ else
 //agregar el gasto
 if ($agregar == 'si')
 {
+    if (!(isset($archivo)) && ($_FILES['archivo']['type'] == "image/jpeg") || ($_FILES['archivo']['type'] == "image/png"))
+    {
+        $imagen = "si";
+    }
+    else
+    {
+        $imagen = "no";
+    }
+
     $fecha_gasto = date("$fecha $hora:s");
     $valor = str_replace('.','',$valor);
 
@@ -59,13 +73,18 @@ if ($agregar == 'si')
 
     if ($consulta->num_rows == 0)
     {
-        $insercion = $conexion->query("INSERT INTO gastos values ('', '$fecha_gasto', '$sesion_id', '$tipo', '$concepto', '$valor', '$local')");
+        $imagen_ref = "gastos";   
+
+        $insercion = $conexion->query("INSERT INTO gastos values ('', '$fecha_gasto', '$sesion_id', '$tipo', '$concepto', '$valor', '$local', '$imagen', '$ahora_img')");
         
         $mensaje = "Gasto agregado";
         $body_snack = 'onLoad="Snackbar()"';
         $mensaje_tema = "aviso";
 
         $id = $conexion->insert_id;
+
+        //si han cargado el archivo subimos la imagen
+        include('imagenes_subir.php'); 
     }
     else
     {
@@ -111,7 +130,8 @@ if ($agregar == 'si')
     
     <section class="rdm-formulario">
 
-        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="image" />
 
             <p class="rdm-formularios--label"><label for="fecha">Fecha*</label></p>
             
@@ -199,6 +219,10 @@ if ($agregar == 'si')
                 ?>
             </select></p>
             <p class="rdm-formularios--ayuda">Local al que se relaciona el gasto</p>
+
+            <p class="rdm-formularios--label"><label for="archivo">Imagen</label></p>
+            <p><input type="file" id="archivo" name="archivo" /></p>
+            <p class="rdm-formularios--ayuda">Sube una foto de la factura o recibo del gasto</p>
 
             <button type="submit" class="rdm-boton--fab" name="agregar" value="si"><i class="zmdi zmdi-check zmdi-hc-2x"></i></button>
         </form>

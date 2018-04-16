@@ -48,7 +48,7 @@ if ($agregar_despacho == 'si')
     {
         $despacho_id = $fila['id'];
 
-        $mensaje = "Despacho <b>No ".ucfirst($despacho_id)."</b> ya fue creado";
+        $mensaje = "Compra <b>No ".ucfirst($despacho_id)."</b> ya fue creada";
         $body_snack = 'onLoad="Snackbar()"';
         $mensaje_tema = "error";
     }
@@ -60,7 +60,7 @@ if ($agregar_despacho == 'si')
         //consulto el ultimo id que se ingreso para tenerlo como id del despacho
         $despacho_id = $conexion->insert_id;
 
-        $mensaje = "Despacho <b>No ".ucfirst($despacho_id)."</b> creado";
+        $mensaje = "Compra <b>No ".ucfirst($despacho_id)."</b> creada";
         $body_snack = 'onLoad="Snackbar()"';
         $mensaje_tema = "aviso";
     }
@@ -90,9 +90,6 @@ if ($fila_despacho = $consulta_despacho->fetch_assoc())
 }
 ?>
 
-
-
-
 <?php
 //consulto el componente
 $consulta_componente = $conexion->query("SELECT * FROM componentes WHERE id = '$componente_id'");
@@ -113,7 +110,7 @@ if ($eliminar_componente == 'si')
 
     if ($borrar)
     {
-        $mensaje = "Componente <b>".ucfirst($componente)."</b> eliminado del despacho";
+        $mensaje = "Componente <b>".ucfirst($componente)."</b> eliminado de la compra";
         $body_snack = 'onLoad="Snackbar()"';
         $mensaje_tema = "aviso";
     }
@@ -135,7 +132,7 @@ if ($agregar == 'si')
     {
         $insercion = $conexion->query("INSERT INTO despachos_componentes values ('', '$ahora', '$sesion_id', '$despacho_id', '$componente_id', '$cantidad', 'creado')");
         
-        $mensaje = $cantidad . " " .ucfirst($unidad) . " de <b>" .ucfirst($componente). "</b> agregados al despacho</b>";
+        $mensaje = $cantidad . " " .ucfirst($unidad) . " de <b>" .ucfirst($componente). "</b> agregados a la compra</b>";
         $body_snack = 'onLoad="Snackbar()"';
         $mensaje_tema = "aviso";
     }
@@ -150,7 +147,7 @@ if ($agregar == 'si')
 
         $insercion = $conexion->query("UPDATE despachos_componentes SET cantidad = '$cantidad_nueva' WHERE componente_id = '$componente_id' and despacho_id = '$despacho_id' and estado = 'creado'");
 
-        $mensaje = $cantidad . " " .ucfirst($unidad) . " de <b>" .ucfirst($componente). "</b> agregados al despacho</b>";
+        $mensaje = $cantidad . " " .ucfirst($unidad) . " de <b>" .ucfirst($componente). "</b> agregados a la compra</b>";
         $body_snack = 'onLoad="Snackbar()"';
         $mensaje_tema = "aviso";
     }
@@ -224,7 +221,7 @@ if ($agregar == 'si')
                         <div class="rdm-lista--icono"><i class="zmdi zmdi-widgets zmdi-hc-2x"></i></div>
                     </div>
                     <div class="rdm-lista--contenedor">
-                        <h2 class="rdm-lista--titulo">Despacho No <?php echo "$despacho_id"; ?></h2>
+                        <h2 class="rdm-lista--titulo">Compra No <?php echo "$despacho_id"; ?></h2>
                         <h2 class="rdm-lista--texto-secundario">Sin componentes</h2>
                     </div>
                 </div>
@@ -328,7 +325,7 @@ if ($agregar == 'si')
                         <div class="rdm-lista--icono"><i class="zmdi zmdi-truck zmdi-hc-2x"></i></div>
                     </div>
                     <div class="rdm-lista--contenedor">
-                        <h2 class="rdm-lista--titulo">Despacho No <?php echo "$despacho_id"; ?></h2>
+                        <h2 class="rdm-lista--titulo">Compra No <?php echo "$despacho_id"; ?></h2>
                         <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst("$total_componentes"); ?> componentes</h2>
                         <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($costo_despacho, 2, ",", "."); ?></h2>
                     </div>

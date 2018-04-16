@@ -56,7 +56,7 @@ if ($actualizar == "si")
 
     if ($enviar_componentes)
     {
-        $mensaje = "Despacho <b>No ".ucfirst($despacho_id)."</b> enviado";
+        $mensaje = "Compra <b>No ".ucfirst($despacho_id)."</b> enviada";
         $body_snack = 'onLoad="Snackbar()"';
         $mensaje_tema = "aviso";
     }
@@ -98,7 +98,7 @@ if ($actualizar == "si")
     <div class="rdm-toolbar--fila">
         <div class="rdm-toolbar--izquierda">
             <a href="index.php#despachos"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-arrow-left zmdi-hc-2x"></i></div></a>
-            <h2 class="rdm-toolbar--titulo">Despachos</h2>
+            <h2 class="rdm-toolbar--titulo">Compras</h2>
         </div>
     </div>
 </header>
@@ -121,7 +121,7 @@ if ($actualizar == "si")
                         <div class="rdm-lista--icono"><i class="zmdi zmdi-truck zmdi-hc-2x"></i></div>
                     </div>
                     <div class="rdm-lista--contenedor">
-                        <h2 class="rdm-lista--titulo">No hay despachos</h2>
+                        <h2 class="rdm-lista--titulo">No hay compras</h2>
                     </div>
                 </div>
             </article>

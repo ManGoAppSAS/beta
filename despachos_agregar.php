@@ -72,7 +72,7 @@ if ($agregar == 'si')
     <div class="rdm-toolbar--fila">
         <div class="rdm-toolbar--izquierda">
             <a href="despachos_ver.php"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-arrow-left zmdi-hc-2x"></i></div></a>
-            <h2 class="rdm-toolbar--titulo">Agregar despacho</h2>
+            <h2 class="rdm-toolbar--titulo">Agregar compra</h2>
         </div>
     </div>
 </header>

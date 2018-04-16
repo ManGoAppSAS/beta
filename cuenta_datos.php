@@ -1,5 +1,5 @@
 <?php
-//inicio y nombre de la sesion
+//nombre de la sesion, inicio de la sesión y conexion con la base de datos
 include ("sis/nombre_sesion.php");
 
 //verifico si la sesión está creada y si no lo está lo envio al logueo
@@ -24,14 +24,12 @@ if(isset($_POST['editar'])) $editar = $_POST['editar']; elseif(isset($_GET['edit
 if(isset($_POST['archivo'])) $archivo = $_POST['archivo']; elseif(isset($_GET['archivo'])) $archivo = $_GET['archivo']; else $archivo = null;
 
 if(isset($_POST['id'])) $id = $_POST['id']; elseif(isset($_GET['id'])) $id = $_GET['id']; else $id = null;
+if(isset($_POST['correo'])) $correo = $_POST['correo']; elseif(isset($_GET['correo'])) $correo = $_GET['correo']; else $correo = null;
+if(isset($_POST['contrasena'])) $contrasena = $_POST['contrasena']; elseif(isset($_GET['contrasena'])) $contrasena = $_GET['contrasena']; else $contrasena = null;
+if(isset($_POST['nombres'])) $nombres = $_POST['nombres']; elseif(isset($_GET['nombres'])) $nombres = $_GET['nombres']; else $nombres = null;
+if(isset($_POST['apellidos'])) $apellidos = $_POST['apellidos']; elseif(isset($_GET['apellidos'])) $apellidos = $_GET['apellidos']; else $apellidos = null;
 if(isset($_POST['tipo'])) $tipo = $_POST['tipo']; elseif(isset($_GET['tipo'])) $tipo = $_GET['tipo']; else $tipo = null;
-if(isset($_POST['concepto'])) $concepto = $_POST['concepto']; elseif(isset($_GET['concepto'])) $concepto = $_GET['concepto']; else $concepto = null;
-if(isset($_POST['valor'])) $valor = $_POST['valor']; elseif(isset($_GET['valor'])) $valor = $_GET['valor']; else $valor = null;
-if(isset($_POST['local'])) $local = $_POST['local']; elseif(isset($_GET['local'])) $local = $_GET['local']; else $local = 0;
-
-if(isset($_POST['fecha'])) $fecha = $_POST['fecha']; elseif(isset($_GET['fecha'])) $fecha = $_GET['fecha']; else $fecha = date('Y-m-d');
-if(isset($_POST['hora'])) $hora = $_POST['hora']; elseif(isset($_GET['hora'])) $hora = $_GET['hora']; else $hora = date('H:i');
-
+if(isset($_POST['local'])) $local = $_POST['local']; elseif(isset($_GET['local'])) $local = $_GET['local']; else $local = null;
 if(isset($_POST['imagen'])) $imagen = $_POST['imagen']; elseif(isset($_GET['imagen'])) $imagen = $_GET['imagen']; else $imagen = null;
 if(isset($_POST['imagen_nombre'])) $imagen_nombre = $_POST['imagen_nombre']; elseif(isset($_GET['imagen_nombre'])) $imagen_nombre = $_GET['imagen_nombre']; else $imagen_nombre = null;
 
@@ -41,14 +39,14 @@ if(isset($_POST['mensaje_tema'])) $mensaje_tema = $_POST['mensaje_tema']; elseif
 ?>
 
 <?php
-//actualizo la información del gasto
+//actualizo la información del usuario
 if ($editar == "si")
-{   
+{
     if (!(isset($archivo)) && ($_FILES['archivo']['type'] == "image/jpeg") || ($_FILES['archivo']['type'] == "image/png"))
     {
         $imagen = "si";
         $imagen_nombre = $ahora_img;
-        $imagen_ref = "gastos";
+        $imagen_ref = "usuarios";
 
         //si han cargado el archivo subimos la imagen
         include('imagenes_subir.php');
@@ -59,17 +57,14 @@ if ($editar == "si")
         $imagen_nombre = $imagen_nombre;
     }
 
-    $fecha_gasto = date("$fecha $hora:s");
-    $valor = str_replace('.','',$valor);
-
-    $actualizar = $conexion->query("UPDATE gastos SET fecha = '$fecha_gasto', usuario = '$sesion_id', tipo = '$tipo', concepto = '$concepto', valor = '$valor', local = '$local', imagen = '$imagen', imagen_nombre = '$imagen_nombre' WHERE id = '$id'");
+    $actualizar = $conexion->query("UPDATE usuarios SET fecha = '$ahora', usuario = '$sesion_id', correo = '$correo', contrasena = '$contrasena', nombres = '$nombres', apellidos = '$apellidos', tipo = '$tipo', local = '$local', imagen = '$imagen', imagen_nombre = '$imagen_nombre' WHERE id = '$id'");
 
     if ($actualizar)
     {
         $mensaje = "Cambios guardados";
         $body_snack = 'onLoad="Snackbar()"';
         $mensaje_tema = "aviso";
-    }
+    }     
 }
 ?>
 
@@ -88,17 +83,17 @@ if ($editar == "si")
 <header class="rdm-toolbar--contenedor">
     <div class="rdm-toolbar--fila">
         <div class="rdm-toolbar--izquierda">
-            <a href="gastos_ver.php"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-arrow-left zmdi-hc-2x"></i></div></a>
-            <h2 class="rdm-toolbar--titulo"><?php echo ucfirst("$concepto"); ?></h2>
+            <a href="ajustes.php#datos"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-arrow-left zmdi-hc-2x"></i></div></a>
+            <h2 class="rdm-toolbar--titulo">Mis datos</h2>
         </div>
     </div>
 </header>
 
 <main class="rdm--contenedor-toolbar">
-            
+
     <?php
-    //consulto y muestro el gasto
-    $consulta = $conexion->query("SELECT * FROM gastos WHERE id = '$id'");
+    //consulto y muestro el usuario
+    $consulta = $conexion2->query("SELECT * FROM clientes_datos WHERE id = '1'");
 
     if ($consulta->num_rows == 0)
     {
@@ -106,7 +101,7 @@ if ($editar == "si")
 
         <div class="rdm-vacio--caja">
             <i class="zmdi zmdi-alert-circle-o zmdi-hc-4x"></i>
-            <p class="rdm-tipografia--subtitulo1">Este gasto ya no existe</p>
+            <p class="rdm-tipografia--subtitulo1">Este usuario ya no existe</p>
         </div>
 
         <?php
@@ -115,44 +110,20 @@ if ($editar == "si")
     {
         while ($fila = $consulta->fetch_assoc())
         {
-            $id = $fila['id'];
+            $id_usuario = $fila['id'];
             $fecha = date('d/m/Y', strtotime($fila['fecha']));
             $hora = date('h:i a', strtotime($fila['fecha']));
             $usuario = $fila['usuario'];
-            $tipo = $fila['tipo'];
-            $concepto = $fila['concepto'];
-            $valor = $fila['valor'];
-            $local = $fila['local'];
-            $imagen = $fila['imagen'];
-            $imagen_nombre = $fila['imagen_nombre'];
-
-            if ($imagen == "no")
-            {
-                $imagen = "";
-                $adjunto = "no";
-            }
-            else
-            {
-                $imagen = "img/avatares/gastos-$id-$imagen_nombre.jpg";
-                $imagen = '<div class="rdm-tarjeta--media" style="background-image: url('.$imagen.');"></div>';
-                $adjunto = "si";
-            }
-
-            //consulto el local
-            $consulta_local = $conexion->query("SELECT * FROM locales WHERE id = '$local'");           
-
-            if ($fila = $consulta_local->fetch_assoc()) 
-            {
-                $local = $fila['local'];
-                $local_tipo = ucfirst($fila['tipo']);
-                $local_tipo = "($local_tipo)";
-            }
-            else
-            {
-                $local = "No se ha asignado un local";
-                $local_tipo = null;
-            }
-
+            $correo = $fila['correo'];
+            $contrasena = $fila['contrasena'];
+            $nombre = $fila['nombre'];
+            $razon_social = $fila['razon_social'];
+            $nit = $fila['nit'];
+            $telefono = $fila['telefono'];
+            $celular = $fila['celular'];
+            $pais = $fila['pais'];
+            $ciudad = $fila['ciudad'];
+            
             //consulto el usuario que realizo la ultima modificacion
             $consulta_usuario = $conexion->query("SELECT * FROM usuarios WHERE id = '$usuario'");           
 
@@ -160,18 +131,22 @@ if ($editar == "si")
             {
                 $usuario = $fila['correo'];
             }
+            
             ?>
 
             <section class="rdm-tarjeta">
 
+                <?php echo "$imagen"; ?>
+
                 <div class="rdm-tarjeta--primario-largo">
-                    <h1 class="rdm-tarjeta--titulo-largo">$ <?php echo number_format($valor, 0, ",", "."); ?></h1>
-                    <h2 class="rdm-tarjeta--subtitulo-largo"><?php echo ucfirst($tipo) ?></h2>
+                    <h1 class="rdm-tarjeta--titulo-largo"><?php echo ucfirst($razon_social) ?></h1>
+                    <h2 class="rdm-tarjeta--subtitulo-largo"><?php echo ucfirst($nombre) ?></h2>
                 </div>
 
                 <div class="rdm-tarjeta--cuerpo">
-                    <p><b>Local</b> <br><?php echo ucfirst($local) ?> <?php echo ucfirst($local_tipo) ?></p>
-                    <p><b>Fecha</b> <br><?php echo ucfirst("$fecha"); ?> - <?php echo ucfirst("$hora"); ?></p>
+                    <p><b>Correo</b> <br><?php echo ($correo) ?></p>
+                    <p><b>Contraseña</b> <br><?php echo ($contrasena) ?></p>
+                    <p><b>Última modificación</b> <br><?php echo ucfirst("$fecha"); ?> - <?php echo ucfirst("$hora"); ?></p>
                     <p><b>Modificado por</b> <br><?php echo ("$usuario"); ?></p>
                 </div>
 
@@ -179,23 +154,6 @@ if ($editar == "si")
             
             <?php
         }
-    }
-    ?>
-
-    <?php
-    if ($adjunto == "si")
-    {
-    ?>
-
-    <h2 class="rdm-lista--titulo-largo">Archivo adjunto</h2>
-
-    <section class="rdm-tarjeta--img">
-
-        <img class="rdm-tarjeta--img" src="<?php echo "img/avatares/gastos-$id-$imagen_nombre.jpg"; ?>">
-
-    </section>
-
-    <?php 
     }
     ?>
 
@@ -211,7 +169,7 @@ if ($editar == "si")
 
 <footer>
     
-    <a href="gastos_editar.php?id=<?php echo "$id"; ?>"><button class="rdm-boton--fab" ><i class="zmdi zmdi-edit zmdi-hc-2x"></i></button></a>
+    <a href="usuarios_editar.php?id=<?php echo "$id_usuario"; ?>"><button class="rdm-boton--fab" ><i class="zmdi zmdi-edit zmdi-hc-2x"></i></button></a>
 
 </footer>
 

@@ -231,8 +231,8 @@ include ("sis/reportes_rangos.php");
                     <div class="rdm-lista--icono"><i class="zmdi zmdi-truck zmdi-hc-2x"></i></div>
                 </div>
                 <div class="rdm-lista--contenedor">
-                    <h2 class="rdm-lista--titulo">Despachos</h2>
-                    <h2 class="rdm-lista--texto-secundario">Hacer o continuar un despacho</h2>
+                    <h2 class="rdm-lista--titulo">Compras</h2>
+                    <h2 class="rdm-lista--texto-secundario">Hacer o continuar una compra</h2>
                 </div>
             </div>
             

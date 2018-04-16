@@ -120,6 +120,18 @@ if ($eliminar == "si")
             $concepto = $fila['concepto'];
             $valor = $fila['valor'];
             $local = $fila['local'];
+            $imagen = $fila['imagen'];
+            $imagen_nombre = $fila['imagen_nombre'];
+
+            if ($imagen == "no")
+            {
+                $imagen = '<div class="rdm-lista--icono"><i class="zmdi zmdi-balance-wallet zmdi-hc-2x"></i></div>';
+            }
+            else
+            {
+                $imagen = "img/avatares/gastos-$id-$imagen_nombre-m.jpg";
+                $imagen = '<div class="rdm-lista--avatar" style="background-image: url('.$imagen.');"></div>';
+            }
 
             //consulto el local
             $consulta2 = $conexion->query("SELECT * FROM locales WHERE id = $local");
@@ -141,7 +153,7 @@ if ($eliminar == "si")
                 <article class="rdm-lista--item-doble">
                     <div class="rdm-lista--izquierda">
                         <div class="rdm-lista--contenedor">
-                            <div class="rdm-lista--icono"><i class="zmdi zmdi-balance-wallet zmdi-hc-2x"></i></div>
+                            <?php echo "$imagen"; ?>
                         </div>
                         <div class="rdm-lista--contenedor">
                             <h2 class="rdm-lista--titulo"><?php echo ucfirst("$concepto"); ?></h2>

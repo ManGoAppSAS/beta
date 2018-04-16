@@ -90,9 +90,11 @@ if ($fila = $consulta->fetch_assoc())
 
     <section class="rdm-formulario">
 
-        <form action="gastos_detalle.php" method="post">
-
-            <input type="hidden" name="id" value="<?php echo "$id"; ?>">
+        <form action="gastos_detalle.php" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="image" />
+            <input type="hidden" name="id" value="<?php echo "$id"; ?>" />
+            <input type="hidden" name="imagen" value="<?php echo "$imagen"; ?>" />
+            <input type="hidden" name="imagen_nombre" value="<?php echo "$imagen_nombre"; ?>" />
 
             <p class="rdm-formularios--label"><label for="fecha">Fecha*</label></p>            
             <div class="rdm-formularios--fecha">
@@ -179,6 +181,10 @@ if ($fila = $consulta->fetch_assoc())
                 ?>
             </select></p>
             <p class="rdm-formularios--ayuda">Local al que se relaciona el gasto</p>
+
+            <p class="rdm-formularios--label"><label for="archivo">Imagen</label></p>            
+            <p><input type="file" id="archivo" name="archivo" /></p>
+            <p class="rdm-formularios--ayuda">Sube una foto de la factura o recibo del gasto</p>
 
             <button type="submit" class="rdm-boton--fab" name="editar" value="si"><i class="zmdi zmdi-check zmdi-hc-2x"></i></button>
         </form>
