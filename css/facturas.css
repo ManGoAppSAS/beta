@@ -66,9 +66,71 @@ Autor: Danny Estrada
 
 
 
-.rdm-factura--imprimira4{
+
+.rdm-factura--mediacarta-contenedor{
     box-sizing: border-box; /*el padding y margin no incrementan el ancho*/ 
     width: 100%; /*ancho del contenedor*/
+    max-width: 900px;
+    background-color: rgba(0,0,0,0.0);
+    margin: 0 auto;
+    padding: 0em;
+    font-size: 0.8em;
+    font-family: arial;
+    line-height: 1.5em;
+}
+
+.rdm-factura--mediacarta-fila{
+    box-sizing: border-box; /*el padding y margin no incrementan el ancho*/ 
+    width: 100%; /*ancho del contenedor*/    
+    background-color: rgba(0,0,0,0.1);
+    margin: 0.25em 0;
+    padding: 0em;
+    display: flex;
+}
+
+.rdm-factura--mediacarta-columna{
+    box-sizing: border-box; /*el padding y margin no incrementan el ancho*/ 
+    width: 100%; /*ancho del contenedor*/    
+    background-color: rgba(0,0,0,0.0);
+    margin: 0.25em 0.25em;
+    padding: 0.25em;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.rdm-factura--imprimira4{
+    box-sizing: border-box; /*el padding y margin no incrementan el ancho*/ 
+    width: 99%; /*ancho del contenedor*/
+    max-width: 900px;
+    background-color: rgba(0,0,0,0.1);
+    margin: 0 auto;
+    border: solid black 1px;
+    padding: 1em;
 }
 
 .rdm-factura--contenedora4{

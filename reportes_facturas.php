@@ -186,7 +186,12 @@ include ("sis/variables_sesion.php");
         
             <h2 class="rdm-tarjeta--dashboard-titulo-positivo">$ <?php echo number_format($total_dia_hoy, 0, ",", ".");?></h2>
             <h2 class="rdm-tarjeta--titulo-largo">Propinas: $ <?php echo number_format($total_propinas_hoy, 0, ",", ".");?></h2>
+
+            <p class="rdm-formularios--submit"><a href="reportes_facturas_imprimir_todas.php?desde=<?php echo "$desde"; ?>&hasta=<?php echo "$hasta"; ?>" target="_blank"><button type="button" class="rdm-boton--resaltado">Imprimir todas</button></a></p>
+
         </div>
+
+
 
 
 

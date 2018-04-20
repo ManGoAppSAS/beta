@@ -28,9 +28,15 @@ if(isset($_POST['tipo'])) $tipo = $_POST['tipo']; elseif(isset($_GET['tipo'])) $
 if(isset($_POST['concepto'])) $concepto = $_POST['concepto']; elseif(isset($_GET['concepto'])) $concepto = $_GET['concepto']; else $concepto = null;
 if(isset($_POST['valor'])) $valor = $_POST['valor']; elseif(isset($_GET['valor'])) $valor = $_GET['valor']; else $valor = null;
 if(isset($_POST['local'])) $local = $_POST['local']; elseif(isset($_GET['local'])) $local = $_GET['local']; else $local = 0;
+if(isset($_POST['periodicidad'])) $periodicidad = $_POST['periodicidad']; elseif(isset($_GET['periodicidad'])) $periodicidad = $_GET['periodicidad']; else $periodicidad = 0;
 
 if(isset($_POST['fecha'])) $fecha = $_POST['fecha']; elseif(isset($_GET['fecha'])) $fecha = $_GET['fecha']; else $fecha = date('Y-m-d');
 if(isset($_POST['hora'])) $hora = $_POST['hora']; elseif(isset($_GET['hora'])) $hora = $_GET['hora']; else $hora = date('H:i');
+
+if(isset($_POST['fecha_pago'])) $fecha_pago = $_POST['fecha_pago']; elseif(isset($_GET['fecha_pago'])) $fecha_pago = $_GET['fecha_pago']; else $fecha_pago = date('Y-m-d');
+if(isset($_POST['hora_pago'])) $hora_pago = $_POST['hora_pago']; elseif(isset($_GET['hora_pago'])) $hora_pago = $_GET['hora_pago']; else $hora_pago = date('H:i');
+
+if(isset($_POST['estado'])) $estado = $_POST['estado']; elseif(isset($_GET['estado'])) $estado = $_GET['estado']; else $estado = null;
 
 if(isset($_POST['imagen'])) $imagen = $_POST['imagen']; elseif(isset($_GET['imagen'])) $imagen = $_GET['imagen']; else $imagen = null;
 if(isset($_POST['imagen_nombre'])) $imagen_nombre = $_POST['imagen_nombre']; elseif(isset($_GET['imagen_nombre'])) $imagen_nombre = $_GET['imagen_nombre']; else $imagen_nombre = null;
@@ -62,7 +68,7 @@ if ($editar == "si")
     $fecha_gasto = date("$fecha $hora:s");
     $valor = str_replace('.','',$valor);
 
-    $actualizar = $conexion->query("UPDATE gastos SET fecha = '$fecha_gasto', usuario = '$sesion_id', tipo = '$tipo', concepto = '$concepto', valor = '$valor', local = '$local', imagen = '$imagen', imagen_nombre = '$imagen_nombre' WHERE id = '$id'");
+    $actualizar = $conexion->query("UPDATE gastos SET fecha = '$fecha_gasto', usuario = '$sesion_id', tipo = '$tipo', concepto = '$concepto', valor = '$valor', local = '$local', estado = '$estado', fecha_pago = '$fecha_pago', periodicidad = '$periodicidad', imagen = '$imagen', imagen_nombre = '$imagen_nombre' WHERE id = '$id'");
 
     if ($actualizar)
     {
@@ -123,8 +129,20 @@ if ($editar == "si")
             $concepto = $fila['concepto'];
             $valor = $fila['valor'];
             $local = $fila['local'];
+            $estado = $fila['estado'];
+            $fecha_pago = date('d/m/Y', strtotime($fila['fecha_pago']));
+            $periodicidad = $fila['periodicidad'];
             $imagen = $fila['imagen'];
             $imagen_nombre = $fila['imagen_nombre'];
+
+            if ($periodicidad == "0")
+            {
+                $periodicidad = "pago único";
+            }
+            else
+            {
+                $periodicidad = "cada $periodicidad días";
+            }
 
             if ($imagen == "no")
             {
@@ -170,8 +188,11 @@ if ($editar == "si")
                 </div>
 
                 <div class="rdm-tarjeta--cuerpo">
+                    <p><b>Periodicidad</b> <br><?php echo ucfirst($periodicidad) ?></p>
+                    <p><b>Estado</b> <br><?php echo ucfirst($estado) ?></p>
                     <p><b>Local</b> <br><?php echo ucfirst($local) ?> <?php echo ucfirst($local_tipo) ?></p>
-                    <p><b>Fecha</b> <br><?php echo ucfirst("$fecha"); ?> - <?php echo ucfirst("$hora"); ?></p>
+                    <p><b>Fecha de pago</b> <br><?php echo ucfirst("$fecha_pago"); ?></p>
+                    <p><b>Fecha de ingreso</b> <br><?php echo ucfirst("$fecha"); ?> - <?php echo ucfirst("$hora"); ?></p>
                     <p><b>Modificado por</b> <br><?php echo ("$usuario"); ?></p>
                 </div>
 

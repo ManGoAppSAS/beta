@@ -33,6 +33,11 @@ if ($fila = $consulta->fetch_assoc())
     $concepto = $fila['concepto'];
     $valor = $fila['valor'];
     $local = $fila['local'];
+    $estado = $fila['estado'];
+    $fecha_pago = date('Y-m-d', strtotime($fila['fecha_pago']));
+    $periodicidad = $fila['periodicidad'];
+    $imagen = $fila['imagen'];
+    $imagen_nombre = $fila['imagen_nombre'];
 
     //consulto el local
     $consulta_local = $conexion->query("SELECT * FROM locales WHERE id = '$local'");           
@@ -96,18 +101,12 @@ if ($fila = $consulta->fetch_assoc())
             <input type="hidden" name="imagen" value="<?php echo "$imagen"; ?>" />
             <input type="hidden" name="imagen_nombre" value="<?php echo "$imagen_nombre"; ?>" />
 
-            <p class="rdm-formularios--label"><label for="fecha">Fecha*</label></p>            
-            <div class="rdm-formularios--fecha">
-                <p><input type="date" id="fecha" name="fecha" value="<?php echo "$fecha"; ?>" placeholder="Fecha" required></p>
-                <p class="rdm-formularios--ayuda">Fecha</p>
-            </div>
-            <div class="rdm-formularios--fecha">
-                <p><input type="time" id="hora" name="hora" value="<?php echo "$hora"; ?>" placeholder="Hora" required></p>
-                <p class="rdm-formularios--ayuda">Hora</p>
-            </div>
+            <p class="rdm-formularios--label"><label for="fecha">Fecha de ingreso*</label></p>
+            <p><input type="date" id="fecha" name="fecha" value="<?php echo "$fecha"; ?>" placeholder="Fecha" required></p>
+            <p class="rdm-formularios--ayuda">Fecha de ingreso del gasto</p>
 
-            <p class="rdm-formularios--label" style="margin-top: 0;"><label for="tipo">Tipo *</label></p>
-            <p><select id="tipo" name="tipo" required>
+            <p class="rdm-formularios--label"><label for="tipo">Tipo*</label></p>
+            <p><select id="tipo" name="tipo" required autofocus>
                 <option value="<?php echo "$tipo"; ?>"><?php echo ucfirst($tipo) ?></option>
                 <option value=""></option>
                 <option value="administrativo">Administrativo</option>
@@ -117,12 +116,16 @@ if ($fila = $consulta->fetch_assoc())
             <p class="rdm-formularios--ayuda">Tipo de gasto</p>
 
             <p class="rdm-formularios--label"><label for="concepto">Concepto*</label></p>
-            <p><input type="text" id="concepto" name="concepto" value="<?php echo "$concepto"; ?>" spellcheck="false" required autofocus/></p>
+            <p><input type="text" id="concepto" name="concepto" value="<?php echo "$concepto"; ?>" spellcheck="false" required /></p>
             <p class="rdm-formularios--ayuda">Concepto del gasto</p>
 
             <p class="rdm-formularios--label"><label for="valor">Valor*</label></p>
             <p><input type="tel" id="valor" name="valor" id="valor" value="<?php echo "$valor"; ?>" required /></p>
-            <p class="rdm-formularios--ayuda">Valor del gasto</p>            
+            <p class="rdm-formularios--ayuda">Valor del gasto</p>
+
+            <p class="rdm-formularios--label"><label for="periodicidad">Periodicidad*</label></p>
+            <p><input type="number" id="periodicidad" name="periodicidad" id="periodicidad" value="<?php echo "$periodicidad"; ?>" required /></p>
+            <p class="rdm-formularios--ayuda">Periodo en días en que se repite el pago del gasto</p>
 
             <p class="rdm-formularios--label"><label for="local">Local*</label></p>
             <p><select id="local" name="local" required>
@@ -181,6 +184,19 @@ if ($fila = $consulta->fetch_assoc())
                 ?>
             </select></p>
             <p class="rdm-formularios--ayuda">Local al que se relaciona el gasto</p>
+
+            <p class="rdm-formularios--label"><label for="estado">Estado*</label></p>
+            <p><select id="estado" name="estado" required autofocus>
+                <option value="<?php echo "$estado"; ?>"><?php echo ucfirst($estado) ?></option>
+                <option value=""></option>
+                <option value="pagado">Pagado</option>
+                <option value="pendiente">Pendiente</option>
+            </select></p>
+            <p class="rdm-formularios--ayuda">Estado de pago del gasto</p>
+
+            <p class="rdm-formularios--label"><label for="fecha">Fecha de pago*</label></p>
+            <p><input type="date" id="fecha_pago" name="fecha_pago" value="<?php echo "$fecha_pago"; ?>" placeholder="Fecha pago" required></p>
+            <p class="rdm-formularios--ayuda">Fecha de pago del gasto</p>
 
             <p class="rdm-formularios--label"><label for="archivo">Imagen</label></p>            
             <p><input type="file" id="archivo" name="archivo" /></p>

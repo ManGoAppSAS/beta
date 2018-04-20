@@ -159,7 +159,7 @@ else
 
                     while ($fila_pro_dat = $consulta_pro_dat->fetch_assoc())
                     {
-                        $precio = $fila_pro_dat['precio'];
+                        
                         $impuesto_id = $fila_pro_dat['impuesto_id'];
                         $impuesto_incluido = $fila_pro_dat['impuesto_incluido'];
 

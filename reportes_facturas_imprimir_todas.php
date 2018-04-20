@@ -17,12 +17,12 @@ include ("sis/variables_sesion.php");
 <?php
 //capturo las variables que pasan por URL o formulario
 if(isset($_POST['venta_id'])) $venta_id = $_POST['venta_id']; elseif(isset($_GET['venta_id'])) $venta_id = $_GET['venta_id']; else $venta_id = null;
-if(isset($_POST['venta_total'])) $venta_total = $_POST['venta_total']; elseif(isset($_GET['venta_total'])) $venta_total = $_GET['venta_total']; else $venta_total = null;   
+if(isset($_POST['venta_total'])) $venta_total = $_POST['venta_total']; elseif(isset($_GET['venta_total'])) $venta_total = $_GET['venta_total']; else $venta_total = null;  
 
 if(isset($_POST['dinero'])) $dinero = $_POST['dinero']; elseif(isset($_GET['dinero'])) $dinero = $_GET['dinero']; else $dinero = null;
+if(isset($_POST['desde'])) $desde = $_POST['desde']; elseif(isset($_GET['desde'])) $desde = $_GET['desde']; else $desde = null;
+if(isset($_POST['hasta'])) $hasta = $_POST['hasta']; elseif(isset($_GET['hasta'])) $hasta = $_GET['hasta']; else $hasta = null;
 ?>
-
-
 
 <?php
 //consulto los datos de la plantilla de la factura
@@ -62,7 +62,7 @@ else
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <title>ManGo! - Venta No <?php echo $venta_id; ?></title>
+    <title>ManGo! - Facturas desde <?php echo "$desde"; ?> - hasta <?php echo "$hasta"; ?></title>
     <?php
     //información del head
     include ("partes/head.php");
@@ -83,68 +83,7 @@ else
     </script>    
 </head>
 
-<body style="background: none;">
-
-
-
-<main class="rdm-factura--mediacarta-contenedor">
-
-    <div class="rdm-factura--mediacarta-fila">
-        
-        <div class="rdm-factura--mediacarta-columna" style="text-align: center; align-self: center;">
-
-            <img src="img/avatares/locales-<?php echo($sesion_local_id) ?>-<?php echo ($sesion_local_imagen_nombre) ?>.jpg" alt="" style="width: 50%">
-
-        </div>
-
-        <div class="rdm-factura--mediacarta-columna" style="text-align: center; align-self: center;">        
-
-            <div><?php echo ucfirst(nl2br($plantilla_texto_superior))?></div>
-            <div><?php echo ucfirst($sesion_local)?></div> 
-            <div><?php echo ucfirst($sesion_local_direccion)?></div>
-            <div><?php echo ucfirst($sesion_local_telefono)?></div>
-
-        </div>
-
-        <?php
-        //datos de la venta
-        include ("sis/ventas_datos.php");
-        ?>
-
-        <div class="rdm-factura--mediacarta-columna" style="align-self: center; text-align: center;">            
-
-            <div style="font-weight: bold; font-size: 1.15em">Factura de venta: <?php echo $venta_id; ?></div>
-
-            <div</div>
-            <div><span style="font-weight: bold">Fecha:</span> <?php echo "$fecha"; ?></div>
-            <div><span style="font-weight: bold">Hora:</span>: <?php echo "$hora"; ?></div>
-
-        </div>
-
-    </div>
-
-    <div class="rdm-factura--mediacarta-fila">
-        
-        <div class="rdm-factura--mediacarta-columna">
-            
-            <div><span style="font-weight: bold">Nombre o razón social:</span> <?php echo ucfirst($nombre)?></div>
-            <div><span style="font-weight: bold">Documento No:</span> <?php echo ucfirst($documento)?></div>
-
-        </div>
-
-        <div class="rdm-factura--mediacarta-columna">
-
-            <div><span style="font-weight: bold">Dirección:</span> <?php echo ucfirst($direccion)?></div>
-            <div><span style="font-weight: bold">Teléfono:</span> <?php echo ucfirst($telefono)?></div>
-
-        </div>
-
-    </div>
-
-
-
-
-
+<body>
 
 
 
@@ -159,6 +98,52 @@ else
 
 
     <?php
+    //ventas por facturas
+    $consulta = $conexion->query("SELECT distinct id FROM ventas_datos WHERE local_id = '$sesion_local_id' and estado = 'liquidado' and fecha BETWEEN '$desde' and '$hasta'");                
+
+    if ($consulta->num_rows == 0)
+    {
+
+    }
+    else
+    {
+
+
+
+        while ($fila = $consulta->fetch_assoc())
+        {
+            $venta_id = $fila['id'];
+
+            ?>
+
+
+
+<section class="rdm-factura--imprimir" style="display: inline-flex; margin: 0.25em; border: dashed black 1px; max-width: 250px;">
+
+            <article class="rdm-factura--contenedor--imprimir">
+
+        <div class="rdm-factura--texto">
+            <h3><?php echo ucfirst(nl2br($plantilla_titulo))?> # <?php echo "$venta_id"; ?></h3>
+            <h3><?php echo ucfirst(nl2br($plantilla_texto_superior))?></h3>
+            <h3><?php echo ucfirst($sesion_local)?><br>
+            <?php echo ucfirst($sesion_local_direccion)?><br>
+            <?php echo ucfirst($sesion_local_telefono)?></h3>
+        </div>
+
+        <?php
+        //datos de la venta
+        include ("sis/ventas_datos.php");
+        ?>
+
+        <div class="rdm-factura--texto">
+            <h3><?php echo "$fecha"; ?> - <?php echo "$hora"; ?></h3>
+        </div>
+
+        <div class="rdm-factura--texto">
+            <p><?php echo ucwords($ubicacion_texto); ?></p>
+        </div>
+
+        <?php
         //consulto y muestro los productos agregados a la venta
         $consulta_pro = $conexion->query("SELECT distinct producto_id FROM ventas_productos WHERE venta_id = '$venta_id' ORDER BY fecha DESC");
 
@@ -174,23 +159,8 @@ else
         {
             ?>
 
-            <div class="rdm-factura--mediacarta-fila">
-        
-                <div class="rdm-factura--mediacarta-columna" style="font-weight: bold; border-bottom: solid 1px black; text-align: center;">Cantidad</div>
-
-                <div class="rdm-factura--mediacarta-columna" style="font-weight: bold; border-bottom: solid 1px black; text-align: center;">Producto</div>
-
-                <div class="rdm-factura--mediacarta-columna" style="font-weight: bold; border-bottom: solid 1px black; text-align: center;">Base unid.</div>
-
-                <div class="rdm-factura--mediacarta-columna" style="font-weight: bold; border-bottom: solid 1px black; text-align: center;">Impuesto unid.</div>
-
-                <div class="rdm-factura--mediacarta-columna" style="font-weight: bold; border-bottom: solid 1px black; text-align: center;">Total Base</div>
-
-                <div class="rdm-factura--mediacarta-columna" style="font-weight: bold; border-bottom: solid 1px black; text-align: center;">Total Impuestos</div>
-
-                <div class="rdm-factura--mediacarta-columna" style="font-weight: bold; border-bottom: solid 1px black; text-align: right; ">TOTAL</div>
-                
-            </div>
+            <p class="rdm-factura--izquierda"><b>Descripción</b></p>
+            <p class="rdm-factura--derecha"><b>Valor</b></p>
 
             <?php
 
@@ -223,7 +193,7 @@ else
 
                     while ($fila_pro_dat = $consulta_pro_dat->fetch_assoc())
                     {
-                        $precio = $fila_pro_dat['precio'];
+                        
                         $impuesto_id = $fila_pro_dat['impuesto_id'];
                         $impuesto_incluido = $fila_pro_dat['impuesto_incluido'];
 
@@ -302,76 +272,141 @@ else
                     $dinero = $venta_total;
                 }
 
-                $cambio = $dinero - $venta_total;     
+                $cambio = $dinero - $venta_total;  
 
                 ?>
 
-                <div class="rdm-factura--mediacarta-fila">
-        
-                    <div class="rdm-factura--mediacarta-columna" style="text-align: center;"><?php echo ucfirst("$cantidad_producto"); ?></div>
+                <section class="rdm-factura--item">
 
-                    <div class="rdm-factura--mediacarta-columna" style="text-align: center;"><?php echo ucfirst("$producto"); ?></div>
+                    <div class="rdm-factura--izquierda"><?php echo ucfirst("$producto"); ?> x <?php echo ucfirst("$cantidad_producto"); ?></div>
+                    <div class="rdm-factura--derecha">$<?php echo number_format($impuesto_base_subtotal, 0, ",", "."); ?></div>
+                    
+                    <?php
+                    //muestro los datos de base e impuesto en cada articulo
+                    $impuesto_mostrar = "no";
+                    if (($impuesto_valor != 0) && ($impuesto_mostrar == "si"))
+                    {
+                    ?>
 
-                    <div class="rdm-factura--mediacarta-columna" style="text-align: right;">$<?php echo number_format($precio_bruto, 0, ",", "."); ?></div>
+                    <div class="rdm-factura--izquierda">Base</div>
+                    <div class="rdm-factura--derecha">$<?php echo number_format($precio_bruto, 0, ",", "."); ?></div>
 
-                    <div class="rdm-factura--mediacarta-columna" style="text-align: right;">(<?php echo "$porcentaje_impuesto%";?>) $<?php echo number_format($impuesto_valor, 0, ",", "."); ?> </div>
+                    <div class="rdm-factura--izquierda">Impuesto (<?php echo "$porcentaje_impuesto%";?>)</div>
+                    <div class="rdm-factura--derecha">$<?php echo number_format($impuesto_valor, 0, ",", "."); ?></div>
 
-                    <div class="rdm-factura--mediacarta-columna" style="text-align: right;">$<?php echo number_format($impuesto_base_total, 0, ",", "."); ?></div>
+                    <?php
+                    }
+                    ?>
 
-                    <div class="rdm-factura--mediacarta-columna" style="text-align: right;">$<?php echo number_format($impuesto_valor_total, 0, ",", "."); ?></div>
-
-                    <div class="rdm-factura--mediacarta-columna" style="text-align: right;">$<?php echo number_format($precio_neto_total, 0, ",", "."); ?></div>
-
-                </div>
-
-
+                </section>
 
                 <?php
             }
         }
-        ?>
+        ?>        
 
-        <div class="rdm-factura--mediacarta-fila">            
+        <br>            
 
-            <div class="rdm-factura--mediacarta-columna"></div>
+        <section class="rdm-factura--item">            
 
-            <div class="rdm-factura--mediacarta-columna"></div>
+            <?php 
+            if ($impuesto_valor_total != 0)
+            {
+            ?>
 
-            <div class="rdm-factura--mediacarta-columna"></div>
+            <div class="rdm-factura--izquierda">Total Base</div>
+            <div class="rdm-factura--derecha">$<?php echo number_format($impuesto_base_total, 0, ",", "."); ?></div>
 
-            <div class="rdm-factura--mediacarta-columna"></div>
+            <div class="rdm-factura--izquierda">Total Impuestos</div>
+            <div class="rdm-factura--derecha">$<?php echo number_format($impuesto_valor_total, 0, ",", "."); ?></div>
 
-            <div class="rdm-factura--mediacarta-columna" style="text-align: right;">
+            <?php
+            }
+            ?>
 
-                <div><span style="font-weight: bold">Total Base:</span> </div>
-                <div><span style="font-weight: bold">Total Impuestos:</span> </div>
-                <div><span style="font-weight: bold">Subtotal Venta:</span> </div>
-                <div><span style="font-weight: bold">Propina:</span> </div>
-                <div><span style="font-weight: bold">Descuento (<?php echo number_format($venta_descuento_porcentaje, 0, ",", "."); ?>%):</span> </div>
-                <div style="font-weight: bold; font-size: 1.15em">TOTAL A PAGAR: </div>
+            <div class="rdm-factura--izquierda"><b>Subtotal venta</b></div>
+            <div class="rdm-factura--derecha"><b>$<?php echo number_format($precio_neto_total, 0, ",", "."); ?></b></div>
 
-            </div>
+        </section>        
 
-            <div class="rdm-factura--mediacarta-columna" style="text-align: right;">
+        <br>
 
-                <div>$<?php echo number_format($impuesto_base_total, 0, ",", "."); ?></div>
-                <div>$<?php echo number_format($impuesto_valor_total, 0, ",", "."); ?></div>
-                <div>$<?php echo number_format($precio_neto_total, 0, ",", "."); ?></div>
-                <div>$<?php echo number_format($propina_valor, 0, ",", "."); ?></div>
-                <div>$<?php echo number_format($descuento_valor, 0, ",", "."); ?></div>
-                <div style="font-weight: bold; font-size: 1.15em">$<?php echo number_format($venta_total, 0, ",", "."); ?></div>
+        <section class="rdm-factura--item">
 
-            </div>
+            <div class="rdm-factura--izquierda">Propina <?php echo "($propina_porcentaje%)"; ?></div>
+            <div class="rdm-factura--derecha">+$<?php echo number_format($propina_valor, 0, ",", "."); ?></div>
 
-        </div>
+            <?php 
+            if ($descuento_valor != 0)
+            {
+            ?>
+
+            <div class="rdm-factura--izquierda">Descuento (<?php echo number_format($venta_descuento_porcentaje, 0, ",", "."); ?>%)</div>
+            <div class="rdm-factura--derecha">-$<?php echo number_format($descuento_valor, 0, ",", "."); ?></div>
+
+            <?php
+            }
+            ?>            
+            
+        </section>
+
+        <br>
+
+        <section class="rdm-factura--item">
+            <div class="rdm-factura--izquierda"><b>TOTAL A PAGAR</b></div>
+            <div class="rdm-factura--derecha"><b>$<?php echo number_format($venta_total, 0, ",", "."); ?></b></div>
+        </section>
+
+        <br>
+
+        <section class="rdm-factura--item">
+            
+            <div class="rdm-factura--izquierda">Tipo de pago</div>
+            <div class="rdm-factura--derecha"><?php echo ucfirst($tipo_pago); ?></div>
+
+        </section>      
+
+                 
+
+    </article>
+
+    </section>
+
+
+
+
+
+
+
+
+            <?php
+
+        }
+
+    }
+    ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
-    <div class="rdm-factura--mediacarta-fila" style="text-align: center;">
 
-         <div class="rdm-factura--mediacarta-columna"><?php echo nl2br($plantilla_texto_inferior) ?></div>
 
-    </div>
-
-</main>
 
 
 </body>

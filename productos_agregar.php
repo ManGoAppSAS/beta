@@ -162,7 +162,7 @@ if ($agregar == 'si')
 
             if ($consulta_componente->num_rows == 0)
             {
-                $insercion = $conexion->query("INSERT INTO componentes values ('', '$ahora', '$sesion_id', 'unid', '$producto', '0', '0', '$sesion_local_id', 'comprado')");
+                $insercion = $conexion->query("INSERT INTO componentes values ('', '$ahora', '$sesion_id', 'unid', 'unid', '$producto', '0', '0', '0', '0', 'comprado')");
                 $componente_id = $conexion->insert_id;
 
                 //agrego la composición

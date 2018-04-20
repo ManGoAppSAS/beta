@@ -120,8 +120,19 @@ if ($eliminar == "si")
             $concepto = $fila['concepto'];
             $valor = $fila['valor'];
             $local = $fila['local'];
+            $estado = $fila['estado'];
+            $fecha_pago = date('d/m/Y', strtotime($fila['fecha_pago']));
             $imagen = $fila['imagen'];
             $imagen_nombre = $fila['imagen_nombre'];
+
+            if ($estado == "pendiente")
+            {
+                $estado = "<span class='rdm-lista--texto-negativo'>" . ucfirst($estado) . "</span>";
+            }
+            else
+            {
+                $estado = $estado;
+            }
 
             if ($imagen == "no")
             {
@@ -157,8 +168,9 @@ if ($eliminar == "si")
                         </div>
                         <div class="rdm-lista--contenedor">
                             <h2 class="rdm-lista--titulo"><?php echo ucfirst("$concepto"); ?></h2>
-                            <h2 class="rdm-lista--texto-secundario"><?php echo ("$fecha"); ?> <?php echo ("$hora"); ?></h2>
+                            <h2 class="rdm-lista--texto-secundario"><?php echo ("$fecha_pago"); ?></h2>
                             <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($valor, 0, ",", "."); ?></h2>
+                            <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst("$estado"); ?></h2>
                         </div>
                     </div>
                 </article>

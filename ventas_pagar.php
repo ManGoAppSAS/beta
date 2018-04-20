@@ -592,7 +592,7 @@ if (strlen($venta_total) == 7 )
                 }
                 ?>
                 
-                <p class="rdm-formularios--submit"><button type="submit" class="rdm-boton--plano-resaltado">Liquidar venta</button> <a href="ventas_factura_imprimir.php?venta_id=<?php echo "$venta_id"; ?>&tipo_pago=<?php echo "$tipo_pago"; ?>" target="_blank"><button type="button" class="rdm-boton--plano">Imprimir factura</button></a></p>
+                <p class="rdm-formularios--submit"><button type="submit" class="rdm-boton--plano-resaltado">Liquidar venta</button> <a href="ventas_factura_imprimir.php?venta_id=<?php echo "$venta_id"; ?>&tipo_pago=<?php echo "$tipo_pago"; ?>" target="_blank"><button type="button" class="rdm-boton--plano">Imprimir ticket</button></a> <a href="ventas_recibo_imprimir_a4medio.php?venta_id=<?php echo "$venta_id"; ?>&tipo_pago=<?php echo "$tipo_pago"; ?>" target="_blank"><button type="button" class="rdm-boton--plano">Imprimir factura</button></p>
 
             </form>
 
