@@ -31,6 +31,10 @@ if ($fila = $consulta->fetch_assoc())
     $texto_superior = $fila['texto_superior'];
     $texto_inferior = $fila['texto_inferior'];
     $local = $fila['local'];
+    $regimen = $fila['regimen'];
+    $resolucion_numero = $fila['resolucion_numero'];
+    $resolucion_fecha = $fila['resolucion_fecha'];
+    $resolucion_rango = $fila['resolucion_rango'];
 
     //consulto el local
     $consulta_local = $conexion->query("SELECT * FROM locales WHERE id = '$local'");           
@@ -89,6 +93,14 @@ else
             <p><input type="text" id="nombre" name="nombre" value="<?php echo "$nombre"; ?>" required autofocus /></p>
             <p class="rdm-formularios--ayuda">Nombre de la plantilla</p>
 
+            <p class="rdm-formularios--label"><label for="regimen">Régimen*</label></p>
+            <p><select id="regimen" name="regimen" required>
+                <option value="<?php echo "$regimen"; ?>"><?php echo ucfirst("$regimen"); ?></option>
+                <option value="común">Común</option>
+                <option value="simplificado">Simplificado</option>
+            </select></p>
+            <p class="rdm-formularios--ayuda">Régimen de facturación.</p>
+
             <p class="rdm-formularios--label"><label for="titulo">Titulo*</label></p>
             <p><input type="text" id="titulo" name="titulo" value="<?php echo "$titulo"; ?>" required /></p>
             <p class="rdm-formularios--ayuda">Ej: Factura de venta, Recibo, Cuenta de cobro, etc.</p>
@@ -96,6 +108,18 @@ else
             <p class="rdm-formularios--label"><label for="texto_superior">Texto superior*</label></p>
             <p><textarea rows="8" id="texto_superior" name="texto_superior"><?php echo "$texto_superior"; ?></textarea></p>
             <p class="rdm-formularios--ayuda">Ej: Nit xxxxxx-x, somos regimen xxx, resolución de faturación No xxx, etc.</p>
+
+            <p class="rdm-formularios--label"><label for="resolucion_numero">Número de resolución</label></p>
+            <p><input type="text" id="resolucion_numero" name="resolucion_numero" value="<?php echo "$resolucion_numero"; ?>" /></p>
+            <p class="rdm-formularios--ayuda">Número de resolución de facturación.</p>
+
+            <p class="rdm-formularios--label"><label for="resolucion_fecha">Fecha de resolución</label></p>
+            <p><input type="date" id="resolucion_fecha" name="resolucion_fecha" value="<?php echo "$resolucion_fecha"; ?>" placeholder="Fecha" /></p>
+            <p class="rdm-formularios--ayuda">Fecha de resolución de facturación.</p>
+
+            <p class="rdm-formularios--label"><label for="resolucion_rango">Rango de resolución</label></p>
+            <p><input type="text" id="resolucion_rango" name="resolucion_rango" value="<?php echo "$resolucion_rango"; ?>" /></p>
+            <p class="rdm-formularios--ayuda">Rango de resolución de facturación.</p>
             
             <p class="rdm-formularios--label"><label for="texto_inferior">Texto inferior*</label></p>
             <p><textarea rows="8" id="texto_inferior" name="texto_inferior"><?php echo "$texto_inferior"; ?></textarea></p>

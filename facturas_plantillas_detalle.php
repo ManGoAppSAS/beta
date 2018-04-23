@@ -21,7 +21,11 @@ if(isset($_POST['editar'])) $editar = $_POST['editar']; elseif(isset($_GET['edit
 if(isset($_POST['id'])) $id = $_POST['id']; elseif(isset($_GET['id'])) $id = $_GET['id']; else $id = null;
 if(isset($_POST['nombre'])) $nombre = $_POST['nombre']; elseif(isset($_GET['nombre'])) $nombre = $_GET['nombre']; else $nombre = null;
 if(isset($_POST['titulo'])) $titulo = $_POST['titulo']; elseif(isset($_GET['titulo'])) $titulo = $_GET['titulo']; else $titulo = null;
+if(isset($_POST['regimen'])) $regimen = $_POST['regimen']; elseif(isset($_GET['regimen'])) $regimen = $_GET['regimen']; else $regimen = null;
 if(isset($_POST['texto_superior'])) $texto_superior = $_POST['texto_superior']; elseif(isset($_GET['texto_superior'])) $texto_superior = $_GET['texto_superior']; else $texto_superior = null;
+if(isset($_POST['resolucion_numero'])) $resolucion_numero = $_POST['resolucion_numero']; elseif(isset($_GET['resolucion_numero'])) $resolucion_numero = $_GET['resolucion_numero']; else $resolucion_numero = null;
+if(isset($_POST['resolucion_fecha'])) $resolucion_fecha = $_POST['resolucion_fecha']; elseif(isset($_GET['resolucion_fecha'])) $resolucion_fecha = $_GET['resolucion_fecha']; else $resolucion_fecha = null;
+if(isset($_POST['resolucion_rango'])) $resolucion_rango = $_POST['resolucion_rango']; elseif(isset($_GET['resolucion_rango'])) $resolucion_rango = $_GET['resolucion_rango']; else $resolucion_rango = null;
 if(isset($_POST['texto_inferior'])) $texto_inferior = $_POST['texto_inferior']; elseif(isset($_GET['texto_inferior'])) $texto_inferior = $_GET['texto_inferior']; else $texto_inferior = null;
 if(isset($_POST['local'])) $local = $_POST['local']; elseif(isset($_GET['local'])) $local = $_GET['local']; else $local = null;
 
@@ -34,7 +38,7 @@ if(isset($_POST['mensaje_tema'])) $mensaje_tema = $_POST['mensaje_tema']; elseif
 //actualizo la información de la plantilla de factura
 if ($editar == "si")
 {
-    $actualizar = $conexion->query("UPDATE facturas_plantillas SET fecha = '$ahora', usuario = '$sesion_id', nombre = '$nombre', titulo = '$titulo', texto_superior = '$texto_superior', texto_inferior = '$texto_inferior', local = '$local' WHERE id = '$id'");
+    $actualizar = $conexion->query("UPDATE facturas_plantillas SET fecha = '$ahora', usuario = '$sesion_id', nombre = '$nombre', titulo = '$titulo', regimen = '$regimen', texto_superior = '$texto_superior', resolucion_numero = '$resolucion_numero', resolucion_fecha = '$resolucion_fecha', resolucion_rango = '$resolucion_rango', texto_inferior = '$texto_inferior', local = '$local' WHERE id = '$id'");
 
     if ($actualizar)
     {
@@ -96,6 +100,10 @@ if ($editar == "si")
             $texto_superior = $fila['texto_superior'];
             $texto_inferior = $fila['texto_inferior'];
             $local = $fila['local'];
+            $regimen = $fila['regimen'];
+            $resolucion_numero = $fila['resolucion_numero'];
+            $resolucion_fecha = $fila['resolucion_fecha'];
+            $resolucion_rango = $fila['resolucion_rango'];
 
             //consulto el local
             $consulta_local = $conexion->query("SELECT * FROM locales WHERE id = '$local'");           

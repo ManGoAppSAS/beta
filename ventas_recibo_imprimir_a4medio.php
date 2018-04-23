@@ -45,6 +45,10 @@ if ($consulta_plantilla->num_rows == 0)
             $plantilla_titulo = $fila_generica['titulo'];
             $plantilla_texto_superior = $fila_generica['texto_superior'];
             $plantilla_texto_inferior = $fila_generica['texto_inferior'];
+            $plantilla_regimen = $fila_generica['regimen'];
+            $plantilla_resolucion_numero = $fila_generica['resolucion_numero'];
+            $plantilla_resolucion_fecha = date('d/m/Y', strtotime($fila_generica['resolucion_fecha']));
+            $plantilla_resolucion_rango = $fila_generica['resolucion_rango'];
         }
     }        
 }
@@ -55,6 +59,10 @@ else
         $plantilla_titulo = $fila_plantilla['titulo'];
         $plantilla_texto_superior = $fila_plantilla['texto_superior'];
         $plantilla_texto_inferior = $fila_plantilla['texto_inferior'];
+        $plantilla_regimen = $fila_plantilla['regimen'];
+        $plantilla_resolucion_numero = $fila_plantilla['resolucion_numero'];
+        $plantilla_resolucion_fecha = date('d/m/Y', strtotime($fila_plantilla['resolucion_fecha']));
+        $plantilla_resolucion_rango = $fila_plantilla['resolucion_rango'];
     }
 }
 ?>
@@ -127,7 +135,7 @@ else
         
         <div class="rdm-factura--mediacarta-columna">
             
-            <div><span style="font-weight: bold">Nombre o razón social:</span> <?php echo ucfirst($nombre)?></div>
+            <div><span style="font-weight: bold">Cliente:</span> <?php echo ucfirst($nombre)?></div>
             <div><span style="font-weight: bold">Documento No:</span> <?php echo ucfirst($documento)?></div>
 
         </div>
@@ -136,6 +144,34 @@ else
 
             <div><span style="font-weight: bold">Dirección:</span> <?php echo ucfirst($direccion)?></div>
             <div><span style="font-weight: bold">Teléfono:</span> <?php echo ucfirst($telefono)?></div>
+
+        </div>
+
+    </div>
+
+    <div class="rdm-factura--mediacarta-fila">
+        
+        <div class="rdm-factura--mediacarta-columna">
+            
+            <div><span style="font-weight: bold">Resolución DIAN:</span> <?php echo ucfirst($plantilla_resolucion_numero)?></div>
+
+        </div>
+
+        <div class="rdm-factura--mediacarta-columna">
+            
+            <div><span style="font-weight: bold">De:</span> <?php echo ucfirst($plantilla_resolucion_fecha)?></div>
+
+        </div>
+
+        <div class="rdm-factura--mediacarta-columna">
+            
+            <div><span style="font-weight: bold">Rango:</span> <?php echo ucfirst($plantilla_resolucion_rango)?></div>
+
+        </div>
+
+        <div class="rdm-factura--mediacarta-columna">
+            
+            <div><span style="font-weight: bold">Régimen:</span> <?php echo ucfirst($plantilla_regimen)?></div>
 
         </div>
 
@@ -349,6 +385,7 @@ else
                 <div><span style="font-weight: bold">Propina:</span> </div>
                 <div><span style="font-weight: bold">Descuento (<?php echo number_format($venta_descuento_porcentaje, 0, ",", "."); ?>%):</span> </div>
                 <div style="font-weight: bold; font-size: 1.15em">TOTAL A PAGAR: </div>
+                <div><span style="font-weight: bold">Tipo de pago:</span> </div>
 
             </div>
 
@@ -360,6 +397,7 @@ else
                 <div>$<?php echo number_format($propina_valor, 0, ",", "."); ?></div>
                 <div>$<?php echo number_format($descuento_valor, 0, ",", "."); ?></div>
                 <div style="font-weight: bold; font-size: 1.15em">$<?php echo number_format($venta_total, 0, ",", "."); ?></div>
+                <div><?php echo ucfirst($tipo_pago)?></div>
 
             </div>
 
@@ -367,7 +405,12 @@ else
     
     <div class="rdm-factura--mediacarta-fila" style="text-align: center;">
 
-         <div class="rdm-factura--mediacarta-columna"><?php echo nl2br($plantilla_texto_inferior) ?></div>
+         <div class="rdm-factura--mediacarta-columna" style="text-align: center; align-self: center;"><?php echo nl2br($plantilla_texto_inferior) ?></div>
+
+         <div class="rdm-factura--mediacarta-columna" style="text-align: center; align-self: flex-end;">
+           <br><br><br><br><br>___________________________________<br>
+         Recibí a satisfacción
+        </div>
 
     </div>
 
