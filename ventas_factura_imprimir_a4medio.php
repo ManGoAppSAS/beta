@@ -121,7 +121,7 @@ else
 
         <div class="rdm-factura--mediacarta-columna" style="align-self: center; text-align: center;">            
 
-            <div style="font-weight: bold; font-size: 1.15em">Factura de venta: <?php echo $venta_id; ?></div>
+            <div style="font-weight: bold; font-size: 1.15em">Cuenta de cobro: <?php echo $venta_id; ?></div>
 
             <div</div>
             <div><span style="font-weight: bold">Fecha:</span> <?php echo "$fecha"; ?></div>
@@ -382,7 +382,14 @@ else
                 <div><span style="font-weight: bold">Total Base:</span> </div>
                 <div><span style="font-weight: bold">Total Impuestos:</span> </div>
                 <div><span style="font-weight: bold">Subtotal Venta:</span> </div>
+                <?php 
+                if ($propina_valor != 0)
+                {
+                ?>
                 <div><span style="font-weight: bold">Propina:</span> </div>
+                <?php 
+                }
+                ?>
                 <div><span style="font-weight: bold">Descuento (<?php echo number_format($venta_descuento_porcentaje, 0, ",", "."); ?>%):</span> </div>
                 <div style="font-weight: bold; font-size: 1.15em">TOTAL A PAGAR: </div>
                 <div><span style="font-weight: bold">Tipo de pago:</span> </div>
@@ -394,10 +401,20 @@ else
                 <div>$<?php echo number_format($impuesto_base_total, 0, ",", "."); ?></div>
                 <div>$<?php echo number_format($impuesto_valor_total, 0, ",", "."); ?></div>
                 <div>$<?php echo number_format($precio_neto_total, 0, ",", "."); ?></div>
+
+                <?php 
+                if ($propina_valor != 0)
+                {
+                ?>
                 <div>$<?php echo number_format($propina_valor, 0, ",", "."); ?></div>
+
+                <?php 
+                }
+                ?>
+
                 <div>$<?php echo number_format($descuento_valor, 0, ",", "."); ?></div>
                 <div style="font-weight: bold; font-size: 1.15em">$<?php echo number_format($venta_total, 0, ",", "."); ?></div>
-                <div><?php echo ucfirst($tipo_pago)?></div>
+                <div>Pendiente de pago</div>
 
             </div>
 

@@ -43,6 +43,11 @@ if(isset($_POST['mensaje'])) $mensaje = $_POST['mensaje']; elseif(isset($_GET['m
 if(isset($_POST['mensaje_venta'])) $mensaje_venta = $_POST['mensaje_venta']; elseif(isset($_GET['mensaje_venta'])) $mensaje_venta = $_GET['mensaje_venta']; else $mensaje_venta = null;
 if(isset($_POST['body_snack'])) $body_snack = $_POST['body_snack']; elseif(isset($_GET['body_snack'])) $body_snack = $_GET['body_snack']; else $body_snack = null;
 if(isset($_POST['mensaje_tema'])) $mensaje_tema = $_POST['mensaje_tema']; elseif(isset($_GET['mensaje_tema'])) $mensaje_tema = $_GET['mensaje_tema']; else $mensaje_tema = null;
+
+//variables para el ccambio de atencion
+if(isset($_POST['cambiar_atencion'])) $cambiar_atencion = $_POST['cambiar_atencion']; elseif(isset($_GET['cambiar_atencion'])) $cambiar_atencion = $_GET['cambiar_atencion']; else $cambiar_atencion = null;
+if(isset($_POST['usuario_actual'])) $usuario_actual = $_POST['usuario_actual']; elseif(isset($_GET['usuario_actual'])) $usuario_actual = $_GET['usuario_actual']; else $usuario_actual = null;
+if(isset($_POST['usuario_nuevo_id'])) $usuario_nuevo_id = $_POST['usuario_nuevo_id']; elseif(isset($_GET['usuario_nuevo_id'])) $usuario_nuevo_id = $_GET['usuario_nuevo_id']; else $usuario_nuevo_id = null;
 ?>
 
 <?php
@@ -152,6 +157,140 @@ while ($fila_venta_total = $consulta_venta_total->fetch_assoc())
     $precio = $fila_venta_total['precio_final'];
 
     $venta_total = $venta_total + $precio;
+}
+?>
+
+<?php
+//consulto los datos de la venta
+$consulta_venta = $conexion->query("SELECT * FROM ventas_datos WHERE id = '$venta_id' and estado = 'ocupado'");
+
+if ($consulta_venta->num_rows == 0)
+{
+    header("location:ventas_ubicaciones.php");
+}
+else
+{
+    while ($fila_venta = $consulta_venta->fetch_assoc())
+    {
+        $ubicacion_id = $fila_venta['ubicacion_id'];
+        $ubicacion = $fila_venta['ubicacion'];
+        $tipo_pago_id = $fila_venta['tipo_pago_id'];
+        $tipo_pago = $fila_venta['tipo_pago'];
+        $venta_descuento = $fila_venta['descuento_id'];
+        $venta_descuento_porcentaje = $fila_venta['descuento_porcentaje'];
+        $venta_descuento_valor = $fila_venta['descuento_valor'];
+        $venta_propina = $fila_venta['propina'];
+        $usuario_actual_id = $fila_venta['usuario_id'];
+        $pago = $fila_venta['pago'];
+        $fecha_pago = date('Y/m/d', strtotime($fila_venta['fecha_pago']));
+
+        if ($venta_descuento == "99")
+        {
+            $descuento_actual = "Descuento personalizado";
+        }
+        else
+        {
+            //consulto los datos del descuento
+            $consulta_descuento = $conexion->query("SELECT * FROM descuentos WHERE id = '$venta_descuento'");           
+
+            if ($fila_descuento = $consulta_descuento->fetch_assoc()) 
+            {
+                $descuento_actual = "Descuento " . $fila_descuento['descuento'];
+            }
+            else
+            {
+                $descuento_actual = "Descuento";
+            }
+        }  
+
+        //consulto los datos del usuario
+        $consulta_usuario = $conexion->query("SELECT * FROM usuarios WHERE id = '$usuario_actual_id'");           
+
+        if ($fila = $consulta_usuario->fetch_assoc()) 
+        {
+            $usuario_actual_nombres = $fila['nombres'];
+            $usuario_actual_apellidos = $fila['apellidos'];
+            $usuario_actual = "$usuario_actual_nombres $usuario_actual_apellidos";
+            $tipo = $fila['tipo'];
+            $imagen = $fila['imagen'];
+            $imagen_nombre = $fila['imagen_nombre'];            
+        }        
+
+        //consulto los datos del tipo de pago
+        $consulta_tipos_pagos = $conexion->query("SELECT * FROM tipos_pagos WHERE id = '$tipo_pago_id'");           
+
+        if ($fila_tipos_pagos = $consulta_tipos_pagos->fetch_assoc()) 
+        {
+            $tipo_pago_tipo = ucfirst($fila_tipos_pagos['tipo']);
+            $tipo_pago_tp = $fila_tipos_pagos['tipo'];
+            $tipo_pago_tipo = " - $tipo_pago_tipo";
+        }
+        else
+        {
+            $tipo_pago_tipo = "";
+            $tipo_pago_tp = "efectivo";
+        }
+
+        if ($tipo_pago_tp == "bono")
+        {
+            $imagen_tp = '<div class="rdm-lista--icono"><i class="zmdi zmdi-card-membership zmdi-hc-2x"></i></div>';
+        }
+        else
+        {
+            if ($tipo_pago_tp == "canje")
+            {
+                $imagen_tp = '<div class="rdm-lista--icono"><i class="zmdi zmdi-refresh-alt zmdi-hc-2x"></i></div>';
+            }
+            else
+            {
+                if ($tipo_pago_tp == "cheque")
+                {
+                    $imagen_tp = '<div class="rdm-lista--icono"><i class="zmdi zmdi-square-o zmdi-hc-2x"></i></div>';
+                }
+                else
+                {
+                    if ($tipo_pago_tp == "efectivo")
+                    {
+                        $imagen_tp = '<div class="rdm-lista--icono"><i class="zmdi zmdi-money-box zmdi-hc-2x"></i></div>';
+                    }
+                    else
+                    {
+                        if ($tipo_pago_tp == "consignacion")
+                        {
+                            $imagen_tp = '<div class="rdm-lista--icono"><i class="zmdi zmdi-balance zmdi-hc-2x"></i></div>';
+                        }
+                        else
+                        {
+                            if ($tipo_pago_tp == "transferencia")
+                            {
+                                $imagen_tp = '<div class="rdm-lista--icono"><i class="zmdi zmdi-smartphone-iphone zmdi-hc-2x"></i></div>';
+                            }
+                            else
+                            {
+                                $imagen_tp = '<div class="rdm-lista--icono"><i class="zmdi zmdi-card zmdi-hc-2x"></i></div>'; 
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+
+        if ($tipo_pago != "efectivo")
+        {
+            $caja_readonly = "readonly";
+            $caja_autofocus = "";
+            $caja_tipo = "hidden";
+        }
+        else
+        {
+            $caja_readonly = "";
+            $caja_autofocus = "autofocus";
+            $caja_tipo = "tel";            
+            $tipo_pago_tipo = "";
+        }
+
+    }
 }
 ?>
 
@@ -329,7 +468,32 @@ while ($fila_venta_total = $consulta_venta_total->fetch_assoc())
         <?php
     }
 
-    ?>
+    ?>    
+
+    <h2 class="rdm-lista--titulo-largo">Cambiar atención</h2>    
+
+    <section class="rdm-lista">        
+
+        <a class="ancla" name="atencion"></a>
+
+        <a href="ventas_atendido_cambiar.php?venta_id=<?php echo "$venta_id";?>">
+
+            <article class="rdm-lista--item-sencillo">
+                <div class="rdm-lista--izquierda-sencillo">
+                    <div class="rdm-lista--contenedor">
+                        <div class="rdm-lista--icono"><i class="zmdi zmdi-account zmdi-hc-2x"></i></div>
+                    </div>
+                    <div class="rdm-lista--contenedor">
+                        <h2 class="rdm-lista--titulo">Atención</h2>
+                        <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst("$usuario_actual"); ?></h2>
+                    </div>
+                </div>
+                
+            </article>
+
+        </a>    
+
+    </section>
 
 </main>
 

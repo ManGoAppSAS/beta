@@ -242,7 +242,7 @@ include ("sis/variables_sesion.php");
 
                 ?>
 
-                <a href="reportes_facturas_imprimir.php?venta_id=<?php echo "$venta_id"; ?>" target="_blank">
+                <a href="reportes_facturas_imprimir_a4medio.php?venta_id=<?php echo "$venta_id"; ?>" target="_blank">
 
                     <article class="rdm-lista--item-porcentaje">
                         <div>

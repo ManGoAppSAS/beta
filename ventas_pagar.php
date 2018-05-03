@@ -592,13 +592,72 @@ if (strlen($venta_total) == 7 )
                 }
                 ?>
                 
-                <p class="rdm-formularios--submit"><button type="submit" class="rdm-boton--plano-resaltado">Liquidar venta</button> <a href="ventas_factura_imprimir.php?venta_id=<?php echo "$venta_id"; ?>&tipo_pago=<?php echo "$tipo_pago"; ?>" target="_blank"><button type="button" class="rdm-boton--plano">Imprimir ticket</button></a> <a href="ventas_recibo_imprimir_a4medio.php?venta_id=<?php echo "$venta_id"; ?>&tipo_pago=<?php echo "$tipo_pago"; ?>" target="_blank"><button type="button" class="rdm-boton--plano">Imprimir factura</button></p>
+                <p class="rdm-formularios--submit"><button type="submit" class="rdm-boton--plano-resaltado">Liquidar venta</button> <button type="submit" class="rdm-boton--plano">Cuenta por cobrar</button> <button type="submit" class="rdm-boton--plano">Pago parcial</button></p>
 
             </form>
 
         </article>
 
-        
+    </section>
+
+    <h2 class="rdm-lista--titulo-largo">Imprimir</h2>
+
+    <section class="rdm-lista">        
+
+        <a class="ancla" name="pago"></a>
+
+        <a href="ventas_factura_imprimir.php?venta_id=<?php echo "$venta_id"; ?>&tipo_pago=<?php echo "$tipo_pago"; ?>" target="_blank">
+
+            <article class="rdm-lista--item-sencillo">
+                <div class="rdm-lista--izquierda-sencillo">
+                    <div class="rdm-lista--contenedor">
+                        <div class="rdm-lista--icono"><i class="zmdi zmdi-receipt zmdi-hc-2x"></i></div>
+                    </div>
+                    <div class="rdm-lista--contenedor">
+                        <h2 class="rdm-lista--titulo">Factura POS</h2>
+                        <h2 class="rdm-lista--texto-secundario">Pendiente de pago</h2>
+                    </div>
+                </div>
+                
+            </article>
+
+        </a>        
+
+        <a class="ancla" name="ubicacion"></a>        
+
+        <a href="ventas_factura_imprimir_a4medio.php?venta_id=<?php echo "$venta_id"; ?>&tipo_pago=<?php echo "$tipo_pago"; ?>" target="_blank">
+
+            <article class="rdm-lista--item-sencillo">
+                <div class="rdm-lista--izquierda-sencillo">
+                    <div class="rdm-lista--contenedor">
+                        <div class="rdm-lista--icono"><i class="zmdi zmdi-file-text zmdi-hc-2x"></i></div>
+                    </div>
+                    <div class="rdm-lista--contenedor">
+                        <h2 class="rdm-lista--titulo">Cuenta de cobro</h2>
+                        <h2 class="rdm-lista--texto-secundario">Pendiente de pago</h2>
+                    </div>
+                </div>
+                
+            </article>
+
+        </a>    
+
+        <a href="ventas_cotizacion_imprimir_a4medio.php?venta_id=<?php echo "$venta_id"; ?>&tipo_pago=<?php echo "$tipo_pago"; ?>" target="_blank">
+
+            <article class="rdm-lista--item-sencillo">
+                <div class="rdm-lista--izquierda-sencillo">
+                    <div class="rdm-lista--contenedor">
+                        <div class="rdm-lista--icono"><i class="zmdi zmdi-border-color zmdi-hc-2x"></i></div>
+                    </div>
+                    <div class="rdm-lista--contenedor">
+                        <h2 class="rdm-lista--titulo">Cotización</h2>
+                        <h2 class="rdm-lista--texto-secundario">Pendiente de pago</h2>
+                    </div>
+                </div>
+                
+            </article>
+
+        </a>        
 
     </section>
 
@@ -607,11 +666,6 @@ if (strlen($venta_total) == 7 )
     <h2 class="rdm-lista--titulo-largo">Opciones del pago</h2>
 
     <section class="rdm-lista">        
-
-        
-        
-
-        
 
         <?php
         //muestro el subtotal
@@ -768,23 +822,13 @@ if (strlen($venta_total) == 7 )
             <?php
         }
 
-        ?>  
-
-        
-
-        
-
-           
+        ?>           
 
     </section>
 
     <h2 class="rdm-lista--titulo-largo">Opciones de la venta</h2>
 
-    
-
-    <section class="rdm-lista">
-
-        
+    <section class="rdm-lista">        
 
         <a class="ancla" name="pago"></a>
 

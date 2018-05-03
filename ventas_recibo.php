@@ -592,13 +592,55 @@ if ($enviar_correo == "si")
 
 
 
-        <div class="rdm-tarjeta--acciones-izquierda">
-            <a href="ventas_recibo_imprimir.php?venta_id=<?php echo "$venta_id"; ?>&dinero=<?php echo "$dinero"; ?>&tipo_pago=<?php echo "$tipo_pago"; ?>" target="_blank"><button type="button" class="rdm-boton--plano-resaltado" autofocus>Imprimir recibo</button></a>
-
-            
-        </div>
+        
 
     </section>
+
+    <h2 class="rdm-lista--titulo-largo">Imprimir</h2>
+
+    <section class="rdm-lista">        
+
+        <a class="ancla" name="pago"></a>
+
+        <a href="ventas_recibo_imprimir.php?venta_id=<?php echo "$venta_id"; ?>&dinero=<?php echo "$dinero"; ?>&tipo_pago=<?php echo "$tipo_pago"; ?>" target="_blank">
+
+            <article class="rdm-lista--item-sencillo">
+                <div class="rdm-lista--izquierda-sencillo">
+                    <div class="rdm-lista--contenedor">
+                        <div class="rdm-lista--icono"><i class="zmdi zmdi-receipt zmdi-hc-2x"></i></div>
+                    </div>
+                    <div class="rdm-lista--contenedor">
+                        <h2 class="rdm-lista--titulo">Factura POS</h2>
+                        <h2 class="rdm-lista--texto-secundario">Pagado</h2>
+                    </div>
+                </div>
+                
+            </article>
+
+        </a>        
+
+        <a class="ancla" name="ubicacion"></a>        
+
+        <a href="ventas_recibo_imprimir_a4medio.php?venta_id=<?php echo "$venta_id"; ?>&dinero=<?php echo "$dinero"; ?>&tipo_pago=<?php echo "$tipo_pago"; ?>" target="_blank">
+
+            <article class="rdm-lista--item-sencillo">
+                <div class="rdm-lista--izquierda-sencillo">
+                    <div class="rdm-lista--contenedor">
+                        <div class="rdm-lista--icono"><i class="zmdi zmdi-file zmdi-hc-2x"></i></div>
+                    </div>
+                    <div class="rdm-lista--contenedor">
+                        <h2 class="rdm-lista--titulo">Factura por computador</h2>
+                        <h2 class="rdm-lista--texto-secundario">Pagado</h2>
+                    </div>
+                </div>
+                
+            </article>
+
+        </a>        
+
+    </section>
+
+    <h2 class="rdm-lista--titulo-largo">Enviar</h2>
 
     <section class="rdm-formulario">
     

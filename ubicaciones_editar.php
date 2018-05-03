@@ -98,6 +98,7 @@ else
                 <option value="<?php echo "$tipo"; ?>"><?php echo ucfirst($tipo) ?></option>
                 <option value=""></option>
                 <option value="caja">Caja</option>
+                <option value="cotizacion">Cotización</option>
                 <option value="barra">Barra</option>
                 <option value="habitacion">Habitación</option>
                 <option value="persona">Persona</option>

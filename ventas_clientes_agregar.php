@@ -58,16 +58,16 @@ if(isset($_POST['mensaje_tema'])) $mensaje_tema = $_POST['mensaje_tema']; elseif
             <p><input type="text" id="nombre" name="nombre" value="" required autofocus /></p>
             <p class="rdm-formularios--ayuda">Nombre del cliente</p>
 
-            <p class="rdm-formularios--label"><label for="telefono">Teléfono</label></p>
-            <p><input type="tel" id="telefono" name="telefono" value="" /></p>
+            <p class="rdm-formularios--label"><label for="telefono">Teléfono*</label></p>
+            <p><input type="tel" id="telefono" name="telefono" value="" required /></p>
             <p class="rdm-formularios--ayuda">Teléfono de contacto del cliente</p>
 
-            <p class="rdm-formularios--label"><label for="direccion">Dirección</label></p>
-            <p><input type="text" id="direccion" name="direccion" value="" /></p>
+            <p class="rdm-formularios--label"><label for="direccion">Dirección*</label></p>
+            <p><input type="text" id="direccion" name="direccion" value="" required/></p>
             <p class="rdm-formularios--ayuda">Dirección del cliente</p>
 
-            <p class="rdm-formularios--label"><label for="documento_tipo">Tipo de documento</label></p>
-            <p><select id="documento_tipo" name="documento_tipo">
+            <p class="rdm-formularios--label"><label for="documento_tipo">Tipo de documento*</label></p>
+            <p><select id="documento_tipo" name="documento_tipo" required>
                 <option value=""></option>
                 <option value="CC">CC</option>
                 <option value="cedula extranjeria">Cédula de extranjería</option>
@@ -77,8 +77,8 @@ if(isset($_POST['mensaje_tema'])) $mensaje_tema = $_POST['mensaje_tema']; elseif
             </select></p>
             <p class="rdm-formularios--ayuda">Tipo de documento, CC, NIT, TI, etc.</p>
 
-            <p class="rdm-formularios--label"><label for="documento">Documento</label></p>
-            <p><input type="tel" id="documento" name="documento" value="" /></p>
+            <p class="rdm-formularios--label"><label for="documento">Documento*</label></p>
+            <p><input type="tel" id="documento" name="documento" value="" required/></p>
             <p class="rdm-formularios--ayuda">Documento de identificación del cliente</p>
             
             <p class="rdm-formularios--label"><label for="correo">Correo electrónico </label></p>
