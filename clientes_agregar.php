@@ -89,7 +89,7 @@ if ($agregar == 'si')
             <p class="rdm-formularios--ayuda">Nombre del cliente</p>
 
             <p class="rdm-formularios--label"><label for="documento_tipo">Tipo de documento*</label></p>
-            <p><select id="documento_tipo" name="documento_tipo">
+            <p><select id="documento_tipo" name="documento_tipo" required>
                 <option value="<?php echo "$documento_tipo"; ?>"><?php echo ucfirst($documento_tipo) ?></option>
                 <option value=""></option>
                 <option value="CC">CC</option>
@@ -101,7 +101,7 @@ if ($agregar == 'si')
             <p class="rdm-formularios--ayuda">Tipo de documento, CC, NIT, TI, etc.</p>
 
             <p class="rdm-formularios--label"><label for="documento">Documento*</label></p>
-            <p><input type="tel" id="documento" name="documento" value="<?php echo "$documento"; ?>" /></p>
+            <p><input type="tel" id="documento" name="documento" value="<?php echo "$documento"; ?>" required /></p>
             <p class="rdm-formularios--ayuda">Documento de identificación del cliente</p>
 
             <p class="rdm-formularios--label"><label for="telefono">Teléfono</label></p>

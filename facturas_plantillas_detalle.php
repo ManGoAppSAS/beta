@@ -104,7 +104,7 @@ if ($editar == "si")
             $local = $fila['local'];
             $regimen = $fila['regimen'];
             $resolucion_numero = $fila['resolucion_numero'];
-            $resolucion_fecha = date('Y-m-d', strtotime($fila['resolucion_fecha']));
+            $resolucion_fecha = date('Y/m/d', strtotime($fila['resolucion_fecha']));
             $resolucion_prefijo = $fila['resolucion_prefijo'];
             $resolucion_desde = $fila['resolucion_desde'];
             $resolucion_hasta = $fila['resolucion_hasta'];
@@ -157,7 +157,17 @@ if ($editar == "si")
 
                     <p><b>Número de resolución</b> <br><?php echo ucfirst($resolucion_numero) ?></p>
                     <p><b>Fecha de resolución</b> <br><?php echo ucfirst($resolucion_fecha) ?></p>
+
+                    <?php
+                    //si la resolución de facturacion no esta vacia muestro los datos de la resolución
+                    if (($resolucion_prefijo != ""))
+                    {
+                    ?>
                     <p><b>Prefijo de resolución</b> <br><?php echo ucfirst($resolucion_prefijo) ?></p>
+                    <?php
+                    }
+                    ?>
+
                     <p><b>Rango</b> <br><?php echo ucfirst($resolucion_desde) ?> - <?php echo ucfirst($resolucion_hasta) ?></p>
 
                     <?php
@@ -178,6 +188,50 @@ if ($editar == "si")
 
     <h2 class="rdm-lista--titulo-largo">Vista previa</h2>
 
+    <section class="rdm-lista">        
+
+        <a class="ancla" name="pago"></a>
+
+        <a href="ventas_factura_imprimir.php?venta_id=<?php echo "$venta_id"; ?>&tipo_pago=<?php echo "$tipo_pago"; ?>" target="_blank">
+
+            <article class="rdm-lista--item-sencillo">
+                <div class="rdm-lista--izquierda-sencillo">
+                    <div class="rdm-lista--contenedor">
+                        <div class="rdm-lista--icono"><i class="zmdi zmdi-receipt zmdi-hc-2x"></i></div>
+                    </div>
+                    <div class="rdm-lista--contenedor">
+                        <h2 class="rdm-lista--titulo">Factura POS</h2>
+                        <h2 class="rdm-lista--texto-secundario">Ticket</h2>
+                    </div>
+                </div>
+                
+            </article>
+
+        </a>        
+
+        <a class="ancla" name="ubicacion"></a>        
+
+        <a href="ventas_factura_imprimir_a4medio.php?venta_id=<?php echo "$venta_id"; ?>&tipo_pago=<?php echo "$tipo_pago"; ?>" target="_blank">
+
+            <article class="rdm-lista--item-sencillo">
+                <div class="rdm-lista--izquierda-sencillo">
+                    <div class="rdm-lista--contenedor">
+                        <div class="rdm-lista--icono"><i class="zmdi zmdi-file-text zmdi-hc-2x"></i></div>
+                    </div>
+                    <div class="rdm-lista--contenedor">
+                        <h2 class="rdm-lista--titulo">Factura por computador</h2>
+                        <h2 class="rdm-lista--texto-secundario">Hoja carta</h2>
+                    </div>
+                </div>
+                
+            </article>
+
+        </a>          
+
+    </section>
+
+    <h2 class="rdm-lista--titulo-largo">Vista previa</h2>
+
     <section class="rdm-factura">
 
         <article class="rdm-factura--contenedor">
@@ -192,7 +246,7 @@ if ($editar == "si")
                 <h3><span class="rdm-formularios--ayuda">Resolución de facturación <br></span>Régimen <?php echo ucfirst($regimen)?><br>
                 Resolución No <?php echo ucfirst($resolucion_numero)?><br>
                 de <?php echo ucfirst($resolucion_fecha)?><br>
-                Rango <?php echo ucfirst($resolucion_desde)?> - <?php echo ucfirst($resolucion_hasta)?></h3>
+                Rango <?php echo ucfirst($resolucion_prefijo)?><?php echo ucfirst($resolucion_desde)?> - <?php echo ucfirst($resolucion_prefijo)?><?php echo ucfirst($resolucion_hasta)?></h3>
             </div>
 
             <div class="rdm-factura--izquierda"><b>Venta No <br>xxx</b></div>
