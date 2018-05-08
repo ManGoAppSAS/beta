@@ -25,7 +25,9 @@ if(isset($_POST['regimen'])) $regimen = $_POST['regimen']; elseif(isset($_GET['r
 if(isset($_POST['texto_superior'])) $texto_superior = $_POST['texto_superior']; elseif(isset($_GET['texto_superior'])) $texto_superior = $_GET['texto_superior']; else $texto_superior = null;
 if(isset($_POST['resolucion_numero'])) $resolucion_numero = $_POST['resolucion_numero']; elseif(isset($_GET['resolucion_numero'])) $resolucion_numero = $_GET['resolucion_numero']; else $resolucion_numero = null;
 if(isset($_POST['resolucion_fecha'])) $resolucion_fecha = $_POST['resolucion_fecha']; elseif(isset($_GET['resolucion_fecha'])) $resolucion_fecha = $_GET['resolucion_fecha']; else $resolucion_fecha = null;
-if(isset($_POST['resolucion_rango'])) $resolucion_rango = $_POST['resolucion_rango']; elseif(isset($_GET['resolucion_rango'])) $resolucion_rango = $_GET['resolucion_rango']; else $resolucion_rango = null;
+if(isset($_POST['resolucion_prefijo'])) $resolucion_prefijo = $_POST['resolucion_prefijo']; elseif(isset($_GET['resolucion_prefijo'])) $resolucion_prefijo = $_GET['resolucion_prefijo']; else $resolucion_prefijo = null;
+if(isset($_POST['resolucion_desde'])) $resolucion_desde = $_POST['resolucion_desde']; elseif(isset($_GET['resolucion_desde'])) $resolucion_desde = $_GET['resolucion_desde']; else $resolucion_desde = null;
+if(isset($_POST['resolucion_hasta'])) $resolucion_hasta = $_POST['resolucion_hasta']; elseif(isset($_GET['resolucion_hasta'])) $resolucion_hasta = $_GET['resolucion_hasta']; else $resolucion_hasta = null;
 if(isset($_POST['texto_inferior'])) $texto_inferior = $_POST['texto_inferior']; elseif(isset($_GET['texto_inferior'])) $texto_inferior = $_GET['texto_inferior']; else $texto_inferior = null;
 if(isset($_POST['local'])) $local = $_POST['local']; elseif(isset($_GET['local'])) $local = $_GET['local']; else $local = null;
 
@@ -38,7 +40,7 @@ if(isset($_POST['mensaje_tema'])) $mensaje_tema = $_POST['mensaje_tema']; elseif
 //actualizo la información de la plantilla de factura
 if ($editar == "si")
 {
-    $actualizar = $conexion->query("UPDATE facturas_plantillas SET fecha = '$ahora', usuario = '$sesion_id', nombre = '$nombre', titulo = '$titulo', regimen = '$regimen', texto_superior = '$texto_superior', resolucion_numero = '$resolucion_numero', resolucion_fecha = '$resolucion_fecha', resolucion_rango = '$resolucion_rango', texto_inferior = '$texto_inferior', local = '$local' WHERE id = '$id'");
+    $actualizar = $conexion->query("UPDATE facturas_plantillas SET fecha = '$ahora', usuario = '$sesion_id', nombre = '$nombre', titulo = '$titulo', regimen = '$regimen', texto_superior = '$texto_superior', resolucion_numero = '$resolucion_numero', resolucion_fecha = '$resolucion_fecha', resolucion_prefijo = '$resolucion_prefijo', resolucion_desde = '$resolucion_desde', resolucion_hasta = '$resolucion_hasta', texto_inferior = '$texto_inferior', local = '$local' WHERE id = '$id'");
 
     if ($actualizar)
     {
@@ -102,8 +104,10 @@ if ($editar == "si")
             $local = $fila['local'];
             $regimen = $fila['regimen'];
             $resolucion_numero = $fila['resolucion_numero'];
-            $resolucion_fecha = $fila['resolucion_fecha'];
-            $resolucion_rango = $fila['resolucion_rango'];
+            $resolucion_fecha = date('Y-m-d', strtotime($fila['resolucion_fecha']));
+            $resolucion_prefijo = $fila['resolucion_prefijo'];
+            $resolucion_desde = $fila['resolucion_desde'];
+            $resolucion_hasta = $fila['resolucion_hasta'];
 
             //consulto el local
             $consulta_local = $conexion->query("SELECT * FROM locales WHERE id = '$local'");           
@@ -142,13 +146,30 @@ if ($editar == "si")
                 </div>
 
                 <div class="rdm-tarjeta--cuerpo">
+                    <p><b>Régimen</b> <br><?php echo ucfirst($regimen) ?></p>
                     <p><b>Texto superior</b> <br><?php echo nl2br($texto_superior) ?></p>
+
+                    <?php
+                    //si la resolución de facturacion no esta vacia muestro los datos de la resolución
+                    if (($resolucion_numero != ""))
+                    {
+                    ?>
+
+                    <p><b>Número de resolución</b> <br><?php echo ucfirst($resolucion_numero) ?></p>
+                    <p><b>Fecha de resolución</b> <br><?php echo ucfirst($resolucion_fecha) ?></p>
+                    <p><b>Prefijo de resolución</b> <br><?php echo ucfirst($resolucion_prefijo) ?></p>
+                    <p><b>Rango</b> <br><?php echo ucfirst($resolucion_desde) ?> - <?php echo ucfirst($resolucion_hasta) ?></p>
+
+                    <?php
+                    }
+                    ?>
+
                     <p><b>Texto inferior</b> <br><?php echo nl2br($texto_inferior) ?></p>
                     <p><b>Última modificación</b> <br><?php echo ucfirst("$fecha"); ?> - <?php echo ucfirst("$hora"); ?></p>
                     <p><b>Modificado por</b> <br><?php echo ("$usuario"); ?></p>
                 </div>
 
-            </section>
+            </section>  
             
             <?php
         }
@@ -167,12 +188,17 @@ if ($editar == "si")
                 <h3><span class="rdm-formularios--ayuda">Información tomada del local <br></span><?php echo ucfirst($local)?><br>
                 <?php echo ucfirst($local_direccion)?><br>
                 <?php echo ucfirst($local_telefono)?></h3>
+
+                <h3><span class="rdm-formularios--ayuda">Resolución de facturación <br></span>Régimen <?php echo ucfirst($regimen)?><br>
+                Resolución No <?php echo ucfirst($resolucion_numero)?><br>
+                de <?php echo ucfirst($resolucion_fecha)?><br>
+                Rango <?php echo ucfirst($resolucion_desde)?> - <?php echo ucfirst($resolucion_hasta)?></h3>
             </div>
 
             <div class="rdm-factura--izquierda"><b>Venta No <br>xxx</b></div>
             <div class="rdm-factura--derecha"><?php echo "$fecha"; ?><br> <?php echo "$hora"; ?></div>
 
-            <div class="rdm-factura--texto">        
+            <div class="rdm-factura--texto">
                 <p>Atendido por <b><?php echo ucwords($sesion_nombres); ?> <?php echo ucwords($sesion_apellidos); ?></b><br>
                 En la ubicación <b>Mesa 1</b></p>
             </div>

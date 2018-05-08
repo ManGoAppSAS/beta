@@ -33,8 +33,10 @@ if ($fila = $consulta->fetch_assoc())
     $local = $fila['local'];
     $regimen = $fila['regimen'];
     $resolucion_numero = $fila['resolucion_numero'];
-    $resolucion_fecha = $fila['resolucion_fecha'];
-    $resolucion_rango = $fila['resolucion_rango'];
+    $resolucion_fecha = date('Y-m-d', strtotime($fila['resolucion_fecha']));
+    $resolucion_prefijo = $fila['resolucion_prefijo'];
+    $resolucion_desde = $fila['resolucion_desde'];
+    $resolucion_hasta = $fila['resolucion_hasta'];
 
     //consulto el local
     $consulta_local = $conexion->query("SELECT * FROM locales WHERE id = '$local'");           
@@ -117,11 +119,21 @@ else
             <p><input type="date" id="resolucion_fecha" name="resolucion_fecha" value="<?php echo "$resolucion_fecha"; ?>" placeholder="Fecha" /></p>
             <p class="rdm-formularios--ayuda">Fecha de resolución de facturación.</p>
 
+            <p class="rdm-formularios--label"><label for="resolucion_prefijo">Prefijo de resolución</label></p>
+            <p><input type="text" id="resolucion_prefijo" name="resolucion_prefijo" value="<?php echo "$resolucion_prefijo"; ?>" /></p>
+            <p class="rdm-formularios--ayuda">Ej: ABC 0, ABC 1, ABC 2.</p>            
+
             <p class="rdm-formularios--label"><label for="resolucion_rango">Rango de resolución</label></p>
-            <p><input type="text" id="resolucion_rango" name="resolucion_rango" value="<?php echo "$resolucion_rango"; ?>" /></p>
-            <p class="rdm-formularios--ayuda">Rango de resolución de facturación.</p>
+            <div class="rdm-formularios--fecha">
+                <p><input type="number" id="resolucion_rango" name="resolucion_desde" value="<?php echo "$resolucion_desde"; ?>" ></p>
+                <p class="rdm-formularios--ayuda">Desde</p>
+            </div>
+            <div class="rdm-formularios--fecha">
+                <p><input type="number" id="resolucion_rango" name="resolucion_hasta" value="<?php echo "$resolucion_hasta"; ?>" ></p>
+                <p class="rdm-formularios--ayuda">Hasta</p>
+            </div>
             
-            <p class="rdm-formularios--label"><label for="texto_inferior">Texto inferior*</label></p>
+            <p class="rdm-formularios--label" style="margin-top: 0;"><label for="texto_inferior">Texto inferior*</label></p>
             <p><textarea rows="8" id="texto_inferior" name="texto_inferior"><?php echo "$texto_inferior"; ?></textarea></p>
             <p class="rdm-formularios--ayuda">Ej: Gracias por su compra, vuelva pronto, propina voluntaria, etc.</p>
             

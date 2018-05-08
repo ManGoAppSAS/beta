@@ -24,7 +24,9 @@ if(isset($_POST['regimen'])) $regimen = $_POST['regimen']; elseif(isset($_GET['r
 if(isset($_POST['texto_superior'])) $texto_superior = $_POST['texto_superior']; elseif(isset($_GET['texto_superior'])) $texto_superior = $_GET['texto_superior']; else $texto_superior = null;
 if(isset($_POST['resolucion_numero'])) $resolucion_numero = $_POST['resolucion_numero']; elseif(isset($_GET['resolucion_numero'])) $resolucion_numero = $_GET['resolucion_numero']; else $resolucion_numero = null;
 if(isset($_POST['resolucion_fecha'])) $resolucion_fecha = $_POST['resolucion_fecha']; elseif(isset($_GET['resolucion_fecha'])) $resolucion_fecha = $_GET['resolucion_fecha']; else $resolucion_fecha = null;
-if(isset($_POST['resolucion_rango'])) $resolucion_rango = $_POST['resolucion_rango']; elseif(isset($_GET['resolucion_rango'])) $resolucion_rango = $_GET['resolucion_rango']; else $resolucion_rango = null;
+if(isset($_POST['resolucion_prefijo'])) $resolucion_prefijo = $_POST['resolucion_prefijo']; elseif(isset($_GET['resolucion_prefijo'])) $resolucion_prefijo = $_GET['resolucion_prefijo']; else $resolucion_prefijo = null;
+if(isset($_POST['resolucion_desde'])) $resolucion_desde = $_POST['resolucion_desde']; elseif(isset($_GET['resolucion_desde'])) $resolucion_desde = $_GET['resolucion_desde']; else $resolucion_desde = null;
+if(isset($_POST['resolucion_hasta'])) $resolucion_hasta = $_POST['resolucion_hasta']; elseif(isset($_GET['resolucion_hasta'])) $resolucion_hasta = $_GET['resolucion_hasta']; else $resolucion_hasta = null;
 if(isset($_POST['texto_inferior'])) $texto_inferior = $_POST['texto_inferior']; elseif(isset($_GET['texto_inferior'])) $texto_inferior = $_GET['texto_inferior']; else $texto_inferior = null;
 if(isset($_POST['local'])) $local = $_POST['local']; elseif(isset($_GET['local'])) $local = $_GET['local']; else $local = 0;
 
@@ -58,7 +60,7 @@ if ($agregar == 'si')
 
     if ($consulta->num_rows == 0)
     {
-        $insercion = $conexion->query("INSERT INTO facturas_plantillas values ('', '$ahora', '$sesion_id', '$nombre', '$titulo', '$regimen', '$texto_superior', '$resolucion_numero', '$resolucion_fecha', '$resolucion_rango', '$texto_inferior', '$local')");
+        $insercion = $conexion->query("INSERT INTO facturas_plantillas values ('', '$ahora', '$sesion_id', '$nombre', '$titulo', '$regimen', '$texto_superior', '$resolucion_numero', '$resolucion_fecha', '$resolucion_prefijo', '$resolucion_desde', '$resolucion_hasta', '$texto_inferior', '$local')");
 
         $mensaje = "Plantilla de factura <b>" . ucfirst($nombre) . "</b> agregada";
         $body_snack = 'onLoad="Snackbar()"';
@@ -104,7 +106,7 @@ if ($agregar == 'si')
 
             <p class="rdm-formularios--label"><label for="nombre">Nombre*</label></p>
             <p><input type="text" id="nombre" name="nombre" value="<?php echo "$nombre"; ?>" required autofocus /></p>
-            <p class="rdm-formularios--ayuda">Nombre de la plantilla</p>
+            <p class="rdm-formularios--ayuda">Nombre de la plantilla.</p>
 
             <p class="rdm-formularios--label"><label for="regimen">Régimen*</label></p>
             <p><select id="regimen" name="regimen" required>
@@ -130,11 +132,21 @@ if ($agregar == 'si')
             <p><input type="date" id="resolucion_fecha" name="resolucion_fecha" value="<?php echo "$resolucion_fecha"; ?>" placeholder="Fecha" /></p>
             <p class="rdm-formularios--ayuda">Fecha de resolución de facturación.</p>
 
+            <p class="rdm-formularios--label"><label for="resolucion_prefijo">Prefijo de resolución</label></p>
+            <p><input type="text" id="resolucion_prefijo" name="resolucion_prefijo" value="<?php echo "$resolucion_prefijo"; ?>" /></p>
+            <p class="rdm-formularios--ayuda">Ej: ABC 0, ABC 1, ABC 2.</p>            
+
             <p class="rdm-formularios--label"><label for="resolucion_rango">Rango de resolución</label></p>
-            <p><input type="text" id="resolucion_rango" name="resolucion_rango" value="<?php echo "$resolucion_rango"; ?>" /></p>
-            <p class="rdm-formularios--ayuda">Rango de resolución de facturación.</p>
+            <div class="rdm-formularios--fecha">
+                <p><input type="number" id="resolucion_rango" name="resolucion_desde" value="<?php echo "$resolucion_desde"; ?>" ></p>
+                <p class="rdm-formularios--ayuda">Desde</p>
+            </div>
+            <div class="rdm-formularios--fecha">
+                <p><input type="number" id="resolucion_rango" name="resolucion_hasta" value="<?php echo "$resolucion_hasta"; ?>" ></p>
+                <p class="rdm-formularios--ayuda">Hasta</p>
+            </div>
             
-            <p class="rdm-formularios--label"><label for="texto_inferior">Texto inferior*</label></p>
+            <p class="rdm-formularios--label" style="margin-top: 0;"><label for="texto_inferior">Texto inferior*</label></p>
             <p><textarea rows="8" id="texto_inferior" name="texto_inferior"><?php echo "$texto_inferior"; ?></textarea></p>
             <p class="rdm-formularios--ayuda">Ej: Gracias por su compra, vuelva pronto, propina voluntaria, etc.</p>
             
