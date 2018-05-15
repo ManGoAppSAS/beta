@@ -152,26 +152,26 @@ if ($editar == "si")
                     <?php
                     //si la resolución de facturacion no esta vacia muestro los datos de la resolución
                     if (($resolucion_numero != ""))
-                    {
-                    ?>
+                        {
+                        ?>
 
-                    <p><b>Número de resolución</b> <br><?php echo ucfirst($resolucion_numero) ?></p>
-                    <p><b>Fecha de resolución</b> <br><?php echo ucfirst($resolucion_fecha) ?></p>
+                        <p><b>Número de resolución</b> <br><?php echo ucfirst($resolucion_numero) ?></p>
+                        <p><b>Fecha de resolución</b> <br><?php echo ucfirst($resolucion_fecha) ?></p>
 
-                    <?php
-                    //si la resolución de facturacion no esta vacia muestro los datos de la resolución
-                    if (($resolucion_prefijo != ""))
-                    {
-                    ?>
-                    <p><b>Prefijo de resolución</b> <br><?php echo ucfirst($resolucion_prefijo) ?></p>
-                    <?php
-                    }
-                    ?>
+                        <?php
+                        //si la resolución de facturacion no esta vacia muestro los datos de la resolución
+                        if (($resolucion_prefijo != ""))
+                        {
+                        ?>
+                        <p><b>Prefijo de resolución</b> <br><?php echo ucfirst($resolucion_prefijo) ?></p>
+                        <?php
+                        }
+                        ?>
 
-                    <p><b>Rango</b> <br><?php echo ucfirst($resolucion_desde) ?> - <?php echo ucfirst($resolucion_hasta) ?></p>
+                        <p><b>Rango</b> <br><?php echo ucfirst($resolucion_desde) ?> - <?php echo ucfirst($resolucion_hasta) ?></p>
 
-                    <?php
-                    }
+                        <?php
+                        }
                     ?>
 
                     <p><b>Texto inferior</b> <br><?php echo nl2br($texto_inferior) ?></p>
@@ -246,7 +246,7 @@ if ($editar == "si")
                 <h3><span class="rdm-formularios--ayuda">Resolución de facturación <br></span>Régimen <?php echo ucfirst($regimen)?><br>
                 Resolución No <?php echo ucfirst($resolucion_numero)?><br>
                 de <?php echo ucfirst($resolucion_fecha)?><br>
-                Rango <?php echo ucfirst($resolucion_prefijo)?><?php echo ucfirst($resolucion_desde)?> - <?php echo ucfirst($resolucion_prefijo)?><?php echo ucfirst($resolucion_hasta)?></h3>
+                Rango <?php echo ($resolucion_prefijo)?><?php echo ucfirst($resolucion_desde)?> - <?php echo ($resolucion_prefijo)?><?php echo ucfirst($resolucion_hasta)?></h3>
             </div>
 
             <div class="rdm-factura--izquierda"><b>Venta No <br>xxx</b></div>

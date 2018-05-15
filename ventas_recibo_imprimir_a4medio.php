@@ -37,6 +37,13 @@ if ($consulta_plantilla->num_rows == 0)
         $plantilla_titulo = "Factura / Recibo";
         $plantilla_texto_superior = "";
         $plantilla_texto_inferior = "";
+        $plantilla_regimen = "";
+
+        $plantilla_resolucion_numero = "";
+        $plantilla_resolucion_fecha = "";
+        $plantilla_resolucion_prefijo = "";
+        $plantilla_resolucion_desde = "0";
+        $plantilla_resolucion_hasta = "0";
     }
     else
     {
@@ -46,9 +53,12 @@ if ($consulta_plantilla->num_rows == 0)
             $plantilla_texto_superior = $fila_generica['texto_superior'];
             $plantilla_texto_inferior = $fila_generica['texto_inferior'];
             $plantilla_regimen = $fila_generica['regimen'];
+
             $plantilla_resolucion_numero = $fila_generica['resolucion_numero'];
             $plantilla_resolucion_fecha = date('d/m/Y', strtotime($fila_generica['resolucion_fecha']));
-            $plantilla_resolucion_rango = $fila_generica['resolucion_rango'];
+            $plantilla_resolucion_prefijo = $fila_generica['resolucion_prefijo'];
+            $plantilla_resolucion_desde = $fila_generica['resolucion_desde'];
+            $plantilla_resolucion_hasta = $fila_generica['resolucion_hasta'];
         }
     }        
 }
@@ -60,9 +70,12 @@ else
         $plantilla_texto_superior = $fila_plantilla['texto_superior'];
         $plantilla_texto_inferior = $fila_plantilla['texto_inferior'];
         $plantilla_regimen = $fila_plantilla['regimen'];
+
         $plantilla_resolucion_numero = $fila_plantilla['resolucion_numero'];
         $plantilla_resolucion_fecha = date('d/m/Y', strtotime($fila_plantilla['resolucion_fecha']));
-        $plantilla_resolucion_rango = $fila_plantilla['resolucion_rango'];
+        $plantilla_resolucion_prefijo = $fila_plantilla['resolucion_prefijo'];
+        $plantilla_resolucion_desde = $fila_plantilla['resolucion_desde'];
+        $plantilla_resolucion_hasta = $fila_plantilla['resolucion_hasta'];
     }
 }
 ?>
@@ -108,7 +121,7 @@ else
         <div class="rdm-factura--mediacarta-columna" style="text-align: center; align-self: center;">        
 
             <div><?php echo ucfirst(nl2br($plantilla_texto_superior))?></div>
-            <div><?php echo ucfirst($sesion_local)?></div> 
+            <div><?php echo ucfirst($sesion_local)?></div>
             <div><?php echo ucfirst($sesion_local_direccion)?></div>
             <div><?php echo ucfirst($sesion_local_telefono)?></div>
 
@@ -150,24 +163,34 @@ else
     </div>
 
     <div class="rdm-factura--mediacarta-fila">
+
+        <?php
+        //si la resolución de facturacion no esta vacia muestro los datos de la resolución
+        if (($plantilla_resolucion_numero != ""))
+            {
+            ?>
         
-        <div class="rdm-factura--mediacarta-columna">
-            
-            <div><span style="font-weight: bold">Resolución DIAN:</span> <?php echo ucfirst($plantilla_resolucion_numero)?></div>
+            <div class="rdm-factura--mediacarta-columna">
+                
+                <div><span style="font-weight: bold">Resolución DIAN:</span> <?php echo ucfirst($plantilla_resolucion_numero)?></div>
 
-        </div>
+            </div>
 
-        <div class="rdm-factura--mediacarta-columna">
-            
-            <div><span style="font-weight: bold">De:</span> <?php echo ucfirst($plantilla_resolucion_fecha)?></div>
+            <div class="rdm-factura--mediacarta-columna">
+                
+                <div><span style="font-weight: bold">De:</span> <?php echo ucfirst($plantilla_resolucion_fecha)?></div>
 
-        </div>
+            </div>
 
-        <div class="rdm-factura--mediacarta-columna">
-            
-            <div><span style="font-weight: bold">Rango:</span> <?php echo ucfirst($plantilla_resolucion_rango)?></div>
+            <div class="rdm-factura--mediacarta-columna">
+                
+                <div><span style="font-weight: bold">Rango:</span> <?php echo ($plantilla_resolucion_prefijo) ?><?php echo ucfirst($plantilla_resolucion_desde) ?> - <?php echo ($plantilla_resolucion_prefijo) ?><?php echo ucfirst($plantilla_resolucion_hasta) ?></div>
 
-        </div>
+            </div>
+
+            <?php
+            }
+        ?>
 
         <div class="rdm-factura--mediacarta-columna">
             
