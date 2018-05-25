@@ -203,8 +203,7 @@ if ($editar == "si")
                         <h2 class="rdm-lista--titulo">Factura POS</h2>
                         <h2 class="rdm-lista--texto-secundario">Ticket</h2>
                     </div>
-                </div>
-                
+                </div>                
             </article>
 
         </a>        
@@ -246,7 +245,7 @@ if ($editar == "si")
                 <h3><span class="rdm-formularios--ayuda">Resolución de facturación <br></span>Régimen <?php echo ucfirst($regimen)?><br>
                 Resolución No <?php echo ucfirst($resolucion_numero)?><br>
                 de <?php echo ucfirst($resolucion_fecha)?><br>
-                Rango <?php echo ($resolucion_prefijo)?><?php echo ucfirst($resolucion_desde)?> - <?php echo ($resolucion_prefijo)?><?php echo ucfirst($resolucion_hasta)?></h3>
+                Rango <?php echo ($resolucion_prefijo)?> <?php echo ucfirst($resolucion_desde)?> - <?php echo ($resolucion_prefijo)?> <?php echo ucfirst($resolucion_hasta)?></h3>
             </div>
 
             <div class="rdm-factura--izquierda"><b>Venta No <br>xxx</b></div>

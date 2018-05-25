@@ -92,7 +92,46 @@ if ($editar == "si")
 <main class="rdm--contenedor-toolbar">
 
     
+    <form id="frm_botonePayco" name="frm_botonePayco" method="post" action="https://secure.payco.co/checkout.php"> 
+        <input name="p_cust_id_cliente" type="hidden" value="20268">
+        <input name="p_key" type="hidden" value="eccc90f9dac5152167a2f9ca3ed1e61d9408d7b3">
+        <input name="p_id_invoice" type="hidden" value="">
+        <input name="p_description" type="hidden" value="Servicio ManGo! App Mayo">
+        <input name="p_currency_code" type="hidden" value="COP">
+        <input name="p_amount" id="p_amount" type="hidden" value="71400.00">
+        <input name="p_tax" id="p_tax" type="hidden" value="11400">
+        <input name="p_amount_base" id="p_amount_base" type="hidden" value="60000">
+        <input name="p_test_request" type="hidden" value="FALSE">
+        <input name="p_url_response" type="hidden" value="http://www.mangoapp.co/pago_respuesta.php"> 
+        <input name="p_url_confirmation" type="hidden" value="http://www.mangoapp.co/pago_confirmacion.php"> 
+        <input name="p_signature" type="hidden" id="signature"  value="aefe6d74000d4f4de84d5b375827aa7b" />
+        <input name="idboton"type="hidden" id="idboton"  value="4901" /> 
 
+
+
+
+        
+
+        <section class="rdm-tarjeta">
+
+            <div class="rdm-tarjeta--primario-largo">
+                <h1 class="rdm-tarjeta--titulo-largo">Hacer mi pago</h1>
+            </div>
+
+            <div class="rdm-tarjeta--cuerpo">
+                Acá puedes realizar el pago de tu servicio ManGo! App.
+            </div>
+            
+            <div class="rdm-tarjeta--acciones-izquierda">
+                <button type="submit" class="rdm-boton--plano-resaltado" name="eliminar_venta" value="si">Pagar</button>
+            </div>
+
+        </section>
+
+
+
+
+    </form>
 
 
 
@@ -121,7 +160,7 @@ if ($editar == "si")
 
 <footer>
     
-    <a href="usuarios_editar.php?id=<?php echo "$id_usuario"; ?>"><button class="rdm-boton--fab" ><i class="zmdi zmdi-edit zmdi-hc-2x"></i></button></a>
+    
 
 </footer>
 

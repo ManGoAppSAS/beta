@@ -118,11 +118,14 @@ if ($editar == "si")
             $contrasena = $fila['contrasena'];
             $nombre = $fila['nombre'];
             $razon_social = $fila['razon_social'];
-            $nit = $fila['nit'];
+            $documento_tipo = $fila['documento_tipo'];
+            $documento = $fila['documento'];
             $telefono = $fila['telefono'];
             $celular = $fila['celular'];
             $pais = $fila['pais'];
             $ciudad = $fila['ciudad'];
+            $fecha_pago = date('d/m/Y', strtotime($fila['fecha_pago']));
+            $id_ejecutivo_comercial = $fila['id_ejecutivo_comercial'];
             
             //consulto el usuario que realizo la ultima modificacion
             $consulta_usuario = $conexion->query("SELECT * FROM usuarios WHERE id = '$usuario'");           
@@ -146,6 +149,11 @@ if ($editar == "si")
                 <div class="rdm-tarjeta--cuerpo">
                     <p><b>Correo</b> <br><?php echo ($correo) ?></p>
                     <p><b>Contraseña</b> <br><?php echo ($contrasena) ?></p>
+                    <p><b>Documento</b> <br><?php echo ($documento_tipo) ?> <?php echo ($documento) ?></p>
+                    <p><b>Teléfono</b> <br><?php echo ($telefono) ?></p>
+                    <p><b>Celular</b> <br><?php echo ($celular) ?></p>
+                    <p><b>País</b> <br><?php echo ucfirst($pais) ?></p>
+                    <p><b>Ciudad</b> <br><?php echo ucfirst($ciudad) ?></p>
                     <p><b>Última modificación</b> <br><?php echo ucfirst("$fecha"); ?> - <?php echo ucfirst("$hora"); ?></p>
                     <p><b>Modificado por</b> <br><?php echo ("$usuario"); ?></p>
                 </div>
