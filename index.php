@@ -19,6 +19,65 @@ include ("sis/variables_sesion.php");
 include ("sis/reportes_rangos.php");
 ?>
 
+<?php
+//consulto los permisos del usuario
+$consulta_permisos = $conexion->query("SELECT * FROM usuarios_permisos WHERE id_usuario = '$sesion_id'");
+
+if ($fila_permisos = $consulta_permisos->fetch_assoc()) 
+{
+    $id = $fila_permisos['id'];
+    $fecha = date('d M', strtotime($fila_permisos['fecha']));
+    $hora = date('h:i a', strtotime($fila_permisos['fecha']));
+    $id_usuario = $fila_permisos['id_usuario'];
+    $ajustes = $fila_permisos['ajustes'];
+    $ventas = $fila_permisos['ventas'];
+    $zonas_entregas = $fila_permisos['zonas_entregas'];
+    $base = $fila_permisos['base'];
+    $cierre = $fila_permisos['cierre'];
+    $compras = $fila_permisos['compras'];
+    $producciones = $fila_permisos['producciones'];
+    $inventario = $fila_permisos['inventario'];
+    $gastos = $fila_permisos['gastos'];
+    $clientes = $fila_permisos['clientes'];
+    $reportes = $fila_permisos['reportes'];    
+}
+else
+{
+    if (($sesion_tipo == "socio") or ($sesion_tipo == "administrador"))
+    {
+        $insercion_permisos = $conexion->query("INSERT INTO usuarios_permisos values ('', '$ahora', '1', '$sesion_id', 'si', 'si', 'si', 'si', 'si', 'si', 'si', 'si', 'si', 'si', 'si')");
+    }
+    else
+    {
+        $insercion_permisos = $conexion->query("INSERT INTO usuarios_permisos values ('', '$ahora', '1', '$sesion_id', 'no', 'si', 'si', 'no', 'no', 'no', 'no', 'no', 'no', 'no', 'no')");
+    }
+}
+?>
+
+<?php
+//consulto los permisos del usuario
+$consulta_permisos = $conexion->query("SELECT * FROM usuarios_permisos WHERE id_usuario = '$sesion_id'");
+
+if ($fila_permisos = $consulta_permisos->fetch_assoc()) 
+{
+    $id = $fila_permisos['id'];
+    $fecha = date('d M', strtotime($fila_permisos['fecha']));
+    $hora = date('h:i a', strtotime($fila_permisos['fecha']));
+    $id_usuario = $fila_permisos['id_usuario'];
+    $ajustes = $fila_permisos['ajustes'];
+    $ventas = $fila_permisos['ventas'];
+    $zonas_entregas = $fila_permisos['zonas_entregas'];
+    $base = $fila_permisos['base'];
+    $cierre = $fila_permisos['cierre'];
+    $compras = $fila_permisos['compras'];
+    $producciones = $fila_permisos['producciones'];
+    $inventario = $fila_permisos['inventario'];
+    $gastos = $fila_permisos['gastos'];
+    $clientes = $fila_permisos['clientes'];
+    $reportes = $fila_permisos['reportes'];    
+}
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -67,14 +126,25 @@ include ("sis/reportes_rangos.php");
         <div class="rdm-toolbar--izquierda">
             <a href="logueo_salir.php"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-power zmdi-hc-2x"></i></div> <span class="rdm-tipografia--leyenda">Salir</span></a>
         </div>
+
+        <?php
+        //le doy acceso al modulo segun el perfil que tenga
+        if ($ventas == "si")
+        {
+
+        ?>
         
         <div class="rdm-toolbar--centro">
             <a href="ventas_ubicaciones.php"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-inbox zmdi-hc-2x"></i></div> <span class="rdm-tipografia--leyenda">Nueva Venta</span></a>
         </div>
 
         <?php
+        }
+        ?>
+
+        <?php
         //le doy acceso al modulo segun el perfil que tenga
-        if (($sesion_tipo == "administrador") or ($sesion_tipo == "socio"))
+        if ($ajustes == "si")
         {
 
         ?>
@@ -121,7 +191,13 @@ include ("sis/reportes_rangos.php");
 
     <h2 class="rdm-lista--titulo-largo">Actividades</h2>
 
-    <section class="rdm-lista-sencillo">        
+    <section class="rdm-lista-sencillo">
+
+        <?php
+        //le doy acceso al modulo segun el perfil que tenga
+        if ($ventas == "si")
+        {
+        ?>
 
         <a class="ancla" name="ventas"></a>
         
@@ -142,6 +218,15 @@ include ("sis/reportes_rangos.php");
 
         </a>
 
+        <?php 
+        }
+        ?>
+
+        <?php
+        //le doy acceso al modulo segun el perfil que tenga
+        if ($zonas_entregas == "si")
+        {
+        ?>
 
         <a class="ancla" name="zonas"></a>
 
@@ -162,17 +247,14 @@ include ("sis/reportes_rangos.php");
 
         </a>
 
-
-
-
-
-
+        <?php 
+        }
+        ?>
 
         <?php
         //le doy acceso al modulo segun el perfil que tenga
-        if (($sesion_tipo == "administrador") or ($sesion_tipo == "socio"))
+        if ($base == "si")
         {
-
         ?>
         
         <a class="ancla" name="base"></a>
@@ -194,6 +276,16 @@ include ("sis/reportes_rangos.php");
 
         </a>
 
+        <?php 
+        }
+        ?>
+
+        <?php
+        //le doy acceso al modulo segun el perfil que tenga
+        if ($cierre == "si")
+        {
+        ?>
+
         <a class="ancla" name="cierre"></a>
 
         <a href="cierres_ver.php">
@@ -213,13 +305,15 @@ include ("sis/reportes_rangos.php");
 
         </a>
 
-        
+        <?php 
+        }
+        ?>
 
-
-
-
-
-        
+        <?php
+        //le doy acceso al modulo segun el perfil que tenga
+        if ($compras == "si")
+        {
+        ?>        
 
         <a class="ancla" name="despachos"></a>
 
@@ -240,6 +334,16 @@ include ("sis/reportes_rangos.php");
 
         </a>
 
+        <?php 
+        }
+        ?>
+
+        <?php
+        //le doy acceso al modulo segun el perfil que tenga
+        if ($producciones == "si")
+        {
+        ?>
+
         <a class="ancla" name="producciones"></a>
 
         <a href="producciones_ver.php">           
@@ -258,6 +362,16 @@ include ("sis/reportes_rangos.php");
         </article>
 
         </a>
+
+        <?php 
+        }
+        ?>
+
+        <?php
+        //le doy acceso al modulo segun el perfil que tenga
+        if ($inventario == "si")
+        {
+        ?>
 
         <a class="ancla" name="inventario"></a>
 
@@ -278,9 +392,15 @@ include ("sis/reportes_rangos.php");
 
         </a>
 
-        
+        <?php 
+        }
+        ?>
 
-        
+        <?php
+        //le doy acceso al modulo segun el perfil que tenga
+        if ($gastos == "si")
+        {
+        ?>
 
         <a class="ancla" name="gastos"></a>
 
@@ -301,13 +421,15 @@ include ("sis/reportes_rangos.php");
 
         </a>
 
+        <?php 
+        }
+        ?>
 
-
-
-
-
-
-        
+        <?php
+        //le doy acceso al modulo segun el perfil que tenga
+        if ($clientes == "si")
+        {
+        ?>        
 
         <a class="ancla" name="clientes"></a>
 
@@ -328,6 +450,16 @@ include ("sis/reportes_rangos.php");
 
         </a>
 
+        <?php 
+        }
+        ?>
+
+        <?php
+        //le doy acceso al modulo segun el perfil que tenga
+        if ($reportes == "si")
+        {
+        ?>
+
         <a class="ancla" name="reportes"></a>
 
         <a href="reportes.php">
@@ -345,13 +477,11 @@ include ("sis/reportes_rangos.php");
                 
             </article>
 
-        </a>        
+        </a>
 
-    
-
-    <?php 
-    }
-    ?>
+        <?php 
+        }
+        ?>
 
     </section>
 
@@ -368,10 +498,9 @@ include ("sis/reportes_rangos.php");
 
     <?php
     //le doy acceso al modulo segun el perfil que tenga
-    if (($sesion_tipo == "administrador") or ($sesion_tipo == "socio"))
+    if ($reportes == "si")
     {
-
-    ?> 
+    ?>
 
 
     <section class="rdm-lista--porcentaje">

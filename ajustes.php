@@ -828,15 +828,15 @@ if(isset($_POST['pago_vencido'])) $pago_vencido = $_POST['pago_vencido']; elseif
     <section class="rdm-lista">
 
         <a class="ancla" name="datos"></a>
-        <a href="cuenta_datos.php">
+        <a href="cuenta_detalle.php">
             <article class="rdm-lista--item-sencillo">
                 <div class="rdm-lista--izquierda-sencillo">
                     <div class="rdm-lista--contenedor">
                         <div class="rdm-lista--icono"><i class="zmdi zmdi-account-box-mail zmdi-hc-2x"></i></div>
                     </div>
                     <div class="rdm-lista--contenedor">
-                        <h2 class="rdm-lista--titulo">Mis datos</h2>
-                        <h2 class="rdm-lista--texto-secundario">Editar mi perfil de ManGo!</h2>
+                        <h2 class="rdm-lista--titulo">Mi cuenta</h2>
+                        <h2 class="rdm-lista--texto-secundario">Ver y editar mi cuenta de ManGo!</h2>
                     </div>
                 </div>
                 <div class="rdm-lista--derecha">

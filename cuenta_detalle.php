@@ -84,7 +84,7 @@ if ($editar == "si")
     <div class="rdm-toolbar--fila">
         <div class="rdm-toolbar--izquierda">
             <a href="ajustes.php#datos"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-arrow-left zmdi-hc-2x"></i></div></a>
-            <h2 class="rdm-toolbar--titulo">Mis datos</h2>
+            <h2 class="rdm-toolbar--titulo">Mi cuenta</h2>
         </div>
     </div>
 </header>
@@ -93,7 +93,7 @@ if ($editar == "si")
 
     <?php
     //consulto y muestro el usuario
-    $consulta = $conexion2->query("SELECT * FROM clientes_datos WHERE id = '1'");
+    $consulta = $conexion2->query("SELECT * FROM clientes_datos WHERE correo = 'dannyws@gmail.com'");
 
     if ($consulta->num_rows == 0)
     {
@@ -110,7 +110,7 @@ if ($editar == "si")
     {
         while ($fila = $consulta->fetch_assoc())
         {
-            $id_usuario = $fila['id'];
+            $id_cuenta = $fila['id'];
             $fecha = date('d/m/Y', strtotime($fila['fecha']));
             $hora = date('h:i a', strtotime($fila['fecha']));
             $usuario = $fila['usuario'];
@@ -125,14 +125,26 @@ if ($editar == "si")
             $pais = $fila['pais'];
             $ciudad = $fila['ciudad'];
             $fecha_pago = date('d/m/Y', strtotime($fila['fecha_pago']));
-            $id_ejecutivo_comercial = $fila['id_ejecutivo_comercial'];
-            
+            $ejecutivo_comercial = $fila['ejecutivo_comercial'];
+
+            $imagen = $fila['imagen'];
+            $imagen_nombre = $fila['imagen_nombre'];
+
             //consulto el usuario que realizo la ultima modificacion
             $consulta_usuario = $conexion->query("SELECT * FROM usuarios WHERE id = '$usuario'");           
 
             if ($fila = $consulta_usuario->fetch_assoc()) 
             {
                 $usuario = $fila['correo'];
+            }
+
+            //consulto el ejecutivo comercial que hizo la activacion de la cuenta y recibirá las comisiones
+            $consulta_ejecutivo = $conexion2->query("SELECT * FROM personal_datos WHERE id = '$ejecutivo_comercial'");           
+
+            if ($fila_ejecutivo = $consulta_ejecutivo->fetch_assoc()) 
+            {
+                $ejecutivo_nombres = $fila_ejecutivo['nombres'];
+                $ejecutivo_apellidos = $fila_ejecutivo['apellidos'];
             }
             
             ?>
@@ -154,6 +166,7 @@ if ($editar == "si")
                     <p><b>Celular</b> <br><?php echo ($celular) ?></p>
                     <p><b>País</b> <br><?php echo ucfirst($pais) ?></p>
                     <p><b>Ciudad</b> <br><?php echo ucfirst($ciudad) ?></p>
+                    <p><b>Ejecutivo comercial</b> <br><?php echo ucwords($ejecutivo_nombres) ?> <?php echo ucwords($ejecutivo_apellidos) ?></p>
                     <p><b>Última modificación</b> <br><?php echo ucfirst("$fecha"); ?> - <?php echo ucfirst("$hora"); ?></p>
                     <p><b>Modificado por</b> <br><?php echo ("$usuario"); ?></p>
                 </div>
@@ -177,7 +190,7 @@ if ($editar == "si")
 
 <footer>
     
-    <a href="usuarios_editar.php?id=<?php echo "$id_usuario"; ?>"><button class="rdm-boton--fab" ><i class="zmdi zmdi-edit zmdi-hc-2x"></i></button></a>
+    <a href="cuenta_editar.php?id=<?php echo "$id_cuenta"; ?>"><button class="rdm-boton--fab" ><i class="zmdi zmdi-edit zmdi-hc-2x"></i></button></a>
 
 </footer>
 
