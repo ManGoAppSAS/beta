@@ -248,8 +248,9 @@ if ($editar == "si")
                 Rango <?php echo ($resolucion_prefijo)?> <?php echo ucfirst($resolucion_desde)?> - <?php echo ($resolucion_prefijo)?> <?php echo ucfirst($resolucion_hasta)?></h3>
             </div>
 
-            <div class="rdm-factura--izquierda"><b>Venta No <br>xxx</b></div>
-            <div class="rdm-factura--derecha"><?php echo "$fecha"; ?><br> <?php echo "$hora"; ?></div>
+            <div class="rdm-factura--texto">
+                <h3><span class="rdm-formularios--ayuda">Fecha y hora <br></span><?php echo "$fecha"; ?> - <?php echo "$hora"; ?></h3>
+            </div>            
 
             <div class="rdm-factura--texto">
                 <p>Atendido por <b><?php echo ucwords($sesion_nombres); ?> <?php echo ucwords($sesion_apellidos); ?></b><br>

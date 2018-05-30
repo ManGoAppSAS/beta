@@ -20,6 +20,28 @@ if(isset($_POST['id'])) $id = $_POST['id']; elseif(isset($_GET['id'])) $id = $_G
 ?>
 
 <?php
+//consulto la información del usuario
+$consulta = $conexion->query("SELECT * FROM usuarios WHERE id = '$id'");
+
+if ($fila = $consulta->fetch_assoc()) 
+{
+    $id = $fila['id'];
+    $correo = $fila['correo'];
+    $contrasena = $fila['contrasena'];
+    $nombres = $fila['nombres'];
+    $apellidos = $fila['apellidos'];
+    $tipo = $fila['tipo'];
+    $local = $fila['local'];
+    $imagen = $fila['imagen'];
+    $imagen_nombre = $fila['imagen_nombre'];    
+}
+else
+{
+    header("location:usuarios_ver.php");
+}
+?>
+
+<?php
 //consulto los permisos del usuario
 $consulta_permisos = $conexion->query("SELECT * FROM usuarios_permisos WHERE id_usuario = '$id'");
 
@@ -62,7 +84,7 @@ else
 <header class="rdm-toolbar--contenedor">
     <div class="rdm-toolbar--fila">
         <div class="rdm-toolbar--izquierda">
-            <a href="usuarios_detalle.php?id=<?php echo "$id"; ?>"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-arrow-left zmdi-hc-2x"></i></div></a>
+            <a href="usuarios_detalle.php?id=<?php echo "$id"; ?>&nombres=<?php echo "$nombres"; ?>&apellidos=<?php echo "$apellidos"; ?>"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-arrow-left zmdi-hc-2x"></i></div></a>
             <h2 class="rdm-toolbar--titulo">Permisos del usuario</h2>
         </div>
         <div class="rdm-toolbar--derecha">
@@ -78,6 +100,8 @@ else
         <form action="usuarios_detalle.php" method="post" enctype="multipart/form-data">
             <input type="hidden" name="action" value="image" />
             <input type="hidden" name="id" value="<?php echo "$id"; ?>" />
+            <input type="hidden" name="nombres" value="<?php echo "$nombres"; ?>" />
+            <input type="hidden" name="apellidos" value="<?php echo "$apellidos"; ?>" />
             
             <p class="rdm-formularios--label"><label for="ajustes">Ajustes</label></p>
             <p><select id="ajustes" name="ajustes" required>

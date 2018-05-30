@@ -82,7 +82,7 @@ if ($editar == "si")
 ?>
 
 <?php
-//actualizo la información del componente
+//actualizo la información de los permisos
 if ($editar_permisos == "si")
 {    
     $actualizar = $conexion->query("UPDATE usuarios_permisos SET fecha = '$ahora', usuario = '$sesion_id', ajustes = '$ajustes', ventas = '$ventas', zonas_entregas = '$zonas_entregas', base = '$base', cierre = '$cierre', compras = '$compras' , producciones = '$producciones' , inventario = '$inventario', gastos = '$gastos', clientes = '$clientes', reportes = '$reportes' WHERE id_usuario = '$id'");

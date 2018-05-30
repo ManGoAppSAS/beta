@@ -35,6 +35,13 @@ if ($consulta_plantilla->num_rows == 0)
         $plantilla_titulo = "Factura / Recibo";
         $plantilla_texto_superior = "";
         $plantilla_texto_inferior = "";
+        $regimen = $fila_generica['regimen'];
+        $resolucion_numero = "";
+        $resolucion_fecha = "";
+        $resolucion_prefijo = "";
+        $resolucion_desde = "";
+        $resolucion_hasta = "";
+
     }
     else
     {
@@ -43,6 +50,12 @@ if ($consulta_plantilla->num_rows == 0)
             $plantilla_titulo = $fila_generica['titulo'];
             $plantilla_texto_superior = $fila_generica['texto_superior'];
             $plantilla_texto_inferior = $fila_generica['texto_inferior'];
+            $regimen = $fila_generica['regimen'];
+            $resolucion_numero = $fila_generica['resolucion_numero'];
+            $resolucion_fecha = date('Y/m/d', strtotime($fila_generica['resolucion_fecha']));
+            $resolucion_prefijo = $fila_generica['resolucion_prefijo'];
+            $resolucion_desde = $fila_generica['resolucion_desde'];
+            $resolucion_hasta = $fila_generica['resolucion_hasta'];
         }
     }        
 }
@@ -53,6 +66,12 @@ else
         $plantilla_titulo = $fila_plantilla['titulo'];
         $plantilla_texto_superior = $fila_plantilla['texto_superior'];
         $plantilla_texto_inferior = $fila_plantilla['texto_inferior'];
+        $regimen = $fila_plantilla['regimen'];
+        $resolucion_numero = $fila_plantilla['resolucion_numero'];
+        $resolucion_fecha = date('Y/m/d', strtotime($fila_plantilla['resolucion_fecha']));
+        $resolucion_prefijo = $fila_plantilla['resolucion_prefijo'];
+        $resolucion_desde = $fila_plantilla['resolucion_desde'];
+        $resolucion_hasta = $fila_plantilla['resolucion_hasta'];
     }
 }
 ?>
@@ -81,7 +100,7 @@ else
     </script>    
 </head>
 
-<body onload="javascript:window.print(); loaded()">
+<body>
 
 <section class="rdm-factura--imprimir">
 
@@ -99,6 +118,13 @@ else
         //datos de la venta
         include ("sis/ventas_datos.php");
         ?>
+
+        <div class="rdm-factura--texto">
+            <h3><span class="rdm-formularios--ayuda">Resolución de facturación <br></span>Régimen <?php echo ucfirst($regimen)?><br>
+                Resolución No <?php echo ucfirst($resolucion_numero)?><br>
+                de <?php echo ucfirst($resolucion_fecha)?><br>
+                Rango <?php echo ($resolucion_prefijo)?> <?php echo ucfirst($resolucion_desde)?> - <?php echo ($resolucion_prefijo)?> <?php echo ucfirst($resolucion_hasta)?></h3>
+        </div>
 
         <div class="rdm-factura--texto">
             <h3><?php echo "$fecha"; ?> - <?php echo "$hora"; ?></h3>
