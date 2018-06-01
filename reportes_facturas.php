@@ -80,7 +80,7 @@ include ("sis/variables_sesion.php");
 
             <?php
             //ingresos de hoy
-            $consulta_ingresos_hoy = $conexion->query("SELECT * FROM ventas_datos WHERE estado = 'liquidado' and local_id = '$sesion_local_id' and fecha BETWEEN '$desde' and '$hasta'");
+            $consulta_ingresos_hoy = $conexion->query("SELECT * FROM ventas_datos WHERE estado = 'liquidado' or estado = 'pendiente' and local_id = '$sesion_local_id' and fecha BETWEEN '$desde' and '$hasta'");
 
             if ($consulta_ingresos_hoy->num_rows == 0)
             {

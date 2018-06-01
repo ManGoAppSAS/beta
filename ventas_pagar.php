@@ -570,7 +570,6 @@ if (strlen($venta_total) == 7 )
         <article class="rdm-formulario" style="border: none; box-shadow: none; padding-top: 0; margin-top: -1em; ">
     
             <form action="ventas_recibo.php" method="post">
-                <input type="hidden" name="pagar" value="si" />
                 <input type="hidden" name="venta_id" value="<?php echo "$venta_id";?>" />
                 <input type="hidden" name="venta_total_bruto" value="<?php echo "$impuesto_base_total";?>" />
                 <input type="hidden" name="descuento_valor" value="<?php echo "$descuento_valor";?>" />
@@ -586,13 +585,13 @@ if (strlen($venta_total) == 7 )
                 {
                 ?>
                 
-                <p><input class="rdm-formularios--input-grande" type="<?php echo "$caja_tipo";?>" id="dinero" name="dinero" min="<?php echo "$venta_total"; ?>" max="<?php echo "$dinero_maximo"; ?>" value="" placeholder="Dinero entregado" required></p>                
+                <p><input class="rdm-formularios--input-grande" type="<?php echo "$caja_tipo";?>" id="dinero" name="dinero" value="" placeholder="Dinero entregado" ></p>                
 
                 <?php 
                 }
                 ?>
                 
-                <p class="rdm-formularios--submit"><button type="submit" class="rdm-boton--plano-resaltado">Liquidar venta</button> <button type="submit" class="rdm-boton--plano">Cuenta por cobrar</button> <button type="submit" class="rdm-boton--plano">Pago parcial</button></p>
+                <p class="rdm-formularios--submit"><button type="submit" class="rdm-boton--plano-resaltado" name="pagar" value="liquidar">Liquidar venta</button> <button type="submit" class="rdm-boton--plano" name="pagar" value="pendiente">Pendiente</button> <button type="submit" class="rdm-boton--plano" name="pagar" value="parcial">Pago parcial</button></p>
 
             </form>
 

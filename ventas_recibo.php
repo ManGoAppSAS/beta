@@ -56,7 +56,7 @@ else
 
 <?php
 //liquido la venta
-if (($pagar == "si") and ($liquidar_venta == "si"))
+if (($pagar == "liquidar") and ($liquidar_venta == "si"))
 {
     $actualizar = $conexion->query("UPDATE ventas_datos SET fecha_cierre = '$ahora', estado = 'liquidado', total_bruto = '$venta_total_bruto', descuento_valor = '$descuento_valor', total_neto = '$venta_total_neto', eliminar_motivo = 'no aplica' WHERE id = '$venta_id'");
     
@@ -65,6 +65,42 @@ if (($pagar == "si") and ($liquidar_venta == "si"))
     $actualizar = $conexion->query("UPDATE ventas_productos SET estado = 'liquidado' WHERE venta_id = '$venta_id'");
 
     $mensaje = "Venta No <b>$venta_id</b> liquidada y guardada";
+    $body_snack = 'onLoad="Snackbar()"';
+    $mensaje_tema = "aviso";
+}
+?>
+
+<?php
+//dejo la venta pendiente
+if (($pagar == "pendiente") and ($liquidar_venta == "si"))
+{
+    $actualizar = $conexion->query("UPDATE ventas_datos SET fecha_cierre = '$ahora', estado = 'pendiente', total_bruto = '$venta_total_bruto', descuento_valor = '$descuento_valor', total_neto = '$venta_total_neto', eliminar_motivo = 'no aplica', pago = 'credito', saldo_pendiente = '$venta_total_neto' WHERE id = '$venta_id'");
+    
+    $actualizar = $conexion->query("UPDATE ubicaciones SET estado = 'libre' WHERE id = '$ubicacion_id'");
+    
+    $actualizar = $conexion->query("UPDATE ventas_productos SET estado = 'pendiente' WHERE venta_id = '$venta_id'");
+
+    $mensaje = "Venta No <b>$venta_id</b> guardada como pendiente";
+    $body_snack = 'onLoad="Snackbar()"';
+    $mensaje_tema = "aviso";
+}
+?>
+
+<?php
+//hago un pago parcial
+if (($pagar == "parcial") and ($liquidar_venta == "si"))
+{
+    $dinero = str_replace('.','',$dinero);
+
+    $pago_parcial = $venta_total_neto - $dinero;
+
+    $actualizar = $conexion->query("UPDATE ventas_datos SET fecha_cierre = '$ahora', estado = 'pendiente', total_bruto = '$venta_total_bruto', descuento_valor = '$descuento_valor', total_neto = '$venta_total_neto', eliminar_motivo = 'no aplica', pago = 'credito', saldo_pendiente = '$pago_parcial' WHERE id = '$venta_id'");
+    
+    $actualizar = $conexion->query("UPDATE ubicaciones SET estado = 'libre' WHERE id = '$ubicacion_id'");
+    
+    $actualizar = $conexion->query("UPDATE ventas_productos SET estado = 'pendiente' WHERE venta_id = '$venta_id'");
+
+    $mensaje = "Venta No <b>$venta_id</b> guardada como pendiente";
     $body_snack = 'onLoad="Snackbar()"';
     $mensaje_tema = "aviso";
 }
@@ -562,7 +598,7 @@ if ($enviar_correo == "si")
     <section class="rdm-tarjeta">
 
         <div class="rdm-tarjeta--primario-largo">
-            <h1 class="rdm-tarjeta--titulo-largo">Cambio</h1>
+            <h1 class="rdm-tarjeta--titulo-largo">Cambio / Saldo pendiente</h1>
             <h2 class="rdm-tarjeta--dashboard-titulo-positivo">$<?php echo number_format($cambio, 2, ",", "."); ?></h2>
         </div>
 
@@ -584,7 +620,7 @@ if ($enviar_correo == "si")
                     <div class="rdm-lista--icono"><i class="zmdi zmdi-money zmdi-hc-2x"></i></div>
                 </div>
                 <div class="rdm-lista--contenedor">
-                    <h2 class="rdm-lista--titulo">Total pagado</h2>
+                    <h2 class="rdm-lista--titulo">Total a pagar</h2>
                     <h2 class="rdm-lista--texto-valor">$<?php echo number_format($total_neto, 2, ",", "."); ?></h2>
                 </div>
             </div>

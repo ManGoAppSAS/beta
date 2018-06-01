@@ -77,6 +77,24 @@ include ("sis/variables_sesion.php");
 
         </a>
 
+        <a class="ancla" name="ingresos"></a>
+        
+        <a href="reportes_cartera.php">
+
+            <article class="rdm-lista--item-sencillo">
+                <div class="rdm-lista--izquierda-sencillo">
+                    <div class="rdm-lista--contenedor">
+                        <div class="rdm-lista--icono"><i class="zmdi zmdi-download zmdi-hc-2x"></i></div>
+                    </div>
+                    <div class="rdm-lista--contenedor">
+                        <h2 class="rdm-lista--titulo">Cartera</h2>
+                        <h2 class="rdm-lista--texto-secundario">Consulta las facturas pendientes</h2>
+                    </div>
+                </div>                
+            </article>
+
+        </a>
+
         <a class="ancla" name="productos"></a>
         
         <a href="reportes_productos.php">

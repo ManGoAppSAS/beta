@@ -576,7 +576,7 @@ if ($fila_permisos = $consulta_permisos->fetch_assoc())
 
             <?php
             //ingresos totales
-            $consulta_ingresos = $conexion->query("SELECT * FROM ventas_datos WHERE fecha BETWEEN '$desde' and '$hasta' and estado = 'liquidado'");
+            $consulta_ingresos = $conexion->query("SELECT * FROM ventas_datos WHERE fecha BETWEEN '$desde' and '$hasta' and estado = 'liquidado' or estado = 'pendiente'");
 
             if ($consulta_ingresos->num_rows == 0)
             {
@@ -593,6 +593,7 @@ if ($fila_permisos = $consulta_permisos->fetch_assoc())
                 $bruto_total = 0;
                 $neto_total = 0;
                 $propinas_total = 0;
+                $saldo_pendiente_total = 0;
 
                 while ($fila_ingresos = $consulta_ingresos->fetch_assoc())
                 {
@@ -601,6 +602,9 @@ if ($fila_permisos = $consulta_permisos->fetch_assoc())
 
                     //total neto de cada venta
                     $neto_valor = $fila_ingresos['total_neto'];
+
+                    //saldo pendiente de cada venta
+                    $saldo_pendiente = $fila_ingresos['saldo_pendiente'];
 
                     //calculo el valor y el porcentaje de la propina
                     $venta_propina = $fila_ingresos['propina'];
@@ -624,6 +628,9 @@ if ($fila_permisos = $consulta_permisos->fetch_assoc())
                     //acumulo el total neto de todas las ventas
                     $neto_total = $neto_total + $neto_valor;
 
+                    //acumulo el total neto de todas las ventas
+                    $saldo_pendiente_total = $saldo_pendiente_total + $saldo_pendiente;
+
 
 
                     //acumulo el total de impuestos de todas las ventas
@@ -631,6 +638,9 @@ if ($fila_permisos = $consulta_permisos->fetch_assoc())
 
                     //total neto sin propinas
                     $neto_total_sp =  $neto_total - $propinas_total;
+
+                    //total neto con saldo pendiente
+                    $neto_total_cartera =  $neto_total_sp - $saldo_pendiente_total;
                 }
             }
             ?>
@@ -691,10 +701,10 @@ if ($fila_permisos = $consulta_permisos->fetch_assoc())
             ?>
         
         
-            <h2 class="rdm-tarjeta--dashboard-titulo-positivo">$<?php echo number_format($neto_total, 2, ",", ".");?></h2>
-            <h2 class="rdm-tarjeta--titulo-largo">Propinas: $<?php echo number_format($propinas_total, 2, ",", ".");?></h2>
+            <h2 class="rdm-tarjeta--dashboard-titulo-positivo">$<?php echo number_format($neto_total_cartera, 2, ",", ".");?></h2>
             <h2 class="rdm-tarjeta--titulo-largo">Impuestos: $<?php echo number_format($impuestos_total, 2, ",", ".");?></h2>
             <h2 class="rdm-tarjeta--titulo-largo">Neto: $<?php echo number_format($bruto_total, 2, ",", ".");?></h2>
+            <h2 class="rdm-tarjeta--titulo-largo">Cartera: $<?php echo number_format($saldo_pendiente_total, 2, ",", ".");?></h2>
             <?php echo "$porcentaje_crecimiento";?>
         </div>
 

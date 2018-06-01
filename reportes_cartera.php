@@ -63,7 +63,7 @@ include ("sis/variables_sesion.php");
     <div class="rdm-toolbar--fila">
         <div class="rdm-toolbar--izquierda">
             <a href="reportes.php#ingresos"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-arrow-left zmdi-hc-2x"></i></div></a>
-            <h2 class="rdm-toolbar--titulo">Resultados</h2>
+            <h2 class="rdm-toolbar--titulo">Facturas</h2>
         </div>        
     </div>
 </header>
@@ -75,181 +75,149 @@ include ("sis/variables_sesion.php");
     <section class="rdm-lista--porcentaje">
 
         <div class="rdm-tarjeta--primario-largo">
-            <h1 class="rdm-tarjeta--titulo-largo">Ingresos <?php echo ($rango); ?></h1>
+            <h1 class="rdm-tarjeta--titulo-largo">Cartera <?php echo ($rango); ?></h1>
             <h2 class="rdm-tarjeta--subtitulo-largo"><?php echo "$rango_texto"; ?></h2>
 
             <?php
-            //ingresos totales
-            $consulta_ingresos = $conexion->query("SELECT * FROM ventas_datos WHERE estado = 'liquidado' or estado = 'pendiente' and fecha BETWEEN '$desde' and '$hasta' and local_id = '$sesion_local_id'");
+            //ingresos de hoy
+            $consulta_ingresos_hoy = $conexion->query("SELECT * FROM ventas_datos WHERE estado = 'pendiente' and local_id = '$sesion_local_id' and fecha BETWEEN '$desde' and '$hasta'");
 
-            if ($consulta_ingresos->num_rows == 0)
+            if ($consulta_ingresos_hoy->num_rows == 0)
             {
-                //si no hay registros pongo los totales en cero
-                $bruto_total = 0;
-                $neto_total = 0;
-                $propinas_total = 0;
-                $impuestos_total = 0;                
-                $neto_total_sp = 0;
+                $total_dia_hoy = 0;
+                $total_propinas_hoy = 0;
             }
             else
             {
-                //inicio los acumuladores
-                $bruto_total = 0;
-                $neto_total = 0;
-                $propinas_total = 0;
-                $saldo_pendiente_total = 0;
+                $total_dia_hoy = 0;
+                $total_propinas_hoy = 0;
 
-                while ($fila_ingresos = $consulta_ingresos->fetch_assoc())
+                while ($fila_ingresos_hoy = $consulta_ingresos_hoy->fetch_assoc())
                 {
-                    //total bruto de cada venta
-                    $bruto_valor = $fila_ingresos['total_bruto'];
+                    $total_neto_hoy = $fila_ingresos_hoy['saldo_pendiente'];
+                    $total_dia_hoy = $total_dia_hoy + $total_neto_hoy;
 
-                    //total neto de cada venta
-                    $neto_valor = $fila_ingresos['total_neto'];
+                    //encontrar el total de propinas de hoy
+                    $total_bruto = $fila_ingresos_hoy['total_bruto'];
+                    $propina = $fila_ingresos_hoy['propina'];
 
-                    //saldo pendiente de cada venta
-                    $saldo_pendiente = $fila_ingresos['saldo_pendiente'];
-
-                    //calculo el valor y el porcentaje de la propina
-                    $venta_propina = $fila_ingresos['propina'];
-
-                    //propina
-                    if (($venta_propina >= 0) and ($venta_propina <= 100))
-                    {    
-                        $propina_valor = (($venta_propina * $bruto_valor) / 100);
+                    if ($propina <= 100)
+                    {
+                        $propina_valor = ($total_bruto * $propina)/100;
+                        $propina_porcentaje = $propina;
                     }
                     else
                     {
-                        $propina_valor = $venta_propina;
+                        $propina_valor = $propina;
+                        $propina_porcentaje = ($propina_valor * 100) / $total_bruto;
                     }
 
-                    //acumulo el total de propinas de todas las ventas
-                    $propinas_total = $propinas_total + $propina_valor;
+                    $total_neto = $total_bruto + $propina_valor;
 
-                    //acumulo el total bruto de todas las ventas
-                    $bruto_total = $bruto_total + $bruto_valor;
-
-                    //acumulo el total neto de todas las ventas
-                    $neto_total = $neto_total + $neto_valor;
-
-                    //acumulo el total neto de todas las ventas
-                    $saldo_pendiente_total = $saldo_pendiente_total + $saldo_pendiente;
-
-
-
-                    //acumulo el total de impuestos de todas las ventas
-                    $impuestos_total =  $neto_total - $bruto_total - $propinas_total;
-
-                    //total neto sin propinas
-                    $neto_total_sp =  $neto_total - $propinas_total;
-
-                    //total neto con saldo pendiente
-                    $neto_total_cartera =  $neto_total_sp - $saldo_pendiente_total;
+                    $total_propinas_hoy = $total_propinas_hoy + $propina_valor;                
                 }
-            }
-            ?>
-
-            <?php
-            //ingresos periodo anterior       
-            $consulta_ingresos_pa = $conexion->query("SELECT * FROM ventas_datos WHERE estado = 'liquidado'  and fecha BETWEEN '$desde_anterior' and '$hasta_anterior' and local_id = '$sesion_local_id'");        
-
-            $neto_total_pa = 0;
-
-            while ($fila_ingresos_pa = $consulta_ingresos_pa->fetch_assoc())
-            {
-                //total neto de cada venta
-                $neto_valor_pa = $fila_ingresos_pa['total_neto'];
-
-                //acumulo el total neto de todas las ventas
-                $neto_total_pa = $neto_total_pa + $neto_valor_pa; 
-            }                
-            ?>
-
-
-
-
-
-
-
-
-
-
-
-
-            <?php
-            //porcentaje de crecimiento                
-            if ($neto_total_pa == 0)
-            {
-               $porcentaje_crecimiento = "<h2 class='rdm-tarjeta--dashboard-subtitulo-neutral'>" . ucfirst($rango_anterior) . " sin ventas</h2>";
-            }
-            else
-            {
-                $porcentaje_crecimiento = ($neto_total - $neto_total_pa) / $neto_total_pa * 100;
-                $porcentaje_crecimiento = number_format($porcentaje_crecimiento, 2, ".", ".");
-                $neto_total_pa = number_format($neto_total_pa, 0, ".", ".");
-                
-
-                if ($porcentaje_crecimiento > 1)
-                {
-                    $porcentaje_crecimiento = "<h2 class='rdm-tarjeta--dashboard-subtitulo-positivo'><i class='zmdi zmdi-long-arrow-up'></i> $porcentaje_crecimiento% " . ($rango_anterior) . " ($$neto_total_pa)</h2>";               
-                }
-                else
-                {
-                    if ($porcentaje_crecimiento == 0)
-                    {
-                        $porcentaje_crecimiento = "<h2 class='rdm-tarjeta--dashboard-subtitulo-neutral'>Igual que " . ($rango_anterior) . " ($$neto_total_pa)</h2>";
-                    }
-                    else
-                    {
-                        $porcentaje_crecimiento = "<h2 class='rdm-tarjeta--dashboard-subtitulo-negativo'><i class='zmdi zmdi-long-arrow-down'></i> " . abs($porcentaje_crecimiento) . "% " . ($rango_anterior) . " ($$neto_total_pa)</h2>";
-                    }
-                }
-            }
-
-            if ($neto_total == 0)
-            {
-               $porcentaje_crecimiento = "<h2 class='rdm-tarjeta--dashboard-subtitulo-neutral'>Aún no hay ventas</h2>";
             }
             ?>
         
-        
-            <h2 class="rdm-tarjeta--dashboard-titulo-positivo">$<?php echo number_format($neto_total_cartera, 2, ",", ".");?></h2>
-            <h2 class="rdm-tarjeta--titulo-largo">Impuestos: $<?php echo number_format($impuestos_total, 2, ",", ".");?></h2>
-            <h2 class="rdm-tarjeta--titulo-largo">Neto: $<?php echo number_format($bruto_total, 2, ",", ".");?></h2>
-            <h2 class="rdm-tarjeta--titulo-largo">Cartera: $<?php echo number_format($saldo_pendiente_total, 2, ",", ".");?></h2>
-            <?php echo "$porcentaje_crecimiento";?>
+            <h2 class="rdm-tarjeta--dashboard-titulo-positivo">$ <?php echo number_format($total_dia_hoy, 0, ",", ".");?></h2>
+
+            
+
         </div>
 
 
 
+
+
+
+
+
+
+
+
+        <?php 
+        if ($total_dia_hoy != 0)
+        {
+        ?>
+
+
+        <?php
+        //ventas por facturas
+        $consulta = $conexion->query("SELECT count(id), id FROM ventas_datos WHERE local_id = '$sesion_local_id' and fecha BETWEEN '$desde' and '$hasta' and estado = 'pendiente' GROUP BY id ORDER BY fecha ASC");                
+
+        if ($consulta->num_rows == 0)
+        {
+
+        }
+        else
+        {
+
+
+
+            while ($fila = $consulta->fetch_assoc())
+            {
+                $venta_id = $fila['id'];
+
+                //consulto el total para cada local
+                $consulta2 = $conexion->query("SELECT * FROM ventas_datos WHERE local_id = '$sesion_local_id' and id = '$venta_id' and fecha BETWEEN '$desde' and '$hasta' and estado = 'pendiente' ORDER by fecha");       
+
+                $total_local = 0;
+                while ($fila2 = $consulta2->fetch_assoc())
+                {
+                    $total_neto = $fila2['saldo_pendiente'];
+                    $total_local = $total_local + $total_neto;
+                    $total_local_t = "$ " . number_format($total_local, 0, ".", ".");
+                }
+               
+                
+
+                $porcentaje_local = ($total_local / $total_dia_hoy) * 100;
+                $porcentaje_local = number_format($porcentaje_local, 0, ".", ".");
+
+                ?>
+
+                <a href="reportes_cartera_venta.php?venta_id=<?php echo "$venta_id"; ?>">
+
+                    <article class="rdm-lista--item-porcentaje">
+                        <div>
+                            <div class="rdm-lista--izquierda-porcentaje">
+                                <h2 class="rdm-lista--titulo-porcentaje">Venta No <?php echo ucfirst("$venta_id"); ?></h2>
+                                <h2 class="rdm-lista--texto-secundario-porcentaje"><?php echo "$total_local_t"; ?></h2>
+                            </div>
+                            <div class="rdm-lista--derecha-porcentaje">
+                                <h2 class="rdm-lista--texto-secundario-porcentaje"><?php echo "$porcentaje_local"; ?>%</h2>
+                            </div>
+                        </div>
+                        
+                        <div class="rdm-lista--linea-pocentaje-fondo" style="background-color: #B2DFDB">
+                            <div class="rdm-lista--linea-pocentaje-relleno" style="width: <?php echo "$porcentaje_local"; ?>%; background-color: #009688;"></div>
+                        </div>
+                    </article>
+
+                </a>
+
+                <?php
+            }
+        }
+        ?>
+
+    <?php 
+    }
+    ?>
+
         
 
-
-
-
-
-
+        
 
         
 
-
-        
-
-    
     </section>
 
 
+
+
+
     
-
-
-
-
-
-
-
-
-
-        
 
         
 
