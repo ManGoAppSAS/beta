@@ -64,8 +64,7 @@ if ($fila = $consulta->fetch_assoc())
 else
 {
     //si no la hay guardo los datos iniciales de la venta
-    $insercion = $conexion->query("INSERT INTO ventas_datos values ('', '$ahora', '', '$sesion_id', '$sesion_local_id', '$ubicacion_id', '$ubicacion', '0', '1', 'efectivo', 'ocupado', '0', '0', '0', '0', '0', '0', '', '', 'contado', '$ahora')");
-
+    $insercion = $conexion->query("INSERT INTO ventas_datos values ('', '$ahora', '', '$sesion_id', '$sesion_local_id', '$ubicacion_id', '$ubicacion', '0', '1', 'efectivo', 'ocupado', '0', '0', '0', '0', '$sesion_local_propina', '0', '', '', 'contado', '$ahora', '0')");
     //consulto el ultimo id que se ingreso para tenerlo como id de la venta
     $venta_id = $conexion->insert_id;
 
