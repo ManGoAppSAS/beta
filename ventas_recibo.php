@@ -74,6 +74,8 @@ if (($pagar == "liquidar") and ($liquidar_venta == "si"))
 //dejo la venta pendiente
 if (($pagar == "pendiente") and ($liquidar_venta == "si"))
 {
+    $cambio = $venta_total;
+    
     $actualizar = $conexion->query("UPDATE ventas_datos SET fecha_cierre = '$ahora', estado = 'pendiente', total_bruto = '$venta_total_bruto', descuento_valor = '$descuento_valor', total_neto = '$venta_total_neto', eliminar_motivo = 'no aplica', pago = 'credito', saldo_pendiente = '$venta_total_neto' WHERE id = '$venta_id'");
     
     $actualizar = $conexion->query("UPDATE ubicaciones SET estado = 'libre' WHERE id = '$ubicacion_id'");
