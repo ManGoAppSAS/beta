@@ -25,6 +25,7 @@ if(isset($_POST['archivo'])) $archivo = $_POST['archivo']; elseif(isset($_GET['a
 
 if(isset($_POST['categoria'])) $categoria = $_POST['categoria']; elseif(isset($_GET['categoria'])) $categoria = $_GET['categoria']; else $categoria = 0;
 if(isset($_POST['tipo'])) $tipo = $_POST['tipo']; elseif(isset($_GET['tipo'])) $tipo = $_GET['tipo']; else $tipo = null;
+if(isset($_POST['costo'])) $costo = $_POST['costo']; elseif(isset($_GET['costo'])) $costo = $_GET['costo']; else $costo = null;
 if(isset($_POST['local'])) $local = $_POST['local']; elseif(isset($_GET['local'])) $local = $_GET['local']; else $local = 0;
 if(isset($_POST['zona'])) $zona = $_POST['zona']; elseif(isset($_GET['zona'])) $zona = $_GET['zona']; else $zona = 0;
 if(isset($_POST['producto'])) $producto = $_POST['producto']; elseif(isset($_GET['producto'])) $producto = $_GET['producto']; else $producto = null;
@@ -141,8 +142,7 @@ if ($agregar == 'si')
 
     if ($consulta->num_rows == 0)
     {
-        $imagen_ref = "productos";
-        
+        $imagen_ref = "productos";        
 
         $insercion = $conexion->query("INSERT INTO productos values ('', '$ahora', '$sesion_id', '$categoria', '$tipo', '$local', '$zona', '$producto', '$precio', '$impuesto_id', '$incluido', '$descripcion', '$codigo_barras', '$imagen', '$ahora_img')");        
 
@@ -162,7 +162,9 @@ if ($agregar == 'si')
 
             if ($consulta_componente->num_rows == 0)
             {
-                $insercion = $conexion->query("INSERT INTO componentes values ('', '$ahora', '$sesion_id', 'unid', 'unid', '$producto', '0', '0', '0', '0', 'comprado')");
+                $costo = str_replace('.','',$costo);
+
+                $insercion = $conexion->query("INSERT INTO componentes values ('', '$ahora', '$sesion_id', 'unid', 'unid', '$producto', '$costo', '$costo', '0', '0', 'comprado')");
                 $componente_id = $conexion->insert_id;
 
                 //agrego la composición
@@ -209,6 +211,30 @@ if ($agregar == 'si')
             
         });
     </script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+                 
+        }); 
+
+        jQuery(function($) {
+            $('#costo').autoNumeric('init', {aSep: '.', aDec: ',', mDec: '0'}); 
+            
+        });
+    </script>
+
+    <script language="javascript" type="text/javascript">
+        function mostrar_costo(selectTag){
+
+         if(selectTag.value == 'simple'){
+        document.getElementById('costo_div').style.display='block';
+        
+         }else{
+         document.getElementById('costo_div').style.display='none';
+         }
+        }
+    </script>
+
 </head>
 <body <?php echo $body_snack; ?>>
 
@@ -225,14 +251,18 @@ if ($agregar == 'si')
     
     <section class="rdm-formulario">
 
+
+
+
+
+
+
         <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" enctype="multipart/form-data">
             <input type="hidden" name="action" value="image" />
 
             <p class="rdm-formularios--label"><label for="producto">Nombre*</label></p>
             <p><input type="text" id="producto" name="producto" value="<?php echo "$producto"; ?>" autofocus required /></p>
-            <p class="rdm-formularios--ayuda">Nombre del producto o servicio</p>
-            
-            
+            <p class="rdm-formularios--ayuda">Nombre del producto o servicio</p>            
 
             <p class="rdm-formularios--label"><label for="categoria">Categoría *</label></p>            
             <p><select id="categoria" name="categoria" required>
@@ -291,12 +321,18 @@ if ($agregar == 'si')
             <p class="rdm-formularios--ayuda">Categoría a la que se relaciona el producto</p>
             
             <p class="rdm-formularios--label"><label for="tipo">Tipo de inventario*</label></p>
-            <p><select id="tipo" name="tipo" required>
+            <p><select id="tipo" name="tipo" onchange="mostrar_costo(this)" required>
                 <option value="<?php echo "$tipo"; ?>"><?php echo ucfirst($tipo) ?></option>
                 <option value="compuesto">Compuesto</option>
                 <option value="simple">Simple</option>
             </select></p>
             <p class="rdm-formularios--ayuda">Al crear un producto <b>simple</b> tambien se crea el componente</p>
+
+            <div id="costo_div" >
+                <p class="rdm-formularios--label"><label for="costo">Costo</label></p>
+                <p><input type="tel" id="costo" name="costo" value="<?php echo "$costo"; ?>" /></p>
+                <p class="rdm-formularios--ayuda">Si es inventario de tipo simple agrega el costo</p>
+            </div>
             
             <p class="rdm-formularios--label"><label for="local">Local*</label></p>
             <p><select id="local" name="local" required>
@@ -414,9 +450,6 @@ if ($agregar == 'si')
                 ?>
             </select></p>            
             <p class="rdm-formularios--ayuda">En que zona de entregas es preparado y entregado</p>
-
-
-
 
             <p class="rdm-formularios--label"><label for="precio">Precio*</label></p>
             <p><input type="tel" id="precio" name="precio" id="precio" value="<?php echo "$precio"; ?>" required /></p>

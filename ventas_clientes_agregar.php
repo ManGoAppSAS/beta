@@ -44,9 +44,21 @@ if(isset($_POST['mensaje_tema'])) $mensaje_tema = $_POST['mensaje_tema']; elseif
             <h2 class="rdm-toolbar--titulo">Agregar cliente</h2>
         </div>
     </div>
+
+    <div class="rdm-toolbar--fila-tab">
+        <div class="rdm-toolbar--centro">
+            <a href="ventas_ubicaciones.php"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-inbox zmdi-hc-2x"></i></div> <span class="rdm-tipografia--leyenda">Nueva Venta</span></a>
+        </div>
+        <div class="rdm-toolbar--centro">
+            <a href="ventas_resumen.php?venta_id=<?php echo "$venta_id";?>"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-view-list-alt zmdi-hc-2x"></i></div> <span class="rdm-tipografia--leyenda">Resúmen</span></a>
+        </div>
+        <div class="rdm-toolbar--derecha">
+            <a href="ventas_pagar.php?venta_id=<?php echo "$venta_id";?>"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-money zmdi-hc-2x"></i></div> <span class="rdm-tipografia--leyenda">Pagar</span></a>
+        </div>
+    </div>
 </header>
 
-<main class="rdm--contenedor-toolbar">
+<main class="rdm--contenedor-toolbar-tabs">
 
     <section class="rdm-formulario">
 

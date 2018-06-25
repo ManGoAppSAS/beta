@@ -34,13 +34,9 @@ else
         $fecha_pago_dia = date('d', strtotime($fila_venta['fecha_pago']));
         $fecha_pago_mes = date('m', strtotime($fila_venta['fecha_pago']));
         $fecha_pago_ano = date('y', strtotime($fila_venta['fecha_pago']));
+        $venta_consecutivo = $fila_venta['consecutivo'];
 
-        if ($dinero == 0)
-        {
-            $dinero = $total_neto;
-        }
-
-        $cambio = $dinero - $total_neto;
+        
 
         //consulto la ubicacion
         $consulta_ubicacion = $conexion->query("SELECT * FROM ubicaciones WHERE id = '$ubicacion_id'");
@@ -52,7 +48,7 @@ else
         }
 
         //consulto el cliente
-        if ($ubicacion_tipo == "persona")
+        if (($ubicacion_tipo == "persona") or ($ubicacion_tipo == "domicilio"))
         {
             $consulta_cliente = $conexion->query("SELECT * FROM clientes WHERE id = '$cliente_id'");
 
@@ -127,7 +123,6 @@ else
             $apellidos = ucwords($fila['apellidos']);
 
             $atendido_texto = "<b>Atendido por</b> $nombres $apellidos";
-            $atendido_texto = "";
         }
     }
 }

@@ -75,9 +75,7 @@ else
             {
                 $descuento_actual = "Ninguno";
             }
-        }      
-
-        
+        }        
     }
 }
 ?>
@@ -238,10 +236,26 @@ else
             <a href="ventas_pagar.php?venta_id=<?php echo "$venta_id";?>#descuentos"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-arrow-left zmdi-hc-2x"></i></div></a>
             <h2 class="rdm-toolbar--titulo">Cambiar descuento</h2>
         </div>
+
+        <div class="rdm-toolbar--derecha">
+            <h2 class="rdm-toolbar--titulo">$ <?php echo number_format($precio_neto_total, 2, ",", "."); ?></h2>
+        </div>
+    </div>
+
+    <div class="rdm-toolbar--fila-tab">
+        <div class="rdm-toolbar--centro">
+            <a href="ventas_ubicaciones.php"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-inbox zmdi-hc-2x"></i></div> <span class="rdm-tipografia--leyenda">Nueva Venta</span></a>
+        </div>
+        <div class="rdm-toolbar--centro">
+            <a href="ventas_resumen.php?venta_id=<?php echo "$venta_id";?>"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-view-list-alt zmdi-hc-2x"></i></div> <span class="rdm-tipografia--leyenda">Resúmen</span></a>
+        </div>
+        <div class="rdm-toolbar--derecha">
+            <a href="ventas_pagar.php?venta_id=<?php echo "$venta_id";?>"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-money zmdi-hc-2x"></i></div> <span class="rdm-tipografia--leyenda">Pagar</span></a>
+        </div>
     </div>
 </header>
 
-<main class="rdm--contenedor-toolbar">
+<main class="rdm--contenedor-toolbar-tabs">
 
     <h2 class="rdm-lista--titulo-largo">Descuento actual</h2>
 
@@ -254,7 +268,7 @@ else
                 </div>
                 <div class="rdm-lista--contenedor">
                     <h2 class="rdm-lista--titulo"><?php echo ucfirst("$descuento_actual"); ?></h2>
-                    <h2 class="rdm-lista--texto-valor"><span class="rdm-lista--texto-negativo">-$<?php echo number_format($descuento_valor, 2, ",", "."); ?> (<?php echo number_format($venta_descuento_porcentaje, 2, ",", "."); ?>%)</span></h2>
+                    <h2 class="rdm-lista--texto-valor"><span class="rdm-lista--texto-negativo">-$ <?php echo number_format($descuento_valor, 2, ",", "."); ?> (<?php echo number_format($venta_descuento_porcentaje, 2, ",", "."); ?>%)</span></h2>
                 </div>
             </div>
         </article>
@@ -345,7 +359,7 @@ else
             <input type="hidden" name="venta_id" value="<?php echo "$venta_id";?>" />
             <input type="hidden" name="descuento_actual" value="<?php echo "$descuento_actual";?>" />
             <input type="hidden" name="descuento_nuevo_id" value="99" />
-            <input type="text" name="precio_neto_total" value="<?php echo ($precio_neto_total); ?>" />
+            <input type="hidden" name="precio_neto_total" value="<?php echo ($precio_neto_total); ?>" />
             
             <p><input class="rdm-formularios--input-grande" type="tel" id="descuento_per" name="descuento_personal" value="" placeholder="Valor" required></p>
             

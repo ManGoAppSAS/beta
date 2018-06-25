@@ -82,7 +82,7 @@ Autor: Danny Estrada
 .rdm-factura--mediacarta-fila{
     box-sizing: border-box; /*el padding y margin no incrementan el ancho*/ 
     width: 100%; /*ancho del contenedor*/    
-    background-color: rgba(0,0,0,0.1);
+    background-color: rgba(0,0,0,0);
     margin: 0.25em 0;
     padding: 0em;
     display: flex;

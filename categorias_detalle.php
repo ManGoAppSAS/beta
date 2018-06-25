@@ -208,6 +208,7 @@ if ($editar == "si")
                 $categoria = $fila['categoria'];
                 $precio = $fila['precio'];
                 $impuesto_id = $fila['impuesto_id'];
+                $impuesto_incluido = $fila['impuesto_incluido'];
                 $imagen = $fila['imagen'];
                 $imagen_nombre = $fila['imagen_nombre'];
 
@@ -232,41 +233,54 @@ if ($editar == "si")
                 else
                 {
                     $impuesto = "No se ha asignado un impuesto";
-                    $impuesto_porcentaje = null;
+                    $impuesto_porcentaje = 0;
                 }
 
-                //consulto la categoria
-                $consulta2 = $conexion->query("SELECT * FROM productos_categorias WHERE id = $categoria");
+                //consulto la cantidad de componentes
+                $consulta_composicion = $conexion->query("SELECT * FROM composiciones WHERE producto = '$id'");
+                $total_composicion = $consulta_composicion->num_rows;
 
-                if ($filas2 = $consulta2->fetch_assoc())
+                if ($total_composicion == 0)
                 {
-                    $categoria = $filas2['categoria'];
+                    $componentes = "sin composicion";
                 }
                 else
                 {
-                    $categoria = "No se ha asignado una categoria";
+                    if ($total_composicion == 1)
+                    {
+                        $componentes = "";
+                    }
+                    else
+                    {
+                        $componentes = "";
+                    }
                 }
 
-                //calculo el valor del precio venta con el impuesto incluido
+                //calculo el valor del precio bruto y el precio neto
                 $impuesto_valor = $precio * ($impuesto_porcentaje / 100);
-                $base_impuesto = $precio - $impuesto_valor;
 
-                if ($base_impuesto == $precio)
+                if ($impuesto_incluido == "no")
                 {
-                    $base_impuesto = 0;
+                   $precio_bruto = $precio;
+                }
+                else
+                {
+                   $precio_bruto = $precio - $impuesto_valor;
                 }
 
-                $precio_neto = $precio + $impuesto_valor
+                $precio_neto = $precio_bruto + $impuesto_valor;
+                $impuesto_base = $precio_bruto;
                 ?>
 
                 <article class="rdm-lista--item-sencillo">
-                    <div class="rdm-lista--izquierda-sencillo">
+                    <div class="rdm-lista--izquierda">
                         <div class="rdm-lista--contenedor">
                             <?php echo "$imagen"; ?>
                         </div>
                         <div class="rdm-lista--contenedor">
                             <h2 class="rdm-lista--titulo"><?php echo ucfirst("$producto"); ?></h2>
                             <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($precio_neto, 2, ",", "."); ?></h2>
+                            <h2 class="rdm-lista--texto-secundario"><span class="rdm-lista--texto-negativo"><?php echo ucfirst($componentes) ?></span></h2>
                         </div>
                     </div>
                 </article>

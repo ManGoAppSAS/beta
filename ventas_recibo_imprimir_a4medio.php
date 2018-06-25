@@ -17,6 +17,7 @@ include ("sis/variables_sesion.php");
 <?php
 //capturo las variables que pasan por URL o formulario
 if(isset($_POST['venta_id'])) $venta_id = $_POST['venta_id']; elseif(isset($_GET['venta_id'])) $venta_id = $_GET['venta_id']; else $venta_id = null;
+if(isset($_POST['venta_consecutivo'])) $venta_consecutivo = $_POST['venta_consecutivo']; elseif(isset($_GET['venta_consecutivo'])) $venta_consecutivo = $_GET['venta_consecutivo']; else $venta_consecutivo = null;
 if(isset($_POST['venta_total'])) $venta_total = $_POST['venta_total']; elseif(isset($_GET['venta_total'])) $venta_total = $_GET['venta_total']; else $venta_total = null;   
 
 if(isset($_POST['dinero'])) $dinero = $_POST['dinero']; elseif(isset($_GET['dinero'])) $dinero = $_GET['dinero']; else $dinero = null;
@@ -83,7 +84,7 @@ else
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <title>ManGo! - Venta No <?php echo $venta_id; ?></title>
+    <title>ManGo! - <?php echo ucfirst(nl2br($plantilla_titulo))?> <?php echo "$plantilla_resolucion_prefijo"; ?><?php echo "$venta_consecutivo"; ?></title>
     <?php
     //información del head
     include ("partes/head.php");
@@ -118,7 +119,7 @@ else
 
         </div>
 
-        <div class="rdm-factura--mediacarta-columna" style="text-align: center; align-self: center;">        
+        <div class="rdm-factura--mediacarta-columna" style="text-align: center; align-self: center; font-weight: bold; font-size: 1.15em">        
 
             <div><?php echo ucfirst(nl2br($plantilla_texto_superior))?></div>
             <div><?php echo ucfirst($sesion_local)?></div>
@@ -134,15 +135,21 @@ else
 
         <div class="rdm-factura--mediacarta-columna" style="align-self: center; text-align: center;">            
 
-            <div style="font-weight: bold; font-size: 1.15em">Factura de venta: <?php echo $venta_id; ?></div>
+            <div style="font-weight: bold; font-size: 1.15em">Factura de venta: <br><?php echo ($plantilla_resolucion_prefijo) ?><?php echo $venta_consecutivo; ?></div>
 
-            <div</div>
+            
             <div><span style="font-weight: bold">Fecha:</span> <?php echo "$fecha"; ?></div>
             <div><span style="font-weight: bold">Hora:</span>: <?php echo "$hora"; ?></div>
 
         </div>
 
     </div>
+
+    <?php 
+    //si la venta tiene un cliente asignado muestro los datos del cliente
+    if ($cliente_id != 0)
+    {
+    ?>    
 
     <div class="rdm-factura--mediacarta-fila">
         
@@ -162,7 +169,17 @@ else
 
     </div>
 
+    <?php
+    } 
+    ?>
+
     <div class="rdm-factura--mediacarta-fila">
+
+        <div class="rdm-factura--mediacarta-columna">
+            
+            <div><span style="font-weight: bold">Régimen:</span> <?php echo ucfirst($plantilla_regimen)?></div>
+
+        </div>
 
         <?php
         //si la resolución de facturacion no esta vacia muestro los datos de la resolución
@@ -190,13 +207,7 @@ else
 
             <?php
             }
-        ?>
-
-        <div class="rdm-factura--mediacarta-columna">
-            
-            <div><span style="font-weight: bold">Régimen:</span> <?php echo ucfirst($plantilla_regimen)?></div>
-
-        </div>
+        ?>        
 
     </div>
 

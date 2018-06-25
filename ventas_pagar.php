@@ -38,16 +38,6 @@ if(isset($_POST['precio_neto_total'])) $precio_neto_total = $_POST['precio_neto_
 if(isset($_POST['pagar_propina'])) $pagar_propina = $_POST['pagar_propina']; elseif(isset($_GET['pagar_propina'])) $pagar_propina = $_GET['pagar_propina']; else $pagar_propina = null;
 if(isset($_POST['propina'])) $propina = $_POST['propina']; elseif(isset($_GET['propina'])) $propina = $_GET['propina']; else $propina = null;
 
-//variables para el cambio de ubicacion
-if(isset($_POST['cambiar_ubicacion'])) $cambiar_ubicacion = $_POST['cambiar_ubicacion']; elseif(isset($_GET['cambiar_ubicacion'])) $cambiar_ubicacion = $_GET['cambiar_ubicacion']; else $cambiar_ubicacion = null;
-if(isset($_POST['ubicacion_actual_id'])) $ubicacion_actual_id = $_POST['ubicacion_actual_id']; elseif(isset($_GET['ubicacion_actual_id'])) $ubicacion_actual_id = $_GET['ubicacion_actual_id']; else $ubicacion_actual_id = null;
-if(isset($_POST['ubicacion_actual'])) $ubicacion_actual = $_POST['ubicacion_actual']; elseif(isset($_GET['ubicacion_actual'])) $ubicacion_actual = $_GET['ubicacion_actual']; else $ubicacion_actual_id = null;
-if(isset($_POST['ubicacion_nueva_id'])) $ubicacion_nueva_id = $_POST['ubicacion_nueva_id']; elseif(isset($_GET['ubicacion_nueva_id'])) $ubicacion_nueva_id = $_GET['ubicacion_nueva_id']; else $ubicacion_nueva_id = null;
-
-//variables para el ccambio de atencion
-if(isset($_POST['cambiar_atencion'])) $cambiar_atencion = $_POST['cambiar_atencion']; elseif(isset($_GET['cambiar_atencion'])) $cambiar_atencion = $_GET['cambiar_atencion']; else $cambiar_atencion = null;
-if(isset($_POST['usuario_actual'])) $usuario_actual = $_POST['usuario_actual']; elseif(isset($_GET['usuario_actual'])) $usuario_actual = $_GET['usuario_actual']; else $usuario_actual = null;
-if(isset($_POST['usuario_nuevo_id'])) $usuario_nuevo_id = $_POST['usuario_nuevo_id']; elseif(isset($_GET['usuario_nuevo_id'])) $usuario_nuevo_id = $_GET['usuario_nuevo_id']; else $usuario_nuevo_id = null;
 
 
 
@@ -72,69 +62,7 @@ if(isset($_POST['body_snack'])) $body_snack = $_POST['body_snack']; elseif(isset
 if(isset($_POST['mensaje_tema'])) $mensaje_tema = $_POST['mensaje_tema']; elseif(isset($_GET['mensaje_tema'])) $mensaje_tema = $_GET['mensaje_tema']; else $mensaje_tema = null;
 ?>
 
-<?php
-//cambio la atención
-if ($cambiar_atencion == "si")
-{
-    //consulto los datos del nuevo usuario
-    $consulta2 = $conexion->query("SELECT * FROM usuarios WHERE id = $usuario_nuevo_id");
 
-    if ($filas2 = $consulta2->fetch_assoc())
-    {
-        $usuario_nuevo_id = $filas2['id'];
-        $usuario_nuevo_nombres = $filas2['nombres'];
-        $usuario_nuevo_apellidos = $filas2['apellidos'];
-        $usuario_nuevo = "$usuario_nuevo_nombres $usuario_nuevo_apellidos";
-    }
-    else
-    {
-        $usuario_nuevo_id = "";
-        $ubicacion_nueva = "sin ubicacion";
-    }
-
-    $actualizar = $conexion->query("UPDATE ventas_datos SET usuario_id = '$usuario_nuevo_id' WHERE id = '$venta_id'");
-    $actualizar = $conexion->query("UPDATE ventas_productos SET usuario = '$usuario_nuevo_id' WHERE venta_id = '$venta_id'");
-
-    $mensaje = 'Se cambió la atención de <b>' . ucfirst($usuario_actual) . '</b> a <b>' . ucfirst($usuario_nuevo) . '</b>';
-    $body_snack = 'onLoad="Snackbar()"';
-    $mensaje_tema = "aviso";
-}
-?>
-
-<?php
-//cambio la ubicación
-if ($cambiar_ubicacion == "si")
-{
-    //consulto los datos de la nueva ubicacion
-    $consulta2 = $conexion->query("SELECT * FROM ubicaciones WHERE id = $ubicacion_nueva_id");
-
-    if ($filas2 = $consulta2->fetch_assoc())
-    {
-        $ubicacion_nueva_id = $filas2['id'];
-        $ubicacion_nueva = $filas2['ubicacion'];
-    }
-    else
-    {
-        $ubicacion_nueva_id = "";
-        $ubicacion_nueva = "sin ubicacion";
-    }
-
-    $actualizar = $conexion->query("UPDATE ventas_datos SET ubicacion_id = '$ubicacion_nueva_id', ubicacion = '$ubicacion_nueva' WHERE id = '$venta_id'");    
-    $actualizar = $conexion->query("UPDATE ventas_productos SET ubicacion_id = '$ubicacion_nueva_id', ubicacion = '$ubicacion_nueva' WHERE venta_id = '$venta_id'");
-
-    $actualizar = $conexion->query("UPDATE ubicaciones SET estado = 'ocupado' WHERE id = '$ubicacion_nueva_id'");
-    $actualizar = $conexion->query("UPDATE ubicaciones SET estado = 'libre' WHERE id = '$ubicacion_actual_id'");
-
-    if ($ubicacion_nueva_id == $ubicacion_actual_id)
-    {
-        $actualizar = $conexion->query("UPDATE ubicaciones SET estado = 'ocupado' WHERE id = '$ubicacion_actual_id'");
-    }    
-
-    $mensaje = 'Se cambió la ubicación de <b>' . ucfirst($ubicacion_actual) . '</b> a <b>' . ucfirst($ubicacion_nueva) . '</b>';
-    $body_snack = 'onLoad="Snackbar()"';
-    $mensaje_tema = "aviso";
-}
-?>
 
 <?php
 //actualizo la propina
@@ -236,6 +164,7 @@ else
     {
         $ubicacion_id = $fila_venta['ubicacion_id'];
         $ubicacion = $fila_venta['ubicacion'];
+        $cliente_id = $fila_venta['cliente_id'];
         $tipo_pago_id = $fila_venta['tipo_pago_id'];
         $tipo_pago = $fila_venta['tipo_pago'];
         $venta_descuento = $fila_venta['descuento_id'];
@@ -245,6 +174,7 @@ else
         $usuario_actual_id = $fila_venta['usuario_id'];
         $pago = $fila_venta['pago'];
         $fecha_pago = date('Y/m/d', strtotime($fila_venta['fecha_pago']));
+        $venta_consecutivo = $fila_venta['consecutivo'];
 
         if ($venta_descuento == "99")
         {
@@ -489,8 +419,6 @@ else
 
 
 
-
-
 <?php 
 //calculo el maximo del campo dinero recibido
 if ((strlen($venta_total) <= 5 ))
@@ -540,7 +468,7 @@ if (strlen($venta_total) == 7 )
         </div>
         
         <div class="rdm-toolbar--derecha">
-            <h2 class="rdm-toolbar--titulo"></h2>
+            <h2 class="rdm-toolbar--titulo">$ <?php echo number_format($precio_neto_total, 2, ",", "."); ?></h2>
         </div>
     </div>
 
@@ -561,9 +489,12 @@ if (strlen($venta_total) == 7 )
 
         <div class="rdm-tarjeta--primario-largo">
             <h1 class="rdm-tarjeta--titulo-largo">Total a pagar</h1>
-            <h2 class="rdm-tarjeta--subtitulo-largo">Venta No <?php echo "$venta_id"; ?></h2>
-            <h2 class="rdm-tarjeta--dashboard-titulo-positivo">$<?php echo number_format($venta_total, 2, ",", "."); ?></h2>
+            <h2 class="rdm-tarjeta--subtitulo-largo">Venta No <?php echo "$venta_consecutivo"; ?></h2>
+            <h2 class="rdm-tarjeta--dashboard-titulo-positivo">$ <?php echo number_format($venta_total, 2, ",", "."); ?></h2>
         </div>
+
+
+        
 
         
 
@@ -571,6 +502,7 @@ if (strlen($venta_total) == 7 )
     
             <form action="ventas_recibo.php" method="post">
                 <input type="hidden" name="venta_id" value="<?php echo "$venta_id";?>" />
+                <input type="hidden" name="venta_consecutivo" value="<?php echo "$venta_consecutivo";?>" />
                 <input type="hidden" name="venta_total_bruto" value="<?php echo "$impuesto_base_total";?>" />
                 <input type="hidden" name="descuento_valor" value="<?php echo "$descuento_valor";?>" />
                 <input type="hidden" name="venta_total_neto" value="<?php echo "$venta_total";?>" />
@@ -591,7 +523,23 @@ if (strlen($venta_total) == 7 )
                 }
                 ?>
                 
-                <p class="rdm-formularios--submit"><button type="submit" class="rdm-boton--plano-resaltado" name="pagar" value="liquidar">Liquidar venta</button> <button type="submit" class="rdm-boton--plano" name="pagar" value="pendiente">Pendiente</button> <button type="submit" class="rdm-boton--plano" name="pagar" value="parcial">Pago parcial</button></p>
+                <p class="rdm-formularios--submit">
+
+                    <button type="submit" class="rdm-boton--plano-resaltado" name="pagar" value="liquidar">Liquidar venta</button>
+
+                    <?php if ($cliente_id != 0)
+                    {
+                    ?>
+
+                    <button type="submit" class="rdm-boton--plano" name="pagar" value="pendiente">Pendiente</button> 
+
+                    <button type="submit" class="rdm-boton--plano" name="pagar" value="parcial">Pago parcial</button>
+
+                    <?php 
+                    }
+                    ?>
+
+                </p>
 
             </form>
 
@@ -599,66 +547,7 @@ if (strlen($venta_total) == 7 )
 
     </section>
 
-    <h2 class="rdm-lista--titulo-largo">Imprimir</h2>
-
-    <section class="rdm-lista">        
-
-        <a class="ancla" name="pago"></a>
-
-        <a href="ventas_factura_imprimir.php?venta_id=<?php echo "$venta_id"; ?>&tipo_pago=<?php echo "$tipo_pago"; ?>" target="_blank">
-
-            <article class="rdm-lista--item-sencillo">
-                <div class="rdm-lista--izquierda-sencillo">
-                    <div class="rdm-lista--contenedor">
-                        <div class="rdm-lista--icono"><i class="zmdi zmdi-receipt zmdi-hc-2x"></i></div>
-                    </div>
-                    <div class="rdm-lista--contenedor">
-                        <h2 class="rdm-lista--titulo">Factura POS</h2>
-                        <h2 class="rdm-lista--texto-secundario">Pendiente de pago</h2>
-                    </div>
-                </div>
-                
-            </article>
-
-        </a>        
-
-        <a class="ancla" name="ubicacion"></a>        
-
-        <a href="ventas_factura_imprimir_a4medio.php?venta_id=<?php echo "$venta_id"; ?>&tipo_pago=<?php echo "$tipo_pago"; ?>" target="_blank">
-
-            <article class="rdm-lista--item-sencillo">
-                <div class="rdm-lista--izquierda-sencillo">
-                    <div class="rdm-lista--contenedor">
-                        <div class="rdm-lista--icono"><i class="zmdi zmdi-file-text zmdi-hc-2x"></i></div>
-                    </div>
-                    <div class="rdm-lista--contenedor">
-                        <h2 class="rdm-lista--titulo">Cuenta de cobro</h2>
-                        <h2 class="rdm-lista--texto-secundario">Pendiente de pago</h2>
-                    </div>
-                </div>
-                
-            </article>
-
-        </a>    
-
-        <a href="ventas_cotizacion_imprimir_a4medio.php?venta_id=<?php echo "$venta_id"; ?>&tipo_pago=<?php echo "$tipo_pago"; ?>" target="_blank">
-
-            <article class="rdm-lista--item-sencillo">
-                <div class="rdm-lista--izquierda-sencillo">
-                    <div class="rdm-lista--contenedor">
-                        <div class="rdm-lista--icono"><i class="zmdi zmdi-border-color zmdi-hc-2x"></i></div>
-                    </div>
-                    <div class="rdm-lista--contenedor">
-                        <h2 class="rdm-lista--titulo">Cotización</h2>
-                        <h2 class="rdm-lista--texto-secundario">Pendiente de pago</h2>
-                    </div>
-                </div>
-                
-            </article>
-
-        </a>        
-
-    </section>
+    
 
     
 
@@ -669,6 +558,7 @@ if (strlen($venta_total) == 7 )
         <?php
         //muestro el subtotal
         $mostrar_subtotal = "no";
+
         if ($mostrar_subtotal == "si")
         {
             ?>
@@ -680,7 +570,7 @@ if (strlen($venta_total) == 7 )
                     </div>
                     <div class="rdm-lista--contenedor">
                         <h2 class="rdm-lista--titulo">Subtotal</h2>
-                        <h2 class="rdm-lista--texto-valor">$<?php echo number_format($precio_neto_total, 2, ",", "."); ?></h2>
+                        <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($precio_neto_total, 2, ",", "."); ?></h2>
                     </div>
                 </div>
             </article>
@@ -692,6 +582,7 @@ if (strlen($venta_total) == 7 )
         <?php
         //muestro el subtotal
         $mostrar_base = "no";
+
         if ($mostrar_base == "si")
         {
             ?>
@@ -703,7 +594,7 @@ if (strlen($venta_total) == 7 )
                     </div>
                     <div class="rdm-lista--contenedor">
                         <h2 class="rdm-lista--titulo">Base</h2>
-                        <h2 class="rdm-lista--texto-valor">$<?php echo number_format($impuesto_base_total, 2, ",", "."); ?></h2>
+                        <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($impuesto_base_total, 2, ",", "."); ?></h2>
                     </div>
                 </div>
             </article>
@@ -721,7 +612,7 @@ if (strlen($venta_total) == 7 )
                         </div>
                         <div class="rdm-lista--contenedor">
                             <h2 class="rdm-lista--titulo">Impuestos</h2>
-                            <h2 class="rdm-lista--texto-valor">$<?php echo number_format($impuesto_valor_total, 2, ",", "."); ?></h2>
+                            <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($impuesto_valor_total, 2, ",", "."); ?></h2>
                         </div>
                     </div>
                 </article>
@@ -748,7 +639,7 @@ if (strlen($venta_total) == 7 )
                     </div>
                     <div class="rdm-lista--contenedor">
                         <h2 class="rdm-lista--titulo">Propina</h2>
-                        <h2 class="rdm-lista--texto-valor"><span class="rdm-lista--texto-positivo">+$<?php echo number_format($propina_valor, 2, ",", "."); ?> (<?php echo number_format($propina_porcentaje, 2, ",", "."); ?>%)</span></h2>
+                        <h2 class="rdm-lista--texto-valor"><span class="rdm-lista--texto-positivo">+$ <?php echo number_format($propina_valor, 2, ",", "."); ?> (<?php echo number_format($propina_porcentaje, 2, ",", "."); ?>%)</span></h2>
                     </div>
                 </div>
             </article>
@@ -810,7 +701,7 @@ if (strlen($venta_total) == 7 )
                         </div>
                         <div class="rdm-lista--contenedor">
                             <h2 class="rdm-lista--titulo"><?php echo ucfirst($descuento_actual) ?></h2>
-                            <h2 class="rdm-lista--texto-valor"><span class="rdm-lista--texto-negativo">-$<?php echo number_format($descuento_valor, 2, ",", "."); ?> (<?php echo number_format($venta_descuento_porcentaje, 2, ",", "."); ?>%)</span></h2>
+                            <h2 class="rdm-lista--texto-valor"><span class="rdm-lista--texto-negativo">-$ <?php echo number_format($descuento_valor, 2, ",", "."); ?> (<?php echo number_format($venta_descuento_porcentaje, 2, ",", "."); ?>%)</span></h2>
                         </div>
                     </div>
                     
@@ -825,29 +716,77 @@ if (strlen($venta_total) == 7 )
 
     </section>
 
-    <h2 class="rdm-lista--titulo-largo">Opciones de la venta</h2>
 
-    <section class="rdm-lista">        
+
+
+
+
+    <h2 class="rdm-lista--titulo-largo">Imprimir</h2>
+
+    <section class="rdm-lista">
 
         <a class="ancla" name="pago"></a>
 
-        <a href="ventas_pago_cambiar.php?venta_id=<?php echo "$venta_id";?>">
+        <a href="ventas_factura_imprimir.php?venta_id=<?php echo "$venta_id"; ?>&tipo_pago=<?php echo "$tipo_pago"; ?>" target="_blank">
 
             <article class="rdm-lista--item-sencillo">
                 <div class="rdm-lista--izquierda-sencillo">
                     <div class="rdm-lista--contenedor">
-                        <div class="rdm-lista--icono"><i class="zmdi zmdi-calendar-alt zmdi-hc-2x"></i></div>
+                        <div class="rdm-lista--icono"><i class="zmdi zmdi-receipt zmdi-hc-2x"></i></div>
                     </div>
                     <div class="rdm-lista--contenedor">
-                        <h2 class="rdm-lista--titulo">Pago</h2>
-                        <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst($pago);?> <?php echo ucfirst($fecha_pago);?></h2>
+                        <h2 class="rdm-lista--titulo">Factura POS</h2>
+                        <h2 class="rdm-lista--texto-secundario">Pendiente de pago</h2>
                     </div>
                 </div>
                 
             </article>
 
-        </a>
+        </a>        
 
+        <a class="ancla" name="ubicacion"></a>        
+
+        <a href="ventas_factura_imprimir_a4medio.php?venta_id=<?php echo "$venta_id"; ?>&tipo_pago=<?php echo "$tipo_pago"; ?>" target="_blank">
+
+            <article class="rdm-lista--item-sencillo">
+                <div class="rdm-lista--izquierda-sencillo">
+                    <div class="rdm-lista--contenedor">
+                        <div class="rdm-lista--icono"><i class="zmdi zmdi-file-text zmdi-hc-2x"></i></div>
+                    </div>
+                    <div class="rdm-lista--contenedor">
+                        <h2 class="rdm-lista--titulo">Cuenta de cobro</h2>
+                        <h2 class="rdm-lista--texto-secundario">Pendiente de pago</h2>
+                    </div>
+                </div>
+                
+            </article>
+
+        </a>    
+
+        <a href="ventas_cotizacion_imprimir_a4medio.php?venta_id=<?php echo "$venta_id"; ?>&tipo_pago=<?php echo "$tipo_pago"; ?>" target="_blank">
+
+            <article class="rdm-lista--item-sencillo">
+                <div class="rdm-lista--izquierda-sencillo">
+                    <div class="rdm-lista--contenedor">
+                        <div class="rdm-lista--icono"><i class="zmdi zmdi-border-color zmdi-hc-2x"></i></div>
+                    </div>
+                    <div class="rdm-lista--contenedor">
+                        <h2 class="rdm-lista--titulo">Cotización</h2>
+                        <h2 class="rdm-lista--texto-secundario">Pendiente de pago</h2>
+                    </div>
+                </div>
+                
+            </article>
+
+        </a>        
+
+    </section>
+
+
+
+    <h2 class="rdm-lista--titulo-largo">Opciones de la venta</h2>
+
+    <section class="rdm-lista">
         
 
         <a class="ancla" name="ubicacion"></a>
@@ -872,7 +811,7 @@ if (strlen($venta_total) == 7 )
 
         <a class="ancla" name="atencion"></a>
 
-        <a href="ventas_atendido_cambiar.php?venta_id=<?php echo "$venta_id";?>">
+        <a href="ventas_atendido_cambiar.php?venta_id=<?php echo "$venta_id";?>&url=ventas_pagar.php">
 
             <article class="rdm-lista--item-sencillo">
                 <div class="rdm-lista--izquierda-sencillo">

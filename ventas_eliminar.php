@@ -47,6 +47,7 @@ else
         $venta_descuento_porcentaje = $fila_venta['descuento_porcentaje'];
         $venta_descuento_valor = $fila_venta['descuento_valor'];
         $venta_propina = $fila_venta['propina'];
+        $venta_consecutivo = $fila_venta['consecutivo'];
 
         if ($tipo_pago != "efectivo")
         {
@@ -219,13 +220,14 @@ else
 
     <form action="ventas_ubicaciones.php" method="post">
         <input type="hidden" name="venta_id" value="<?php echo $venta_id; ?>">
+        <input type="hidden" name="venta_consecutivo" value="<?php echo $venta_consecutivo; ?>">
         <input type="hidden" name="ubicacion_id" value="<?php echo $ubicacion_id; ?>">
         <input type="hidden" name="venta_total" value="<?php echo $venta_total; ?>">
     
         <section class="rdm-tarjeta">
 
             <div class="rdm-tarjeta--primario-largo">
-                <h1 class="rdm-tarjeta--titulo-largo">¿Eliminar venta No <?php echo "$venta_id"; ?>?</h1>
+                <h1 class="rdm-tarjeta--titulo-largo">¿Eliminar venta No <?php echo "$venta_consecutivo"; ?>?</h1>
             </div>
 
             <div class="rdm-tarjeta--cuerpo">
@@ -247,7 +249,7 @@ else
             </div>
 
             <div class="rdm-tarjeta--acciones-izquierda">
-                <button type="submit" class="rdm-boton--plano-resaltado" name="eliminar_venta" value="si">Eliminar</button> <a href="ventas_pagar.php?venta_id=<?php echo "$venta_id";?>#eliminar"><button type="button" class="rdm-boton--plano" name="cancelar" value="si">Cancelar</button></a>
+                <button type="submit" class="rdm-boton--plano-resaltado" name="eliminar_venta" value="si">Eliminar</button> <a href="ventas_pagar.php?venta_id=<?php echo "$venta_id";?>?venta_consecutivo=<?php echo "$venta_consecutivo";?>#eliminar"><button type="button" class="rdm-boton--plano" name="cancelar" value="si">Cancelar</button></a>
             </div>
 
         </section>

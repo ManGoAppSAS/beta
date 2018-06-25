@@ -222,64 +222,24 @@ if ($fila_permisos = $consulta_permisos->fetch_assoc())
         }
         ?>
 
-
-        <?php
-        //le doy acceso al modulo segun el perfil que tenga
-        if ($ventas == "si")
-        {
-        ?>
-
-        <a class="ancla" name="ventas"></a>
+        <a class="ancla" name="cuentas_cobrar"></a>
         
-        <a href="">
+        <a href="cuentas_cobrar_ver.php">
 
             <article class="rdm-lista--item-sencillo">
                 <div class="rdm-lista--izquierda">
                     <div class="rdm-lista--contenedor">
-                        <div class="rdm-lista--icono"><i class="zmdi zmdi-arrow-split zmdi-hc-2x"></i></div>
+                        <div class="rdm-lista--icono"><i class="zmdi zmdi-long-arrow-down zmdi-hc-2x"></i></div>
                     </div>
                     <div class="rdm-lista--contenedor">
-                        <h2 class="rdm-lista--titulo">Ingresos y egresos</h2>
-                        <h2 class="rdm-lista--texto-secundario">Generar comprobantes de ingresos y egresos</h2>
+                        <h2 class="rdm-lista--titulo">Cuentas por cobrar</h2>
+                        <h2 class="rdm-lista--texto-secundario">Gestionar las cuentas por cobrar</h2>
                     </div>
                 </div>
                 
             </article>
 
         </a>
-
-        <?php 
-        }
-        ?>
-
-        <?php
-        //le doy acceso al modulo segun el perfil que tenga
-        if ($ventas == "si")
-        {
-        ?>
-
-        <a class="ancla" name="ventas"></a>
-        
-        <a href="">
-
-            <article class="rdm-lista--item-sencillo">
-                <div class="rdm-lista--izquierda">
-                    <div class="rdm-lista--contenedor">
-                        <div class="rdm-lista--icono"><i class="zmdi zmdi-download zmdi-hc-2x"></i></div>
-                    </div>
-                    <div class="rdm-lista--contenedor">
-                        <h2 class="rdm-lista--titulo">Cartera</h2>
-                        <h2 class="rdm-lista--texto-secundario">Administrar pagos y abonos de saldos pendientes</h2>
-                    </div>
-                </div>
-                
-            </article>
-
-        </a>
-
-        <?php 
-        }
-        ?>
 
         <?php
         //le doy acceso al modulo segun el perfil que tenga

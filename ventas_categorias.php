@@ -57,28 +57,29 @@ if ($eliminar == 'si')
 }
 ?>
 
-
-
 <?php
-//consulto si hay una venta en la ubicacion en estado OCUPADO
+//consulto si hay una venta en la ubicacion en estado OCUPADO en ese local
 $consulta = $conexion->query("SELECT * FROM ventas_datos WHERE local_id = '$sesion_local_id' and estado = 'ocupado' and ubicacion_id = '$ubicacion_id'");
 
 //si ya existe una venta creada en esa ubicacion en estado OCUPADO consulto el id de la venta
 if ($fila = $consulta->fetch_assoc())
 {
-    $venta_id = $fila['id'];
-
-    
+    $venta_id = $fila['id'];    
 }
 else
 {
     //si no la hay guardo los datos iniciales de la venta
-    $insercion = $conexion->query("INSERT INTO ventas_datos values ('', '$ahora', '', '$sesion_id', '$sesion_local_id', '$ubicacion_id', '$ubicacion', '0', '1', 'efectivo', 'ocupado', '0', '0', '0', '0', '$sesion_local_propina', '0', '', '', 'contado', '$ahora', '0')");
+
+    //consulto la cantidad de ventas en este local para adquirir el consecutivo de la venta           
+    $consulta_consecutivo = $conexion->query("SELECT * FROM ventas_datos WHERE local_id = '$sesion_local_id'");
+    $consecutivo = ($consulta_consecutivo->num_rows) + 1;
+
+    $insercion = $conexion->query("INSERT INTO ventas_datos values ('', '$ahora', '', '$sesion_id', '$sesion_local_id', '$ubicacion_id', '$ubicacion', '0', '1', 'efectivo', 'ocupado', '0', '0', '0', '0', '$sesion_local_propina', '0', '', '', 'contado', '$ahora', '0', '$consecutivo')");
 
     //consulto el ultimo id que se ingreso para tenerlo como id de la venta
     $venta_id = $conexion->insert_id;
 
-    $mensaje = 'Venta <b>No ' . ucfirst($venta_id) . '</b> creada';
+    $mensaje = 'Venta <b>No ' . ucfirst($consecutivo) . '</b> creada';
     $body_snack = 'onLoad="Snackbar()"';
     $mensaje_tema = "aviso";
    
@@ -161,7 +162,7 @@ while ($fila_venta_total = $consulta_venta_total->fetch_assoc())
         </div>
         
         <div class="rdm-toolbar--derecha">
-            <h2 class="rdm-toolbar--titulo">$<?php echo number_format($venta_total, 2, ",", "."); ?></h2>
+            <h2 class="rdm-toolbar--titulo">$ <?php echo number_format($venta_total, 2, ",", "."); ?></h2>
         </div>
     </div>
 

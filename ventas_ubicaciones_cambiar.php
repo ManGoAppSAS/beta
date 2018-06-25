@@ -129,7 +129,14 @@ else
                             }
                             else
                             {
-                                $imagen = '<div class="rdm-lista--icono"><i '.$estado_color.' class="zmdi zmdi-seat zmdi-hc-2x"></i></div>';
+                                if ($tipo == "domicilio")
+                                {
+                                    $imagen = '<div class="rdm-lista--icono"><i '.$estado_color.' class="zmdi zmdi-bike zmdi-hc-2x"></i></div>';
+                                }
+                                else
+                                {
+                                    $imagen = '<div class="rdm-lista--icono"><i '.$estado_color.' class="zmdi zmdi-seat zmdi-hc-2x"></i></div>';
+                                }
                             }
                         }
                     }
@@ -160,9 +167,21 @@ else
             <h2 class="rdm-toolbar--titulo">Cambiar ubicación</h2>
         </div>
     </div>
+
+    <div class="rdm-toolbar--fila-tab">
+        <div class="rdm-toolbar--centro">
+            <a href="ventas_ubicaciones.php"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-inbox zmdi-hc-2x"></i></div> <span class="rdm-tipografia--leyenda">Nueva Venta</span></a>
+        </div>
+        <div class="rdm-toolbar--centro">
+            <a href="ventas_resumen.php?venta_id=<?php echo "$venta_id";?>"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-view-list-alt zmdi-hc-2x"></i></div> <span class="rdm-tipografia--leyenda">Resúmen</span></a>
+        </div>
+        <div class="rdm-toolbar--derecha">
+            <a href="ventas_pagar.php?venta_id=<?php echo "$venta_id";?>"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-money zmdi-hc-2x"></i></div> <span class="rdm-tipografia--leyenda">Pagar</span></a>
+        </div>
+    </div>
 </header>
 
-<main class="rdm--contenedor-toolbar">
+<main class="rdm--contenedor-toolbar-tabs">
 
     <h2 class="rdm-lista--titulo-largo">Ubicación actual</h2>
 
@@ -258,7 +277,14 @@ else
                                 }
                                 else
                                 {
-                                    $imagen = '<div class="rdm-lista--icono"><i '.$estado_color.' class="zmdi zmdi-seat zmdi-hc-2x"></i></div>';
+                                    if ($tipo == "domicilio")
+                                    {
+                                        $imagen = '<div class="rdm-lista--icono"><i '.$estado_color.' class="zmdi zmdi-bike zmdi-hc-2x"></i></div>';
+                                    }
+                                    else
+                                    {
+                                        $imagen = '<div class="rdm-lista--icono"><i '.$estado_color.' class="zmdi zmdi-seat zmdi-hc-2x"></i></div>';
+                                    }
                                 }
                             }
                         }
@@ -266,7 +292,7 @@ else
                 }
                 ?>
                 
-                <a href="ventas_pagar.php?cambiar_ubicacion=si&venta_id=<?php echo "$venta_id";?>&ubicacion_actual_id=<?php echo "$ubicacion_actual_id";?>&ubicacion_actual=<?php echo "$ubicacion_actual";?>&ubicacion_nueva_id=<?php echo "$ubicacion_id";?>&ubicacion_nueva=<?php echo "$ubicacion";?>">
+                <a href="ventas_ubicaciones_cambiar.php?cambiar_ubicacion=si&venta_id=<?php echo "$venta_id";?>&ubicacion_actual_id=<?php echo "$ubicacion_actual_id";?>&ubicacion_actual=<?php echo "$ubicacion_actual";?>&ubicacion_nueva_id=<?php echo "$ubicacion_id";?>&ubicacion_nueva=<?php echo "$ubicacion";?>">
                     <article class="rdm-lista--item-sencillo">
                         <div class="rdm-lista--izquierda-sencillo">
                             <div class="rdm-lista--contenedor">

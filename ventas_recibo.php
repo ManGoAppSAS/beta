@@ -19,6 +19,7 @@ include ("sis/variables_sesion.php");
 if(isset($_POST['pagar'])) $pagar = $_POST['pagar']; elseif(isset($_GET['pagar'])) $pagar = $_GET['pagar']; else $pagar = null;
 
 if(isset($_POST['venta_id'])) $venta_id = $_POST['venta_id']; elseif(isset($_GET['venta_id'])) $venta_id = $_GET['venta_id']; else $venta_id = null;
+if(isset($_POST['venta_consecutivo'])) $venta_consecutivo = $_POST['venta_consecutivo']; elseif(isset($_GET['venta_consecutivo'])) $venta_consecutivo = $_GET['venta_consecutivo']; else $venta_consecutivo = null;
 if(isset($_POST['venta_total_bruto'])) $venta_total_bruto = $_POST['venta_total_bruto']; elseif(isset($_GET['venta_total_bruto'])) $venta_total_bruto = $_GET['venta_total_bruto']; else $venta_total_bruto = null;
 if(isset($_POST['venta_total'])) $venta_total = $_POST['venta_total']; elseif(isset($_GET['venta_total'])) $venta_total = $_GET['venta_total']; else $venta_total = null;   
 if(isset($_POST['descuento_valor'])) $descuento_valor = $_POST['descuento_valor']; elseif(isset($_GET['descuento_valor'])) $descuento_valor = $_GET['descuento_valor']; else $descuento_valor = null;
@@ -52,66 +53,103 @@ else
 }
 ?>
 
+<?php 
+if ($pagar == "liquidar")
+{
+    if (empty($dinero))
+    {
+        $dinero = $venta_total_neto;
+    }
 
+    $dinero = str_replace('.','',$dinero);
+    $cambio = $dinero - $venta_total_neto;
+    $titulo_resultado = "cambio";
+}
+?>
 
 <?php
 //liquido la venta
 if (($pagar == "liquidar") and ($liquidar_venta == "si"))
 {
+    
+
     $actualizar = $conexion->query("UPDATE ventas_datos SET fecha_cierre = '$ahora', estado = 'liquidado', total_bruto = '$venta_total_bruto', descuento_valor = '$descuento_valor', total_neto = '$venta_total_neto', eliminar_motivo = 'no aplica' WHERE id = '$venta_id'");
+
+    $insercion_comprobante = $conexion->query("INSERT INTO comprobantes_ingreso values ('', '$ahora', '$sesion_id', '$venta_id', '$venta_total_neto', '')");
     
     $actualizar = $conexion->query("UPDATE ubicaciones SET estado = 'libre' WHERE id = '$ubicacion_id'");
     
     $actualizar = $conexion->query("UPDATE ventas_productos SET estado = 'liquidado' WHERE venta_id = '$venta_id'");
 
-    $mensaje = "Venta No <b>$venta_id</b> liquidada y guardada";
+    $mensaje = "Venta No <b>$venta_consecutivo</b> liquidada y guardada";
     $body_snack = 'onLoad="Snackbar()"';
     $mensaje_tema = "aviso";
+}
+?>
+
+<?php 
+if ($pagar == "pendiente")
+{    
+    $dinero = 0;
+    $cambio =  $venta_total_neto - $dinero;
+    $titulo_resultado = "venta pendiente";
 }
 ?>
 
 <?php
 //dejo la venta pendiente
 if (($pagar == "pendiente") and ($liquidar_venta == "si"))
-{
-    $cambio = $venta_total;
-    
+{    
     $actualizar = $conexion->query("UPDATE ventas_datos SET fecha_cierre = '$ahora', estado = 'pendiente', total_bruto = '$venta_total_bruto', descuento_valor = '$descuento_valor', total_neto = '$venta_total_neto', eliminar_motivo = 'no aplica', pago = 'credito', saldo_pendiente = '$venta_total_neto' WHERE id = '$venta_id'");
+
+    
     
     $actualizar = $conexion->query("UPDATE ubicaciones SET estado = 'libre' WHERE id = '$ubicacion_id'");
     
     $actualizar = $conexion->query("UPDATE ventas_productos SET estado = 'pendiente' WHERE venta_id = '$venta_id'");
 
-    $mensaje = "Venta No <b>$venta_id</b> guardada como pendiente";
+    $mensaje = "Venta No <b>$venta_consecutivo</b> guardada como pendiente";
     $body_snack = 'onLoad="Snackbar()"';
     $mensaje_tema = "aviso";
+}
+?>
+
+<?php 
+if ($pagar == "parcial")
+{    
+    $dinero = str_replace('.','',$dinero);
+    $pago_parcial = $venta_total_neto - $dinero;
+    $cambio = $pago_parcial;
+    $titulo_resultado = "saldo pendiente";
 }
 ?>
 
 <?php
 //hago un pago parcial
 if (($pagar == "parcial") and ($liquidar_venta == "si"))
-{
-    $dinero = str_replace('.','',$dinero);
-
-    $pago_parcial = $venta_total_neto - $dinero;
+{    
 
     $actualizar = $conexion->query("UPDATE ventas_datos SET fecha_cierre = '$ahora', estado = 'pendiente', total_bruto = '$venta_total_bruto', descuento_valor = '$descuento_valor', total_neto = '$venta_total_neto', eliminar_motivo = 'no aplica', pago = 'credito', saldo_pendiente = '$pago_parcial' WHERE id = '$venta_id'");
+
+    $insercion_comprobante = $conexion->query("INSERT INTO comprobantes_ingreso values ('', '$ahora', '$sesion_id', '$venta_id', '$dinero', '')");
     
     $actualizar = $conexion->query("UPDATE ubicaciones SET estado = 'libre' WHERE id = '$ubicacion_id'");
     
     $actualizar = $conexion->query("UPDATE ventas_productos SET estado = 'pendiente' WHERE venta_id = '$venta_id'");
 
-    $mensaje = "Venta No <b>$venta_id</b> guardada como pendiente";
+    $mensaje = "Venta No <b>$venta_consecutivo</b> guardada como pendiente";
     $body_snack = 'onLoad="Snackbar()"';
     $mensaje_tema = "aviso";
 }
 ?>
 
-<?php
-//consulto los datos de la venta
-$dinero = str_replace('.','',$dinero);
 
+
+
+
+
+
+<?php
 //datos de la venta
 include ("sis/ventas_datos.php");
 ?>
@@ -129,6 +167,13 @@ if ($consulta_plantilla->num_rows == 0)
         $plantilla_titulo = "Factura / Recibo";
         $plantilla_texto_superior = "";
         $plantilla_texto_inferior = "";
+        $regimen = "";
+        $resolucion_numero = "";
+        $resolucion_fecha = "";
+        $resolucion_prefijo = "";
+        $resolucion_desde = "";
+        $resolucion_hasta = "";
+
     }
     else
     {
@@ -137,10 +182,14 @@ if ($consulta_plantilla->num_rows == 0)
             $plantilla_titulo = $fila_generica['titulo'];
             $plantilla_texto_superior = $fila_generica['texto_superior'];
             $plantilla_texto_inferior = $fila_generica['texto_inferior'];
+            $regimen = $fila_generica['regimen'];
+            $resolucion_numero = $fila_generica['resolucion_numero'];
+            $resolucion_fecha = date('Y/m/d', strtotime($fila_generica['resolucion_fecha']));
+            $resolucion_prefijo = $fila_generica['resolucion_prefijo'];
+            $resolucion_desde = $fila_generica['resolucion_desde'];
+            $resolucion_hasta = $fila_generica['resolucion_hasta'];
         }
-    }
-
-        
+    }        
 }
 else
 {
@@ -149,6 +198,12 @@ else
         $plantilla_titulo = $fila_plantilla['titulo'];
         $plantilla_texto_superior = $fila_plantilla['texto_superior'];
         $plantilla_texto_inferior = $fila_plantilla['texto_inferior'];
+        $regimen = $fila_plantilla['regimen'];
+        $resolucion_numero = $fila_plantilla['resolucion_numero'];
+        $resolucion_fecha = date('Y/m/d', strtotime($fila_plantilla['resolucion_fecha']));
+        $resolucion_prefijo = $fila_plantilla['resolucion_prefijo'];
+        $resolucion_desde = $fila_plantilla['resolucion_desde'];
+        $resolucion_hasta = $fila_plantilla['resolucion_hasta'];
     }
 }
 ?>
@@ -189,7 +244,7 @@ if ($enviar_correo == "si")
         $mail->setFrom('notificaciones@mangoapp.co', ucfirst($sesion_local));
 
         //Destinatario
-        $mail->addAddress($correo_cliente);
+        $mail->addAddress($correo);
 
         //Responder a
         $mail->addReplyTo('notificaciones@mangoapp.co', 'ManGo! App');        
@@ -222,7 +277,7 @@ if ($enviar_correo == "si")
                         <article class="rdm-factura--contenedor--imprimir" style="width: 90%; margin: 0px auto;">
 
                             <div class="rdm-factura--texto" style="text-align: center; width: 100%;">
-                                <h3>' . ucfirst(nl2br($plantilla_titulo)) . ' # ' . $venta_id . '</h3>
+                                <h3>' . ucfirst(nl2br($plantilla_titulo)) . ' ' . $venta_consecutivo . '</h3>
                                 <h3>' . ucfirst(nl2br($plantilla_texto_superior)) . '</h3>
                                 <h3>' . ucfirst($sesion_local) . '<br>
                                 ' . ucfirst($sesion_local_direccion) . '<br>
@@ -360,13 +415,7 @@ if ($enviar_correo == "si")
                                         //total de la venta con descuento y propina
                                         $venta_total = ($precio_neto_total + $propina_valor) - $descuento_valor;
 
-                                        //cambio
-                                        if ($dinero == 0)
-                                        {
-                                            $dinero = $venta_total;
-                                        }
-
-                                        $cambio = $dinero - $venta_total;  
+                                        
 
 
 
@@ -566,7 +615,7 @@ if ($enviar_correo == "si")
         echo 'Mensaje no pudo ser enviado: ', $mail->ErrorInfo;
     }
 
-    $mensaje = "Recibo de venta No <b>$venta_id</b> enviado al correo <b>$correo</b>";
+    $mensaje = "Recibo de venta No <b>$venta_consecutivo</b> enviado al correo <b>$correo</b>";
     $body_snack = 'onLoad="Snackbar()"';
     $mensaje_tema = "aviso";
 }
@@ -590,7 +639,7 @@ if ($enviar_correo == "si")
     <div class="rdm-toolbar--fila">
         <div class="rdm-toolbar--izquierda">
             <a href="ventas_ubicaciones.php"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-arrow-left zmdi-hc-2x"></i></div></a>
-            <h2 class="rdm-toolbar--titulo">Venta No <?php echo "$venta_id"; ?> liquidada</h2>
+            <h2 class="rdm-toolbar--titulo">Venta No <?php echo "$venta_consecutivo"; ?> liquidada</h2>
         </div>
     </div>
 </header>
@@ -600,8 +649,8 @@ if ($enviar_correo == "si")
     <section class="rdm-tarjeta">
 
         <div class="rdm-tarjeta--primario-largo">
-            <h1 class="rdm-tarjeta--titulo-largo">Cambio / Saldo pendiente</h1>
-            <h2 class="rdm-tarjeta--dashboard-titulo-positivo">$<?php echo number_format($cambio, 2, ",", "."); ?></h2>
+            <h1 class="rdm-tarjeta--titulo-largo"><?php echo ucfirst($titulo_resultado) ?></h1>
+            <h2 class="rdm-tarjeta--dashboard-titulo-positivo">$ <?php echo number_format($cambio, 2, ",", "."); ?></h2>
         </div>
 
         <article class="rdm-lista--item-sencillo">
@@ -611,7 +660,7 @@ if ($enviar_correo == "si")
                 </div>
                 <div class="rdm-lista--contenedor">
                     <h2 class="rdm-lista--titulo">Dinero recibido</h2>
-                    <h2 class="rdm-lista--texto-valor">$<?php echo number_format($dinero, 2, ",", "."); ?></h2>
+                    <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($dinero, 2, ",", "."); ?></h2>
                 </div>
             </div>
         </article>
@@ -623,7 +672,7 @@ if ($enviar_correo == "si")
                 </div>
                 <div class="rdm-lista--contenedor">
                     <h2 class="rdm-lista--titulo">Total a pagar</h2>
-                    <h2 class="rdm-lista--texto-valor">$<?php echo number_format($total_neto, 2, ",", "."); ?></h2>
+                    <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($total_neto, 2, ",", "."); ?></h2>
                 </div>
             </div>
         </article>
@@ -640,7 +689,7 @@ if ($enviar_correo == "si")
 
         <a class="ancla" name="pago"></a>
 
-        <a href="ventas_recibo_imprimir.php?venta_id=<?php echo "$venta_id"; ?>&dinero=<?php echo "$dinero"; ?>&tipo_pago=<?php echo "$tipo_pago"; ?>" target="_blank">
+        <a href="ventas_recibo_imprimir.php?venta_id=<?php echo "$venta_id"; ?>&venta_consecutivo=<?php echo "$venta_consecutivo"; ?>&dinero=<?php echo "$dinero"; ?>&tipo_pago=<?php echo "$tipo_pago"; ?>" target="_blank">
 
             <article class="rdm-lista--item-sencillo">
                 <div class="rdm-lista--izquierda-sencillo">
@@ -659,7 +708,7 @@ if ($enviar_correo == "si")
 
         <a class="ancla" name="ubicacion"></a>        
 
-        <a href="ventas_recibo_imprimir_a4medio.php?venta_id=<?php echo "$venta_id"; ?>&dinero=<?php echo "$dinero"; ?>&tipo_pago=<?php echo "$tipo_pago"; ?>" target="_blank">
+        <a href="ventas_recibo_imprimir_a4medio.php?venta_id=<?php echo "$venta_id"; ?>&venta_consecutivo=<?php echo "$venta_consecutivo"; ?>&dinero=<?php echo "$dinero"; ?>&tipo_pago=<?php echo "$tipo_pago"; ?>" target="_blank">
 
             <article class="rdm-lista--item-sencillo">
                 <div class="rdm-lista--izquierda-sencillo">
@@ -727,11 +776,18 @@ if ($enviar_correo == "si")
         <article class="rdm-factura--contenedor">
 
             <div class="rdm-factura--texto">
-                <h3><?php echo ucfirst(nl2br($plantilla_titulo))?> # <?php echo "$venta_id"; ?></h3>
+                <h3><?php echo ucfirst(nl2br($plantilla_titulo))?> # <?php echo "$resolucion_prefijo"; ?><?php echo "$venta_consecutivo"; ?></h3>
                 <h3><?php echo ucfirst(nl2br($plantilla_texto_superior))?></h3>
                 <h3><?php echo ucfirst($sesion_local)?><br>
                 <?php echo ucfirst($sesion_local_direccion)?><br>
                 <?php echo ucfirst($sesion_local_telefono)?></h3>
+            </div>
+
+            <div class="rdm-factura--texto">
+                <h3>Régimen <?php echo ucfirst($regimen)?><br>
+                    Resolución No <?php echo ucfirst($resolucion_numero)?><br>
+                    de <?php echo ucfirst($resolucion_fecha)?><br>
+                    Rango <?php echo ($resolucion_prefijo)?><?php echo ucfirst($resolucion_desde)?> - <?php echo ($resolucion_prefijo)?><?php echo ucfirst($resolucion_hasta)?></h3>
             </div>
 
             <div class="rdm-factura--texto">
@@ -940,13 +996,7 @@ if ($enviar_correo == "si")
                     //total de la venta con descuento y propina
                     $venta_total = ($precio_neto_total + $propina_valor) - $descuento_valor;
 
-                    //cambio
-                    if ($dinero == 0)
-                    {
-                        $dinero = $venta_total;
-                    }
-
-                    $cambio = $dinero - $venta_total;   
+                      
 
                     ?>
 

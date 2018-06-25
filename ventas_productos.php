@@ -134,7 +134,7 @@ while ($fila_venta_total = $consulta_venta_total->fetch_assoc())
         </div>
         
         <div class="rdm-toolbar--derecha">
-            <h2 class="rdm-toolbar--titulo">$<?php echo number_format($venta_total, 2, ",", "."); ?></h2>
+            <h2 class="rdm-toolbar--titulo">$ <?php echo number_format($venta_total, 2, ",", "."); ?></h2>
         </div>
     </div>
 
@@ -273,7 +273,7 @@ while ($fila_venta_total = $consulta_venta_total->fetch_assoc())
                     <div class="rdm-lista--contenedor">
                         <h2 class="rdm-lista--titulo"><?php echo ucfirst("$producto"); ?></h2>
                         <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst("$descripcion"); ?></h2>
-                        <h2 class="rdm-lista--texto-valor">$<?php echo number_format($precio_neto, 2, ",", "."); ?></h2>
+                        <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($precio_neto, 2, ",", "."); ?></h2>
 
 
                         <form action="<?php echo $_SERVER['PHP_SELF']; ?>#<?php echo $producto_id; ?>" method="post" enctype="multipart/form-data">

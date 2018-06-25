@@ -17,6 +17,7 @@ include ("sis/variables_sesion.php");
 <?php
 //capturo las variables que pasan por URL o formulario
 if(isset($_POST['venta_id'])) $venta_id = $_POST['venta_id']; elseif(isset($_GET['venta_id'])) $venta_id = $_GET['venta_id']; else $venta_id = null;
+if(isset($_POST['venta_consecutivo'])) $venta_consecutivo = $_POST['venta_consecutivo']; elseif(isset($_GET['venta_consecutivo'])) $venta_consecutivo = $_GET['venta_consecutivo']; else $venta_consecutivo = null;
 if(isset($_POST['venta_total'])) $venta_total = $_POST['venta_total']; elseif(isset($_GET['venta_total'])) $venta_total = $_GET['venta_total']; else $venta_total = null;   
 
 if(isset($_POST['dinero'])) $dinero = $_POST['dinero']; elseif(isset($_GET['dinero'])) $dinero = $_GET['dinero']; else $dinero = null;
@@ -35,7 +36,7 @@ if ($consulta_plantilla->num_rows == 0)
         $plantilla_titulo = "Factura / Recibo";
         $plantilla_texto_superior = "";
         $plantilla_texto_inferior = "";
-        $regimen = $fila_generica['regimen'];
+        $regimen = "";
         $resolucion_numero = "";
         $resolucion_fecha = "";
         $resolucion_prefijo = "";
@@ -79,7 +80,7 @@ else
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <title>ManGo! - Recibo de venta No <?php echo "$venta_id"; ?></title>
+    <title>ManGo! - <?php echo ucfirst(nl2br($plantilla_titulo))?> <?php echo "$resolucion_prefijo"; ?><?php echo "$venta_consecutivo"; ?></title>
     <?php
     //información del head
     include ("partes/head.php");
@@ -107,7 +108,8 @@ else
     <article class="rdm-factura--contenedor--imprimir">
 
         <div class="rdm-factura--texto">
-            <h3><?php echo ucfirst(nl2br($plantilla_titulo))?> # <?php echo "$venta_id"; ?></h3>
+            <img src="img/avatares/locales-<?php echo($sesion_local_id) ?>-<?php echo ($sesion_local_imagen_nombre) ?>.jpg" alt="" style="width: 30%">
+            <h3><?php echo ucfirst(nl2br($plantilla_titulo))?> <?php echo "$resolucion_prefijo"; ?><?php echo "$venta_consecutivo"; ?></h3>
             <h3><?php echo ucfirst(nl2br($plantilla_texto_superior))?></h3>
             <h3><?php echo ucfirst($sesion_local)?><br>
             <?php echo ucfirst($sesion_local_direccion)?><br>
@@ -120,10 +122,10 @@ else
         ?>
 
         <div class="rdm-factura--texto">
-            <h3><span class="rdm-formularios--ayuda">Resolución de facturación <br></span>Régimen <?php echo ucfirst($regimen)?><br>
+            <h3>Régimen <?php echo ucfirst($regimen)?><br>
                 Resolución No <?php echo ucfirst($resolucion_numero)?><br>
                 de <?php echo ucfirst($resolucion_fecha)?><br>
-                Rango <?php echo ($resolucion_prefijo)?> <?php echo ucfirst($resolucion_desde)?> - <?php echo ($resolucion_prefijo)?> <?php echo ucfirst($resolucion_hasta)?></h3>
+                Rango <?php echo ($resolucion_prefijo)?><?php echo ucfirst($resolucion_desde)?> - <?php echo ($resolucion_prefijo)?><?php echo ucfirst($resolucion_hasta)?></h3>
         </div>
 
         <div class="rdm-factura--texto">

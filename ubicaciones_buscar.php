@@ -121,7 +121,14 @@ if (isset($consultaBusqueda))
                             }
                             else
                             {
-                                $imagen = '<div class="rdm-lista--icono"><i class="zmdi zmdi-seat zmdi-hc-2x"></i></div>';
+                                if ($tipo == "domicilio")
+                                {
+                                    $imagen = '<div class="rdm-lista--icono"><i class="zmdi zmdi-bike zmdi-hc-2x"></i></div>';
+                                }
+                                else
+                                {
+                                    $imagen = '<div class="rdm-lista--icono"><i class="zmdi zmdi-seat zmdi-hc-2x"></i></div>';
+                                }
                             }
                         }
                     }

@@ -16,13 +16,20 @@ include ("sis/variables_sesion.php");
 
 <?php
 //capturo las variables que pasan por URL o formulario
+
+//consulta en tiempo real
 if(isset($_POST['consultaBusqueda'])) $consultaBusqueda = $_POST['consultaBusqueda']; elseif(isset($_GET['consultaBusqueda'])) $consultaBusqueda = $_GET['consultaBusqueda']; else $consultaBusqueda = null;
+
+//pagar
 if(isset($_POST['pagar'])) $pagar = $_POST['pagar']; elseif(isset($_GET['pagar'])) $pagar = $_GET['pagar']; else $pagar = null;
+
+//eliminar
 if(isset($_POST['eliminar_venta'])) $eliminar_venta = $_POST['eliminar_venta']; elseif(isset($_GET['eliminar_venta'])) $eliminar_venta = $_GET['eliminar_venta']; else $eliminar_venta = null;
 if(isset($_POST['eliminar_motivo'])) $eliminar_motivo = $_POST['eliminar_motivo']; elseif(isset($_GET['eliminar_motivo'])) $eliminar_motivo = $_GET['eliminar_motivo']; else $eliminar_motivo = null;
 
 if(isset($_POST['id'])) $id = $_POST['id']; elseif(isset($_GET['id'])) $id = $_GET['id']; else $id = null;
 if(isset($_POST['venta_id'])) $venta_id = $_POST['venta_id']; elseif(isset($_GET['venta_id'])) $venta_id = $_GET['venta_id']; else $venta_id = null;
+if(isset($_POST['venta_consecutivo'])) $venta_consecutivo = $_POST['venta_consecutivo']; elseif(isset($_GET['venta_consecutivo'])) $venta_consecutivo = $_GET['venta_consecutivo']; else $venta_consecutivo = null;
 if(isset($_POST['ubicacion'])) $ubicacion = $_POST['ubicacion']; elseif(isset($_GET['ubicacion'])) $ubicacion = $_GET['ubicacion']; else $ubicacion = null;
 if(isset($_POST['ubicacion_id'])) $ubicacion_id = $_POST['ubicacion_id']; elseif(isset($_GET['ubicacion_id'])) $ubicacion_id = $_GET['ubicacion_id']; else $ubicacion_id = null;
 if(isset($_POST['venta_usuario'])) $venta_usuario = $_POST['venta_usuario']; elseif(isset($_GET['venta_usuario'])) $venta_usuario = $_GET['venta_usuario']; else $venta_usuario = null;
@@ -37,6 +44,7 @@ if(isset($_POST['cambiar_usuario'])) $cambiar_usuario = $_POST['cambiar_usuario'
 if(isset($_POST['cambiar'])) $cambiar = $_POST['cambiar']; elseif(isset($_GET['cambiar'])) $cambiar = $_GET['cambiar']; else $cambiar = null;
 if(isset($_POST['ubicacion_actual_id'])) $ubicacion_actual_id = $_POST['ubicacion_actual_id']; elseif(isset($_GET['ubicacion_actual_id'])) $ubicacion_actual_id = $_GET['ubicacion_actual_id']; else $ubicacion_actual_id = null;
 
+//mensaje de la snackbar
 if(isset($_POST['mensaje'])) $mensaje = $_POST['mensaje']; elseif(isset($_GET['mensaje'])) $mensaje = $_GET['mensaje']; else $mensaje = null;
 if(isset($_POST['body_snack'])) $body_snack = $_POST['body_snack']; elseif(isset($_GET['body_snack'])) $body_snack = $_GET['body_snack']; else $body_snack = null;
 if(isset($_POST['mensaje_tema'])) $mensaje_tema = $_POST['mensaje_tema']; elseif(isset($_GET['mensaje_tema'])) $mensaje_tema = $_GET['mensaje_tema']; else $mensaje_tema = null;
@@ -50,17 +58,17 @@ if ($eliminar_venta == 'si')
 
     if ($borrar_venta)
     {
-        $borrar_venta_productos = $conexion->query("DELETE FROM ventas_productos WHERE venta_id = $venta_id");
+        $borrar_venta_productos = $conexion->query("UPDATE ventas_productos SET estado = 'eliminado' WHERE venta_id = $venta_id");
 
-        $actualizar = $conexion->query("UPDATE ubicaciones SET estado = 'libre' WHERE id = '$ubicacion_id'");
+        $actualizar_ubicacion = $conexion->query("UPDATE ubicaciones SET estado = 'libre' WHERE id = '$ubicacion_id'");
 
-        $mensaje = "Venta No <b>$venta_id</b> eliminada";
+        $mensaje = "Venta No <b>$venta_consecutivo</b> eliminada";
         $body_snack = 'onLoad="Snackbar()"';
         $mensaje_tema = "aviso";
     }
     else
     {
-        $mensaje = "No es posible eliminar la venta No <b>$venta_id</b>";
+        $mensaje = "No es posible eliminar la venta No <b>$venta_consecutivo</b>";
         $body_snack = 'onLoad="Snackbar()"';
         $mensaje_tema = "error";
     }
@@ -277,7 +285,14 @@ if ($eliminar_venta == "si")
                             }
                             else
                             {
-                                $imagen = '<div class="rdm-lista--icono"><i '.$estado_color.' class="zmdi zmdi-seat zmdi-hc-2x"></i></div>';
+                                if ($tipo == "domicilio")
+                                {
+                                    $imagen = '<div class="rdm-lista--icono"><i '.$estado_color.' class="zmdi zmdi-bike zmdi-hc-2x"></i></div>';
+                                }
+                                else
+                                {
+                                    $imagen = '<div class="rdm-lista--icono"><i '.$estado_color.' class="zmdi zmdi-seat zmdi-hc-2x"></i></div>';
+                                }
                             }
                         }
                     }
@@ -343,7 +358,7 @@ if ($eliminar_venta == "si")
 
                         $venta_total = $venta_total + $precio;
                     }
-                    $venta_total = "$".number_format($venta_total, 2, ",", ".")."";
+                    $venta_total = "$ ".number_format($venta_total, 2, ",", ".")."";
                 }
                 else
                 {
@@ -367,8 +382,7 @@ if ($eliminar_venta == "si")
             }
 
 
-
-            if ($tipo == "persona")
+            if (($tipo == "persona") or ($tipo == "domicilio"))
             {
                 $ventas_url = "ventas_clientes.php";
             }

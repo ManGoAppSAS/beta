@@ -102,7 +102,14 @@ if (isset($consultaBusqueda))
                             }
                             else
                             {
-                                $imagen = '<div class="rdm-lista--icono"><i '.$estado_color.' class="zmdi zmdi-seat zmdi-hc-2x"></i></div>';
+                                if ($tipo == "domicilio")
+                                {
+                                    $imagen = '<div class="rdm-lista--icono"><i '.$estado_color.' class="zmdi zmdi-bike zmdi-hc-2x"></i></div>';
+                                }
+                                else
+                                {
+                                    $imagen = '<div class="rdm-lista--icono"><i '.$estado_color.' class="zmdi zmdi-seat zmdi-hc-2x"></i></div>';
+                                }
                             }
                         }
                     }
@@ -167,7 +174,7 @@ if (isset($consultaBusqueda))
 
                         $venta_total = $venta_total + $precio;
                     }
-                    $venta_total = "$ ".number_format($venta_total, 0, ",", ".")."";
+                    $venta_total = "$ ".number_format($venta_total, 2, ",", ".")."";
                 }
                 else
                 {

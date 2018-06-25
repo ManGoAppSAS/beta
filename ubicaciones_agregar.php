@@ -111,7 +111,7 @@ if ($agregar == 'si')
                 <option value=""></option>
                 <option value="barra">Barra</option>
                 <option value="caja">Caja</option>
-                <option value="cotizacion">Cotización</option>
+                <option value="domicilio">Domicilio</option>
                 <option value="habitacion">Habitación</option>
                 <option value="mesa">Mesa</option>
                 <option value="persona">Persona</option>

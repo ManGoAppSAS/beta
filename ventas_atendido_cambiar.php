@@ -26,6 +26,8 @@ if(isset($_POST['usuario_nuevo_id'])) $usuario_nuevo_id = $_POST['usuario_nuevo_
 if(isset($_POST['mensaje'])) $mensaje = $_POST['mensaje']; elseif(isset($_GET['mensaje'])) $mensaje = $_GET['mensaje']; else $mensaje = null;
 if(isset($_POST['body_snack'])) $body_snack = $_POST['body_snack']; elseif(isset($_GET['body_snack'])) $body_snack = $_GET['body_snack']; else $body_snack = null;
 if(isset($_POST['mensaje_tema'])) $mensaje_tema = $_POST['mensaje_tema']; elseif(isset($_GET['mensaje_tema'])) $mensaje_tema = $_GET['mensaje_tema']; else $mensaje_tema = null;
+
+if(isset($_POST['url'])) $url = $_POST['url']; elseif(isset($_GET['url'])) $url = $_GET['url']; else $url = null;
 ?>
 
 <?php
@@ -113,13 +115,27 @@ else
 <header class="rdm-toolbar--contenedor">
     <div class="rdm-toolbar--fila">
         <div class="rdm-toolbar--izquierda">
-            <a href="ventas_pagar.php?venta_id=<?php echo "$venta_id";?>#atencion"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-arrow-left zmdi-hc-2x"></i></div></a>
+            <a href="<?php echo "$url";?>?venta_id=<?php echo "$venta_id";?>#atencion"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-arrow-left zmdi-hc-2x"></i></div></a>
             <h2 class="rdm-toolbar--titulo">Cambiar atención</h2>
+        </div>
+    </div>
+
+    <div class="rdm-toolbar--fila-tab">
+        <div class="rdm-toolbar--centro">
+            <a href="ventas_ubicaciones.php"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-inbox zmdi-hc-2x"></i></div> <span class="rdm-tipografia--leyenda">Nueva Venta</span></a>
+        </div>
+        <div class="rdm-toolbar--centro">
+            <a href="ventas_resumen.php?venta_id=<?php echo "$venta_id";?>"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-view-list-alt zmdi-hc-2x"></i></div> <span class="rdm-tipografia--leyenda">Resúmen</span></a>
+        </div>
+        <div class="rdm-toolbar--derecha">
+            <a href="ventas_pagar.php?venta_id=<?php echo "$venta_id";?>"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-money zmdi-hc-2x"></i></div> <span class="rdm-tipografia--leyenda">Pagar</span></a>
         </div>
     </div>
 </header>
 
-<main class="rdm--contenedor-toolbar">
+
+
+<main class="rdm--contenedor-toolbar-tabs">
 
     <h2 class="rdm-lista--titulo-largo">Atención actual</h2>
 
@@ -186,7 +202,7 @@ else
                 }
                 ?>
                 
-                <a href="ventas_pagar.php?cambiar_atencion=si&venta_id=<?php echo "$venta_id";?>&usuario_actual_id=<?php echo "$usuario_actual_id";?>&usuario_actual=<?php echo "$usuario_actual";?>&usuario_nuevo_id=<?php echo "$id";?>">
+                <a href="ventas_atendido_cambiar.php?cambiar_atencion=si&venta_id=<?php echo "$venta_id";?>&usuario_actual_id=<?php echo "$usuario_actual_id";?>&usuario_actual=<?php echo "$usuario_actual";?>&usuario_nuevo_id=<?php echo "$id";?>&url=<?php echo "$url";?>">
                     <article class="rdm-lista--item-sencillo">
                         <div class="rdm-lista--izquierda-sencillo">
                             <div class="rdm-lista--contenedor">

@@ -177,7 +177,7 @@ else
     $descuento_valor = (($venta_descuento_porcentaje * ($precio_neto_total + $propina_valor) ) / 100);  
 
     //total de la venta mas la propina
-    $venta_total = $venta_total + $propina_valor;    
+    $venta_total = $venta_total + $propina_valor;
     
     //total de la venta con descuento y propina
     $venta_total = ($precio_neto_total + $propina_valor) - $descuento_valor;
@@ -191,6 +191,8 @@ else
     $cambio = $dinero - $venta_total;   
 }
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -221,10 +223,26 @@ else
             <a href="ventas_pagar.php?venta_id=<?php echo "$venta_id";?>#propina"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-arrow-left zmdi-hc-2x"></i></div></a>
             <h2 class="rdm-toolbar--titulo">Propina</h2>
         </div>
+
+        <div class="rdm-toolbar--derecha">
+            <h2 class="rdm-toolbar--titulo">$ <?php echo number_format($precio_neto_total, 2, ",", "."); ?></h2>
+        </div>
+    </div>
+
+    <div class="rdm-toolbar--fila-tab">
+        <div class="rdm-toolbar--centro">
+            <a href="ventas_ubicaciones.php"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-inbox zmdi-hc-2x"></i></div> <span class="rdm-tipografia--leyenda">Nueva Venta</span></a>
+        </div>
+        <div class="rdm-toolbar--centro">
+            <a href="ventas_resumen.php?venta_id=<?php echo "$venta_id";?>"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-view-list-alt zmdi-hc-2x"></i></div> <span class="rdm-tipografia--leyenda">Resúmen</span></a>
+        </div>
+        <div class="rdm-toolbar--derecha">
+            <a href="ventas_pagar.php?venta_id=<?php echo "$venta_id";?>"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-money zmdi-hc-2x"></i></div> <span class="rdm-tipografia--leyenda">Pagar</span></a>
+        </div>
     </div>
 </header>
 
-<main class="rdm--contenedor-toolbar">
+<main class="rdm--contenedor-toolbar-tabs">
 
     <h2 class="rdm-lista--titulo-largo">Propina actual</h2>
 
@@ -236,7 +254,7 @@ else
                     <div class="rdm-lista--icono"><i class="zmdi zmdi-star zmdi-hc-2x"></i></div>
                 </div>
                 <div class="rdm-lista--contenedor">
-                    <h2 class="rdm-lista--texto-valor">$<?php echo number_format($propina_valor, 2, ",", "."); ?> (<?php echo number_format($propina_porcentaje, 2, ",", "."); ?>%)</h2>
+                    <h2 class="rdm-lista--texto-valor">$ <?php echo number_format($propina_valor, 2, ",", "."); ?> (<?php echo number_format($propina_porcentaje, 2, ",", "."); ?>%)</h2>
                 </div>
             </div>
 

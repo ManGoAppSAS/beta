@@ -133,6 +133,20 @@ else
 }
 ?>
 
+<?php
+//consulto el total de la venta
+$consulta_venta_total = $conexion->query("SELECT * FROM ventas_productos WHERE venta_id = '$venta_id'");
+
+$venta_subtotal = 0;
+
+while ($fila_venta_total = $consulta_venta_total->fetch_assoc())
+{
+    $precio = $fila_venta_total['precio_final'];
+
+    $venta_subtotal = $venta_subtotal + $precio;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -152,10 +166,26 @@ else
             <a href="ventas_pagar.php?venta_id=<?php echo "$venta_id";?>#tipos_pagos"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-arrow-left zmdi-hc-2x"></i></div></a>
             <h2 class="rdm-toolbar--titulo">Cambiar tipo de pago</h2>
         </div>
+
+        <div class="rdm-toolbar--derecha">
+            <h2 class="rdm-toolbar--titulo">$ <?php echo number_format($venta_subtotal, 2, ",", "."); ?></h2>
+        </div>
+    </div>
+
+    <div class="rdm-toolbar--fila-tab">
+        <div class="rdm-toolbar--centro">
+            <a href="ventas_ubicaciones.php"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-inbox zmdi-hc-2x"></i></div> <span class="rdm-tipografia--leyenda">Nueva Venta</span></a>
+        </div>
+        <div class="rdm-toolbar--centro">
+            <a href="ventas_resumen.php?venta_id=<?php echo "$venta_id";?>"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-view-list-alt zmdi-hc-2x"></i></div> <span class="rdm-tipografia--leyenda">Resúmen</span></a>
+        </div>
+        <div class="rdm-toolbar--derecha">
+            <a href="ventas_pagar.php?venta_id=<?php echo "$venta_id";?>"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-money zmdi-hc-2x"></i></div> <span class="rdm-tipografia--leyenda">Pagar</span></a>
+        </div>
     </div>
 </header>
 
-<main class="rdm--contenedor-toolbar">
+<main class="rdm--contenedor-toolbar-tabs">
 
     <h2 class="rdm-lista--titulo-largo">Tipo de pago actual</h2>
 

@@ -57,18 +57,21 @@ $consulta = $conexion->query("SELECT * FROM ventas_datos WHERE local_id = '$sesi
 //si ya existe una venta creada en esa ubicacion en estado OCUPADO consulto el id de la venta
 if ($fila = $consulta->fetch_assoc())
 {
-    $venta_id = $fila['id'];
-
-    
+    $venta_id = $fila['id'];    
 }
 else
 {
     //si no la hay guardo los datos iniciales de la venta
-    $insercion = $conexion->query("INSERT INTO ventas_datos values ('', '$ahora', '', '$sesion_id', '$sesion_local_id', '$ubicacion_id', '$ubicacion', '0', '1', 'efectivo', 'ocupado', '0', '0', '0', '0', '$sesion_local_propina', '0', '', '', 'contado', '$ahora', '0')");
+
+    //consulto la cantidad de ventas en este local para adquirir el consecutivo de la venta           
+    $consulta_consecutivo = $conexion->query("SELECT * FROM ventas_datos WHERE local_id = '$sesion_local_id'");
+    $consecutivo = ($consulta_consecutivo->num_rows) + 1;
+
+    $insercion = $conexion->query("INSERT INTO ventas_datos values ('', '$ahora', '', '$sesion_id', '$sesion_local_id', '$ubicacion_id', '$ubicacion', '0', '1', 'efectivo', 'ocupado', '0', '0', '0', '0', '$sesion_local_propina', '0', '', '', 'contado', '$ahora', '0', '$consecutivo')");
     //consulto el ultimo id que se ingreso para tenerlo como id de la venta
     $venta_id = $conexion->insert_id;
 
-    $mensaje_venta = 'Venta <b>No ' . ucfirst($venta_id) . '</b> creada';
+    $mensaje_venta = 'Venta <b>No ' . ucfirst($consecutivo) . '</b> creada';
     $body_snack = 'onLoad="Snackbar()"';
     $mensaje_tema = "aviso";
    
@@ -212,83 +215,18 @@ else
             $usuario_actual = "$usuario_actual_nombres $usuario_actual_apellidos";
             $tipo = $fila['tipo'];
             $imagen = $fila['imagen'];
-            $imagen_nombre = $fila['imagen_nombre'];            
-        }        
+            $imagen_nombre = $fila['imagen_nombre'];
 
-        //consulto los datos del tipo de pago
-        $consulta_tipos_pagos = $conexion->query("SELECT * FROM tipos_pagos WHERE id = '$tipo_pago_id'");           
-
-        if ($fila_tipos_pagos = $consulta_tipos_pagos->fetch_assoc()) 
-        {
-            $tipo_pago_tipo = ucfirst($fila_tipos_pagos['tipo']);
-            $tipo_pago_tp = $fila_tipos_pagos['tipo'];
-            $tipo_pago_tipo = " - $tipo_pago_tipo";
-        }
-        else
-        {
-            $tipo_pago_tipo = "";
-            $tipo_pago_tp = "efectivo";
-        }
-
-        if ($tipo_pago_tp == "bono")
-        {
-            $imagen_tp = '<div class="rdm-lista--icono"><i class="zmdi zmdi-card-membership zmdi-hc-2x"></i></div>';
-        }
-        else
-        {
-            if ($tipo_pago_tp == "canje")
+            if ($imagen == "no")
             {
-                $imagen_tp = '<div class="rdm-lista--icono"><i class="zmdi zmdi-refresh-alt zmdi-hc-2x"></i></div>';
+                $imagen = '<div class="rdm-lista--icono"><i class="zmdi zmdi-account zmdi-hc-2x"></i></div>';
             }
             else
             {
-                if ($tipo_pago_tp == "cheque")
-                {
-                    $imagen_tp = '<div class="rdm-lista--icono"><i class="zmdi zmdi-square-o zmdi-hc-2x"></i></div>';
-                }
-                else
-                {
-                    if ($tipo_pago_tp == "efectivo")
-                    {
-                        $imagen_tp = '<div class="rdm-lista--icono"><i class="zmdi zmdi-money-box zmdi-hc-2x"></i></div>';
-                    }
-                    else
-                    {
-                        if ($tipo_pago_tp == "consignacion")
-                        {
-                            $imagen_tp = '<div class="rdm-lista--icono"><i class="zmdi zmdi-balance zmdi-hc-2x"></i></div>';
-                        }
-                        else
-                        {
-                            if ($tipo_pago_tp == "transferencia")
-                            {
-                                $imagen_tp = '<div class="rdm-lista--icono"><i class="zmdi zmdi-smartphone-iphone zmdi-hc-2x"></i></div>';
-                            }
-                            else
-                            {
-                                $imagen_tp = '<div class="rdm-lista--icono"><i class="zmdi zmdi-card zmdi-hc-2x"></i></div>'; 
-                            }
-
-                        }
-                    }
-                }
+                $imagen = "img/avatares/usuarios-$usuario_actual_id-$imagen_nombre-m.jpg";
+                $imagen = '<div class="rdm-lista--avatar" style="background-image: url('.$imagen.');"></div>';
             }
         }
-
-        if ($tipo_pago != "efectivo")
-        {
-            $caja_readonly = "readonly";
-            $caja_autofocus = "";
-            $caja_tipo = "hidden";
-        }
-        else
-        {
-            $caja_readonly = "";
-            $caja_autofocus = "autofocus";
-            $caja_tipo = "tel";            
-            $tipo_pago_tipo = "";
-        }
-
     }
 }
 ?>
@@ -331,12 +269,24 @@ else
             <h2 class="rdm-toolbar--titulo">Cliente</h2>
         </div>
         <div class="rdm-toolbar--derecha">
-            <h2 class="rdm-toolbar--titulo">$ <?php echo number_format($venta_total, 0, ",", "."); ?></h2>
+            <h2 class="rdm-toolbar--titulo">$ <?php echo number_format($venta_total, 2, ",", "."); ?></h2>
+        </div>
+    </div>
+
+    <div class="rdm-toolbar--fila-tab">
+        <div class="rdm-toolbar--centro">
+            <a href="ventas_ubicaciones.php"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-inbox zmdi-hc-2x"></i></div> <span class="rdm-tipografia--leyenda">Nueva Venta</span></a>
+        </div>
+        <div class="rdm-toolbar--centro">
+            <a href="ventas_resumen.php?venta_id=<?php echo "$venta_id";?>"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-view-list-alt zmdi-hc-2x"></i></div> <span class="rdm-tipografia--leyenda">Resúmen</span></a>
+        </div>
+        <div class="rdm-toolbar--derecha">
+            <a href="ventas_pagar.php?venta_id=<?php echo "$venta_id";?>"><div class="rdm-toolbar--icono"><i class="zmdi zmdi-money zmdi-hc-2x"></i></div> <span class="rdm-tipografia--leyenda">Pagar</span></a>
         </div>
     </div>
 </header>
 
-<main class="rdm--contenedor-toolbar">
+<main class="rdm--contenedor-toolbar-tabs">
 
     <input type="search" name="busqueda" id="busqueda" value="<?php echo "$consultaBusqueda"; ?>" placeholder="Buscar cliente" maxlength="30" autofocus autocomplete="off" onKeyUp="buscar();" onFocus="buscar();" />
 
@@ -475,16 +425,16 @@ else
 
         <a class="ancla" name="atencion"></a>
 
-        <a href="ventas_atendido_cambiar.php?venta_id=<?php echo "$venta_id";?>">
+        <a href="ventas_atendido_cambiar.php?venta_id=<?php echo "$venta_id";?>&url=ventas_clientes.php?ubicacion_id=<?php echo "$ubicacion_id";?>&ubicacion=<?php echo "$ubicacion";?>">
 
             <article class="rdm-lista--item-sencillo">
                 <div class="rdm-lista--izquierda-sencillo">
                     <div class="rdm-lista--contenedor">
-                        <div class="rdm-lista--icono"><i class="zmdi zmdi-account zmdi-hc-2x"></i></div>
+                        <?php echo "$imagen"; ?>
                     </div>
                     <div class="rdm-lista--contenedor">
-                        <h2 class="rdm-lista--titulo">Atención</h2>
-                        <h2 class="rdm-lista--texto-secundario"><?php echo ucfirst("$usuario_actual"); ?></h2>
+                        <h2 class="rdm-lista--titulo"><?php echo ucwords("$usuario_actual"); ?></h2>
+                        <h2 class="rdm-lista--texto-secundario"><?php echo ucwords("$tipo"); ?></h2>
                     </div>
                 </div>
                 
