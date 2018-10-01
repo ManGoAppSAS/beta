@@ -30,8 +30,11 @@ if ($fila = $consulta->fetch_assoc())
     $hora = date('h:i a', strtotime($fila['fecha']));
     $usuario = $fila['usuario'];
     $proveedor = $fila['proveedor'];
+    $documento_tipo = $fila['documento_tipo'];
+    $documento = $fila['documento'];
     $correo = $fila['correo'];
     $telefono = $fila['telefono'];
+    $direccion = $fila['direccion'];
     $imagen = $fila['imagen'];
     $imagen_nombre = $fila['imagen_nombre'];    
 }
@@ -78,10 +81,30 @@ else
             <p class="rdm-formularios--label"><label for="proveedor">Nombre*</label></p>
             <p><input type="text" id="proveedor" name="proveedor" value="<?php echo "$proveedor"; ?>" required autofocus /></p>
             <p class="rdm-formularios--ayuda">Nombre del proveedor</p>
+
+            <p class="rdm-formularios--label"><label for="documento_tipo">Tipo de documento*</label></p>
+            <p><select id="documento_tipo" name="documento_tipo" required>
+                <option value="<?php echo "$documento_tipo"; ?>"><?php echo ucfirst($documento_tipo) ?></option>
+                <option value=""></option>
+                <option value="CC">CC</option>
+                <option value="cedula extranjeria">Cédula de extranjería</option>
+                <option value="NIT">NIT</option>
+                <option value="pasaporte">Pasaporte</option>
+                <option value="TI">TI</option>
+            </select></p>
+            <p class="rdm-formularios--ayuda">Tipo de documento, CC, NIT, TI, etc.</p>
+
+            <p class="rdm-formularios--label"><label for="documento">Documento*</label></p>
+            <p><input type="tel" id="documento" name="documento" value="<?php echo "$documento"; ?>" required /></p>
+            <p class="rdm-formularios--ayuda">Documento de identificación del cliente</p>
             
             <p class="rdm-formularios--label"><label for="telefono">Teléfono*</label></p>
             <p><input type="tel" id="telefono" name="telefono" value="<?php echo "$telefono"; ?>" required /></p>
             <p class="rdm-formularios--ayuda">Teléfono de contacto para compras</p>
+
+            <p class="rdm-formularios--label"><label for="direccion">Dirección</label></p>
+            <p><input type="text" id="direccion" name="direccion" value="<?php echo "$direccion"; ?>" /></p>
+            <p class="rdm-formularios--ayuda">Dirección del cliente</p>
             
             <p class="rdm-formularios--label"><label for="correo">Correo electrónico</label></p>
             <p><input type="email" id="correo" name="correo" value="<?php echo "$correo"; ?>" /></p>

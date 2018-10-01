@@ -138,7 +138,7 @@ if ($agregar == 'si')
 
             <p class="rdm-formularios--label" style="margin-top: 0"><label for="archivo">Imagen</label></p>
             <p><input type="file" id="archivo" name="archivo" /></p>
-            <p class="rdm-formularios--ayuda">Usa una imagen para identificarlo</p>
+            <p class="rdm-formularios--ayuda">Usa una imagen para identificarlo</p>            
 
             <button type="submit" class="rdm-boton--fab" name="agregar" value="si"><i class="zmdi zmdi-check zmdi-hc-2x"></i></button>
         </form>

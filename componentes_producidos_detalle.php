@@ -17,11 +17,13 @@ include ("sis/variables_sesion.php");
 <?php
 //capturo las variables que pasan por URL o formulario
 if(isset($_POST['editar'])) $editar = $_POST['editar']; elseif(isset($_GET['editar'])) $editar = $_GET['editar']; else $editar = null;
+if(isset($_POST['agregar'])) $agregar = $_POST['agregar']; elseif(isset($_GET['agregar'])) $agregar = $_GET['agregar']; else $agregar = null;
 
 if(isset($_POST['id'])) $id = $_POST['id']; elseif(isset($_GET['id'])) $id = $_GET['id']; else $id = null;
-if(isset($_POST['unidad'])) $unidad = $_POST['unidad']; elseif(isset($_GET['unidad'])) $unidad = $_GET['unidad']; else $unidad = null;
+if(isset($_POST['unidad_compra'])) $unidad_compra = $_POST['unidad_compra']; elseif(isset($_GET['unidad_compra'])) $unidad_compra = $_GET['unidad_compra']; else $unidad_compra = null;
 if(isset($_POST['componente'])) $componente = $_POST['componente']; elseif(isset($_GET['componente'])) $componente = $_GET['componente']; else $componente = null;
 if(isset($_POST['local'])) $local = $_POST['local']; elseif(isset($_GET['local'])) $local = $_GET['local']; else $local = null;
+if(isset($_POST['preparacion'])) $preparacion = $_POST['preparacion']; elseif(isset($_GET['preparacion'])) $preparacion = $_GET['preparacion']; else $preparacion = null;
 
 if(isset($_POST['mensaje'])) $mensaje = $_POST['mensaje']; elseif(isset($_GET['mensaje'])) $mensaje = $_GET['mensaje']; else $mensaje = null;
 if(isset($_POST['body_snack'])) $body_snack = $_POST['body_snack']; elseif(isset($_GET['body_snack'])) $body_snack = $_GET['body_snack']; else $body_snack = null;
@@ -32,7 +34,31 @@ if(isset($_POST['mensaje_tema'])) $mensaje_tema = $_POST['mensaje_tema']; elseif
 //actualizo la información del componente producido
 if ($editar == "si")
 {
-    $actualizar = $conexion->query("UPDATE componentes SET fecha = '$ahora', usuario = '$sesion_id', unidad = 'unid', componente = '$componente', productor = '$local' WHERE id = '$id'");
+    //calculo la unidad con base a la unidad de compra
+    if ($unidad_compra == "k")
+    {
+        $unidad = "g";
+    }
+    else
+    {
+    if ($unidad_compra == "l")
+        {
+            $unidad = "ml";
+        }
+        else
+        {
+            if ($unidad_compra == "m")
+            {
+                $unidad = "mm";
+            }
+            else
+            {
+                $unidad = $unidad_compra;
+            }
+        }
+    }
+
+    $actualizar = $conexion->query("UPDATE componentes SET fecha = '$ahora', usuario = '$sesion_id', unidad = '$unidad', unidad_compra = '$unidad_compra', componente = '$componente', productor = '$local', preparacion = '$preparacion' WHERE id = '$id'");
 
     if ($actualizar)
     {
@@ -44,29 +70,31 @@ if ($editar == "si")
 ?>
 
 <?php 
-//consulto la composición de este componente producido
+//consulto el costo total de este componente producido
 $consulta_composicion = $conexion->query("SELECT * FROM composiciones_componentes_producidos WHERE componente_producido = '$id' ORDER BY fecha DESC");
 
 if ($consulta_composicion->num_rows == 0)
 {
-    $total_costo = 0;
+    $total_costo_componente = 0;
 }
 else                 
 {
-    $total_costo = 0;
+    $total_costo_componente = 0;
 
     while ($fila_composicion = $consulta_composicion->fetch_assoc())
     {
         $id_componente_producido = $fila_composicion['componente_producido'];
-        $componente_id = $fila_composicion['componente'];
+        $componentex = $fila_composicion['componente'];
         $cantidad = $fila_composicion['cantidad'];
 
-        //consulto el componente
-        $consulta_componente = $conexion->query("SELECT * FROM componentes WHERE id = $componente_id");
+        echo "<br><br><br><br><br><br>$id_componente_producido";
 
-        if ($filas_componente = $consulta_componente->fetch_assoc())
-        {
-            $costo_unidad = $filas_componente['costo_unidad'];
+        //consulto el componente
+        $consulta2 = $conexion->query("SELECT * FROM componentes WHERE id = $componentex");
+
+        if ($filas2 = $consulta2->fetch_assoc())
+        {            
+            $costo_unidad = $filas2['costo_unidad'];
         }
         else
         {
@@ -75,10 +103,11 @@ else
 
         $subtotal_costo_unidad = $costo_unidad * $cantidad;
 
-        $total_costo = $total_costo + $subtotal_costo_unidad;
+        $total_costo_componente = $total_costo_componente + $subtotal_costo_unidad;
 
-        //actualizo el costo del componente producido
-        $actualizar_costo = $conexion->query("UPDATE componentes SET fecha = '$ahora', usuario = '$sesion_id', costo_unidad = '$total_costo' WHERE id = '$id'");
+        echo "  $total_costo_componente";
+
+        
     }
    
 }
@@ -109,7 +138,7 @@ else
 
     <?php
     //consulto y muestro el componente
-    $consulta = $conexion->query("SELECT * FROM componentes WHERE id = '$id'");
+    $consulta = $conexion->query("SELECT * FROM componentes_producidos WHERE id = '$id'");
 
     if ($consulta->num_rows == 0)
     {
@@ -131,9 +160,10 @@ else
             $hora = date('h:i a', strtotime($fila['fecha']));
             $usuario = $fila['usuario'];
             $unidad = $fila['unidad'];
+            $unidad_produccion = $fila['unidad_produccion'];
             $componente = $fila['componente'];
-            $costo_unidad = $fila['costo_unidad'];
             $productor = $fila['productor'];
+            $preparacion = $fila['preparacion'];
 
             //consulto el local productor
             $consulta2 = $conexion->query("SELECT * FROM locales WHERE id = $productor");
@@ -156,16 +186,40 @@ else
             {
                 $usuario = $fila['correo'];
             }
+
+            //si la unidad es kilos, litros o metros se divide por mil para obtener la unidad minima
+            if (($unidad_produccion == "k") or ($unidad_produccion == "l") or ($unidad_produccion == "m"))
+            {
+                $costo_unidad = $total_costo / 1000;
+            }
+            else
+            {
+                $costo_unidad = $total_costo;
+            }
+            
             ?>
 
             <section class="rdm-tarjeta">
 
-                <div class="rdm-tarjeta--primario-largo">                    
-                    <h1 class="rdm-tarjeta--titulo-largo">$<?php echo number_format($total_costo, 2, ",", "."); ?></h1>
+                <div class="rdm-tarjeta--primario-largo">
+                    <h1 class="rdm-tarjeta--titulo-largo"><?php echo ucfirst("$componente"); ?></h1>
                     <h2 class="rdm-tarjeta--subtitulo-largo"><?php echo ucfirst($productor) ?></h2>
                 </div>
 
                 <div class="rdm-tarjeta--cuerpo">
+                    <p><b>Costo unidad de producción</b> <br>$<?php echo number_format($costo_unidad_compra, 2, ",", "."); ?> x <?php echo ("$unidad_compra"); ?></p>
+                    <p><b>Costo unidad</b> <br>$<?php echo number_format($costo_unidad, 2, ",", "."); ?> x <?php echo ("$unidad"); ?></p>
+                    <p><b>Local productor</b> <br><?php echo ucfirst("$productor"); ?></p>
+
+                    <?php 
+                    if (!empty($preparacion))
+                    {
+                    ?>
+                    <p><b>Preparación</b> <br><?php echo nl2br("$preparacion"); ?></p>
+                    <?php
+                    } 
+                    ?>
+                    
                     <p><b>Última modificación</b> <br><?php echo ucfirst("$fecha"); ?> - <?php echo ucfirst("$hora"); ?></p>
                     <p><b>Modificado por</b> <br><?php echo ("$usuario"); ?></p>
                 </div>
@@ -175,27 +229,28 @@ else
             <?php
         }
     }
+
+    
     ?>
 
-    <h2 class="rdm-lista--titulo-largo">Valores</h2>
-            
-            <section class="rdm-lista">                
 
-                <article class="rdm-lista--item-sencillo">
-                    <div class="rdm-lista--izquierda-sencillo">
-                        <div class="rdm-lista--contenedor">
-                            <div class="rdm-lista--icono"><i class="zmdi zmdi-shape zmdi-hc-2x"></i></div>
-                        </div>
-                        <div class="rdm-lista--contenedor">
-                            <h2 class="rdm-lista--titulo">Costo</h2>
-                            <h2 class="rdm-lista--texto-valor"><span class="rdm-lista--texto-negativo">$<?php echo number_format($total_costo, 2, ",", "."); ?></span></h2>
-                        </div>
-                    </div>
-                </article>
 
-        </section>
 
-    <a class="ancla" name="composicion"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
 
     <h2 class="rdm-lista--titulo-largo">Composición</h2>
 
@@ -278,6 +333,50 @@ else
         </div>
 
 
+
+    </section>
+
+
+
+    <h2 class="rdm-lista--titulo-largo">Totales</h2>
+
+    <section class="rdm-lista">
+
+        <article class="rdm-lista--item-sencillo">
+            <div class="rdm-lista--izquierda-sencillo">
+                <div class="rdm-lista--contenedor">
+                    <div class="rdm-lista--icono"><i class="zmdi zmdi-shape zmdi-hc-2x"></i></div>
+                </div>
+                <div class="rdm-lista--contenedor">
+                    <h2 class="rdm-lista--titulo">Cantidad final</h2>
+                    <h2 class="rdm-lista--texto-valor"><span class="rdm-lista--texto-negativo"><?php echo number_format($cantidad_final, 0, ",", "."); ?></span></h2>
+                </div>
+            </div>
+        </article>
+
+        <article class="rdm-lista--item-sencillo">
+            <div class="rdm-lista--izquierda-sencillo">
+                <div class="rdm-lista--contenedor">
+                    <div class="rdm-lista--icono"><i class="zmdi zmdi-shape zmdi-hc-2x"></i></div>
+                </div>
+                <div class="rdm-lista--contenedor">
+                    <h2 class="rdm-lista--titulo">Costo total</h2>
+                    <h2 class="rdm-lista--texto-valor"><span class="rdm-lista--texto-negativo">$<?php echo number_format($total_costo, 2, ",", "."); ?></span></h2>
+                </div>
+            </div>
+        </article>
+
+        <article class="rdm-lista--item-sencillo">
+            <div class="rdm-lista--izquierda-sencillo">
+                <div class="rdm-lista--contenedor">
+                    <div class="rdm-lista--icono"><i class="zmdi zmdi-shape zmdi-hc-2x"></i></div>
+                </div>
+                <div class="rdm-lista--contenedor">
+                    <h2 class="rdm-lista--titulo">Costo por unidad</h2>
+                    <h2 class="rdm-lista--texto-valor"><span class="rdm-lista--texto-negativo">$<?php echo number_format($total_costo, 2, ",", "."); ?></span></h2>
+                </div>
+            </div>
+        </article>
 
     </section>
 

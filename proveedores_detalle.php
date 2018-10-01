@@ -26,7 +26,10 @@ if(isset($_POST['archivo'])) $archivo = $_POST['archivo']; elseif(isset($_GET['a
 if(isset($_POST['id'])) $id = $_POST['id']; elseif(isset($_GET['id'])) $id = $_GET['id']; else $id = null;
 if(isset($_POST['proveedor'])) $proveedor = $_POST['proveedor']; elseif(isset($_GET['proveedor'])) $proveedor = $_GET['proveedor']; else $proveedor = null;
 if(isset($_POST['correo'])) $correo = $_POST['correo']; elseif(isset($_GET['correo'])) $correo = $_GET['correo']; else $correo = null;
+if(isset($_POST['documento_tipo'])) $documento_tipo = $_POST['documento_tipo']; elseif(isset($_GET['documento_tipo'])) $documento_tipo = $_GET['documento_tipo']; else $documento_tipo = null;
+if(isset($_POST['documento'])) $documento = $_POST['documento']; elseif(isset($_GET['documento'])) $documento = $_GET['documento']; else $documento = null;
 if(isset($_POST['telefono'])) $telefono = $_POST['telefono']; elseif(isset($_GET['telefono'])) $telefono = $_GET['telefono']; else $telefono = null;
+if(isset($_POST['direccion'])) $direccion = $_POST['direccion']; elseif(isset($_GET['direccion'])) $direccion = $_GET['direccion']; else $direccion = null;
 if(isset($_POST['imagen'])) $imagen = $_POST['imagen']; elseif(isset($_GET['imagen'])) $imagen = $_GET['imagen']; else $imagen = null;
 if(isset($_POST['imagen_nombre'])) $imagen_nombre = $_POST['imagen_nombre']; elseif(isset($_GET['imagen_nombre'])) $imagen_nombre = $_GET['imagen_nombre']; else $imagen_nombre = null;
 
@@ -54,7 +57,7 @@ if ($editar == "si")
         $imagen_nombre = $imagen_nombre;
     }
 
-    $actualizar = $conexion->query("UPDATE proveedores SET fecha = '$ahora', usuario = '$sesion_id', proveedor = '$proveedor', correo = '$correo', telefono = '$telefono', imagen = '$imagen', imagen_nombre = '$imagen_nombre' WHERE id = '$id'");
+    $actualizar = $conexion->query("UPDATE proveedores SET fecha = '$ahora', usuario = '$sesion_id', proveedor = '$proveedor', documento_tipo = '$documento_tipo', documento = '$documento', correo = '$correo', telefono = '$telefono', direccion = '$direccion', imagen = '$imagen', imagen_nombre = '$imagen_nombre' WHERE id = '$id'");
 
     if ($actualizar)
     {
@@ -112,10 +115,48 @@ if ($editar == "si")
             $hora = date('h:i a', strtotime($fila['fecha']));
             $usuario = $fila['usuario'];
             $proveedor = $fila['proveedor'];
+            $documento_tipo = $fila['documento_tipo'];
+            $documento = $fila['documento'];
             $correo = $fila['correo'];
             $telefono = $fila['telefono'];
+            $direccion = $fila['direccion'];
             $imagen = $fila['imagen'];
-            $imagen_nombre = $fila['imagen_nombre'];            
+            $imagen_nombre = $fila['imagen_nombre'];
+
+            if (empty($documento_tipo))
+            {
+                $documento_tipo = "";
+            }
+
+            if (empty($documento))
+            {
+                $documento = "Pendiente";
+            }
+
+            if (empty($telefono))
+            {
+                $telefono = "Pendiente";
+            }
+
+            if (empty($direccion))
+            {
+                $direccion = "Pendiente";
+            }
+
+            if (empty($correo))
+            {
+                $correo = "Pendiente";
+            }
+
+            //persona natural o juridica
+            if ($documento_tipo == "NIT")
+            {
+                $persona = 'persona juridica';
+            }
+            else
+            {
+                $persona = 'persona natural';
+            }
 
             if ($imagen == "no")
             {
@@ -147,11 +188,13 @@ if ($editar == "si")
 
                 <div class="rdm-tarjeta--primario-largo">
                     <h1 class="rdm-tarjeta--titulo-largo"><?php echo ucfirst($proveedor) ?></h1>
-                    <h2 class="rdm-tarjeta--subtitulo-largo"><?php echo ($telefono) ?></h2>
+                    <h2 class="rdm-tarjeta--subtitulo-largo"><?php echo ucfirst($persona) ?></h2>
                 </div>
 
                 <div class="rdm-tarjeta--cuerpo">                    
-                    <p><b>Correo</b> <br><?php echo $correo; ?></p>
+                    <p><b>Teléfono</b> <br><?php echo ($telefono) ?></p>
+                    <p><b>Dirección</b> <br><?php echo ($direccion) ?></p>
+                    <p><b>Documento</b> <br><?php echo ($documento_tipo) ?> <?php echo ($documento) ?></p><p><b>Correo</b> <br><?php echo $correo; ?></p>
                     <p><b>Última modificación</b> <br><?php echo ucfirst("$fecha"); ?> - <?php echo ucfirst("$hora"); ?></p>
                     <p><b>Modificado por</b> <br><?php echo ("$usuario"); ?></p>
                 </div>

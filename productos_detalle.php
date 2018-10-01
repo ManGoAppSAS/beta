@@ -144,7 +144,7 @@ if ($editar == "si")
             }
 
             //consulto la composiciones
-            $consulta_composicion = $conexion->query("SELECT * FROM composiciones WHERE producto = '$id_producto'");           
+            $consulta_composicion = $conexion->query("SELECT * FROM productos_composiciones WHERE producto = '$id_producto'");           
 
             $costo = 0;
 
@@ -162,8 +162,7 @@ if ($editar == "si")
                     $id_componente_producido = $filas_componente['id'];
                     $unidad = $filas_componente['unidad'];
                     $componente = $filas_componente['componente'];
-                    $costo_unidad = $filas_componente['costo_unidad'];
-                    $tipo = $filas_componente['tipo'];                    
+                    $costo_unidad = $filas_componente['costo_unidad']; 
 
                 }
                 else
@@ -380,7 +379,7 @@ if ($editar == "si")
         
         <?php                
         //consulto y muestros la composición de este producto
-        $consulta = $conexion->query("SELECT * FROM composiciones WHERE producto = '$id_producto' ORDER BY fecha DESC");
+        $consulta = $conexion->query("SELECT * FROM productos_composiciones WHERE producto = '$id_producto' ORDER BY fecha DESC");
 
         if ($consulta->num_rows == 0)
         {
@@ -422,18 +421,7 @@ if ($editar == "si")
                     $id_componente_producido = $filas2['id'];
                     $unidad = $filas2['unidad'];
                     $componente = $filas2['componente'];
-                    $costo_unidad = $filas2['costo_unidad'];
-                    $tipo = $filas2['tipo'];
-
-                    if ($tipo == "producido")
-                    {
-                        $imagen = '<div class="rdm-lista--icono"><i class="zmdi zmdi-shape zmdi-hc-2x"></i></div>';
-
-                    }
-                    else
-                    {
-                        $imagen = '<div class="rdm-lista--icono"><i class="zmdi zmdi-widgets zmdi-hc-2x"></i></div>';
-                    }
+                    $costo_unidad = $filas2['costo_unidad']; 
                 }
                 else
                 {
@@ -448,7 +436,7 @@ if ($editar == "si")
                 <article class="rdm-lista--item-doble">
                     <div class="rdm-lista--izquierda">
                         <div class="rdm-lista--contenedor">
-                            <?php echo "$imagen"; ?>
+                            <div class="rdm-lista--icono"><i class="zmdi zmdi-widgets zmdi-hc-2x"></i></div>
                         </div>
                         <div class="rdm-lista--contenedor">
                             <h2 class="rdm-lista--titulo"><?php echo ucfirst("$componente"); ?></h2>

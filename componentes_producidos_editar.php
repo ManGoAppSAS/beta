@@ -27,9 +27,12 @@ if ($fila = $consulta->fetch_assoc())
 {
     $id = $fila['id'];
     $unidad = $fila['unidad'];
+    $unidad_compra = $fila['unidad_compra'];
     $componente = $fila['componente'];
     $costo_unidad = $fila['costo_unidad'];
+    $costo_unidad_compra = $fila['costo_unidad_compra'];
     $productor = $fila['productor'];
+    $preparacion = $fila['preparacion'];
 
     //consulto el local
     $consulta_local = $conexion->query("SELECT * FROM locales WHERE id = '$productor'");           
@@ -160,7 +163,27 @@ else
                 }
                 ?>
             </select></p>
-            <p class="rdm-formularios--ayuda">Local que produce el componente</p>            
+            <p class="rdm-formularios--ayuda">Local que produce el componente</p>
+
+            <p class="rdm-formularios--label"><label for="unidad_compra">Unidad de producción*</label></p>
+            <p><select id="unidad_compra" name="unidad_compra" required>
+                <option value="<?php echo "$unidad_compra"; ?>"><?php echo $unidad_compra ?></option>
+                <option value="">---------</option>
+                <option value="g">g</option>
+                <option value="ml">ml</option>
+                <option value="mm">mm</option>
+                <option value="">---------</option>
+                <option value="k">k</option>
+                <option value="l">l</option>
+                <option value="m">m</option>
+                <option value="">---------</option>
+                <option value="unid">unid</option>
+            </select></p>
+            <p class="rdm-formularios--ayuda">Unidad de producción del componente</p>
+
+            <p class="rdm-formularios--label"><label for="preparacion">Preparación</label></p>
+            <p><textarea id="preparacion" name="preparacion"><?php echo "$preparacion"; ?></textarea></p>
+            <p class="rdm-formularios--ayuda">Escribe la preparación o receta</p>
             
             <button type="submit" class="rdm-boton--fab" name="editar" value="si"><i class="zmdi zmdi-check zmdi-hc-2x"></i></button>
         </form>

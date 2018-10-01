@@ -25,6 +25,7 @@ if(isset($_POST['venta_total'])) $venta_total = $_POST['venta_total']; elseif(is
 if(isset($_POST['descuento_valor'])) $descuento_valor = $_POST['descuento_valor']; elseif(isset($_GET['descuento_valor'])) $descuento_valor = $_GET['descuento_valor']; else $descuento_valor = null;
 if(isset($_POST['venta_total_neto'])) $venta_total_neto = $_POST['venta_total_neto']; elseif(isset($_GET['venta_total_neto'])) $venta_total_neto = $_GET['venta_total_neto']; else $venta_total_neto = null;
 if(isset($_POST['tipo_pago'])) $tipo_pago = $_POST['tipo_pago']; elseif(isset($_GET['tipo_pago'])) $tipo_pago = $_GET['tipo_pago']; else $tipo_pago = null;
+if(isset($_POST['tipo_pago_id'])) $tipo_pago_id = $_POST['tipo_pago_id']; elseif(isset($_GET['tipo_pago_id'])) $tipo_pago_id = $_GET['tipo_pago_id']; else $tipo_pago_id = null;
 if(isset($_POST['ubicacion_id'])) $ubicacion_id = $_POST['ubicacion_id']; elseif(isset($_GET['ubicacion_id'])) $ubicacion_id = $_GET['ubicacion_id']; else $ubicacion_id = null;
 if(isset($_POST['dinero'])) $dinero = $_POST['dinero']; elseif(isset($_GET['dinero'])) $dinero = $_GET['dinero']; else $dinero = null;
 if(isset($_POST['enviar_correo'])) $enviar_correo = $_POST['enviar_correo']; elseif(isset($_GET['enviar_correo'])) $enviar_correo = $_GET['enviar_correo']; else $enviar_correo = null;
@@ -75,7 +76,7 @@ if (($pagar == "liquidar") and ($liquidar_venta == "si"))
 
     $actualizar = $conexion->query("UPDATE ventas_datos SET fecha_cierre = '$ahora', estado = 'liquidado', total_bruto = '$venta_total_bruto', descuento_valor = '$descuento_valor', total_neto = '$venta_total_neto', eliminar_motivo = 'no aplica' WHERE id = '$venta_id'");
 
-    $insercion_comprobante = $conexion->query("INSERT INTO comprobantes_ingreso values ('', '$ahora', '$sesion_id', '$venta_id', '$venta_total_neto', '')");
+    $insercion_comprobante = $conexion->query("INSERT INTO comprobantes_ingreso values ('', '$ahora', '$sesion_id', '$venta_id', '$dinero', '$tipo_pago_id', '$tipo_pago', 'unico pago', 'sin observaciones', '1')");
     
     $actualizar = $conexion->query("UPDATE ubicaciones SET estado = 'libre' WHERE id = '$ubicacion_id'");
     
@@ -100,10 +101,10 @@ if ($pagar == "pendiente")
 //dejo la venta pendiente
 if (($pagar == "pendiente") and ($liquidar_venta == "si"))
 {    
-    $actualizar = $conexion->query("UPDATE ventas_datos SET fecha_cierre = '$ahora', estado = 'pendiente', total_bruto = '$venta_total_bruto', descuento_valor = '$descuento_valor', total_neto = '$venta_total_neto', eliminar_motivo = 'no aplica', pago = 'credito', saldo_pendiente = '$venta_total_neto' WHERE id = '$venta_id'");
+    $actualizar = $conexion->query("UPDATE ventas_datos SET fecha_cierre = '$ahora', estado = 'pendiente', total_bruto = '$venta_total_bruto', descuento_valor = '$descuento_valor', total_neto = '$venta_total_neto', eliminar_motivo = 'no aplica', pago = 'credito', saldo_pendiente = '$venta_total_neto' WHERE id = '$venta_id'");    
+    
+    $insercion_comprobante = $conexion->query("INSERT INTO comprobantes_ingreso values ('', '$ahora', '$sesion_id', '$venta_id', '$dinero', '$tipo_pago_id', '$tipo_pago', 'primer pago', 'sin observaciones', '1')");
 
-    
-    
     $actualizar = $conexion->query("UPDATE ubicaciones SET estado = 'libre' WHERE id = '$ubicacion_id'");
     
     $actualizar = $conexion->query("UPDATE ventas_productos SET estado = 'pendiente' WHERE venta_id = '$venta_id'");
@@ -131,7 +132,7 @@ if (($pagar == "parcial") and ($liquidar_venta == "si"))
 
     $actualizar = $conexion->query("UPDATE ventas_datos SET fecha_cierre = '$ahora', estado = 'pendiente', total_bruto = '$venta_total_bruto', descuento_valor = '$descuento_valor', total_neto = '$venta_total_neto', eliminar_motivo = 'no aplica', pago = 'credito', saldo_pendiente = '$pago_parcial' WHERE id = '$venta_id'");
 
-    $insercion_comprobante = $conexion->query("INSERT INTO comprobantes_ingreso values ('', '$ahora', '$sesion_id', '$venta_id', '$dinero', '')");
+    $insercion_comprobante = $conexion->query("INSERT INTO comprobantes_ingreso values ('', '$ahora', '$sesion_id', '$venta_id', '$dinero', '$tipo_pago_id', '$tipo_pago', 'primer pago', 'sin observaciones', '1')");
     
     $actualizar = $conexion->query("UPDATE ubicaciones SET estado = 'libre' WHERE id = '$ubicacion_id'");
     
@@ -142,11 +143,6 @@ if (($pagar == "parcial") and ($liquidar_venta == "si"))
     $mensaje_tema = "aviso";
 }
 ?>
-
-
-
-
-
 
 
 <?php

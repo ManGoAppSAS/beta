@@ -506,6 +506,7 @@ if (strlen($venta_total) == 7 )
                 <input type="hidden" name="venta_total_bruto" value="<?php echo "$impuesto_base_total";?>" />
                 <input type="hidden" name="descuento_valor" value="<?php echo "$descuento_valor";?>" />
                 <input type="hidden" name="venta_total_neto" value="<?php echo "$venta_total";?>" />
+                <input type="hidden" name="tipo_pago_id" value="<?php echo "$tipo_pago_id";?>" />
                 <input type="hidden" name="tipo_pago" value="<?php echo "$tipo_pago";?>" />
                 <input type="hidden" name="ubicacion_id" value="<?php echo "$ubicacion_id";?>" />
 

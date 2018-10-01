@@ -98,7 +98,7 @@ if ($fila = $consulta->fetch_assoc())
 {
     $id = $fila['id'];
     $componente = $fila['componente'];
-    $unidad_c = $fila['unidad'];
+    $unidad_c = $fila['unidad_compra'];
     $productor = $fila['productor'];                   
 
     //consulto el local productor
@@ -272,8 +272,17 @@ else
             </section>
 
             <?php
-            //actualizo el costo del componente producido
-            $actualizar_costo = $conexion->query("UPDATE componentes SET fecha = '$ahora', usuario = '$sesion_id', costo_unidad = '$total_costo' WHERE id = '$id'");
+            //si la unidad es kilos, litros o metros se divide por mil para obtener la unidad minima
+            if (($unidad_c == "k") or ($unidad_c == "l") or ($unidad_c == "m"))
+            {
+                $costo_unidad = $total_costo / 1000;
+            }
+            else
+            {
+                $costo_unidad = $total_costo;
+            }
+
+            $actualizar_costo = $conexion->query("UPDATE componentes SET fecha = '$ahora', usuario = '$sesion_id', costo_unidad = '$costo_unidad', costo_unidad_compra = '$total_costo' WHERE id = '$id'");
             ?>
 
             <section class="rdm-lista">

@@ -91,8 +91,8 @@ if ($eliminar == "si")
 <main class="rdm--contenedor-toolbar">
 
     <?php
-    //consulto y muestro los componentes
-    $consulta = $conexion->query("SELECT * FROM componentes WHERE tipo = 'producido' ORDER BY componente");
+    //consulto y muestro los componentes producidos
+    $consulta = $conexion->query("SELECT * FROM componentes_producidos ORDER BY componente");
 
     if ($consulta->num_rows == 0)
     {
@@ -123,7 +123,6 @@ if ($eliminar == "si")
             $unidad = $fila['unidad'];
             $componente_producido = $fila['componente'];
             $productor = $fila['productor'];
-            $tipo = $fila['tipo'];
             $costo_unidad = $fila['costo_unidad'];
 
             //consulto el local productor

@@ -121,34 +121,29 @@ if (isset($consultaBusqueda))
 
             <a class="ancla" name="<?php echo $producto_id; ?>"></a>
                     
-            <article class="rdm-lista--item-doble">
-                <div class="rdm-lista--izquierda">
-                    <div class="rdm-lista--contenedor">
-                        <div class="rdm-lista--icono"><i class="zmdi zmdi-shape zmdi-hc-2x"></i></div>
-                    </div>
-                    <div class="rdm-lista--contenedor">
-                        <h2 class="rdm-lista--titulo"><?php echo ucfirst(preg_replace("/$consultaBusqueda/i", "<span class='rdm-resaltado'>\$0</span>", $componente_completo)); ?></h2>
+            
+
+
+            <a href="producciones_detalle.php?produccion_id=<?php echo "$produccion_id"; ?>&componente_id=<?php echo "$componente_id"; ?>&destino=<?php echo "$destino"; ?>&agregar=si">
+
+                <article class="rdm-lista--item-doble">                
+                    <div class="rdm-lista--izquierda">
+                        <div class="rdm-lista--contenedor">
+                            <div class="rdm-lista--icono"><i class="zmdi zmdi-shape zmdi-hc-2x"></i></div>
+                        </div>
+                        <div class="rdm-lista--contenedor">
+                            <h2 class="rdm-lista--titulo"><?php echo ucfirst(preg_replace("/$consultaBusqueda/i", "<span class='rdm-resaltado'>\$0</span>", $componente_completo)); ?></h2>
                         
-                        <h2 class="rdm-lista--texto-secundario">En inventario <?php echo number_format($cantidad_actual, 0, ",", "."); ?> <?php echo ucfirst($unidad); ?></h2>
-                        <h2 class="rdm-lista--texto-valor">$<?php echo number_format($costo_unidad, 2, ",", "."); ?></h2>
-
-
-                        <form action="producciones_detalle.php" method="post" enctype="multipart/form-data">
-                            <input type="hidden" name="produccion_id" value="<?php echo "$produccion_id"; ?>">
-                            <input type="hidden" name="componente_id" value="<?php echo "$componente_id"; ?>">
-                            <input type="hidden" name="destino" value="<?php echo "$destino"; ?>">
-
-                            <p><input class="rdm-formularios--input-cantidad" type="number" name="cantidad" placeholder="Cantidad" value=""/> <button type="submit" class="rdm-boton--resaltado" name="agregar" value="si"><i class="zmdi zmdi-check"></i></button>                           
+                            <h2 class="rdm-lista--texto-secundario">En inventario <?php echo number_format($cantidad_actual, 0, ",", "."); ?> <?php echo ucfirst($unidad); ?></h2>
+                            <h2 class="rdm-lista--texto-valor">$<?php echo number_format($costo_unidad, 2, ",", "."); ?></h2>
 
                             
-                        </form>
 
-                    </div>
-                </div>
-                <div class="rdm-lista--derecha">
-                    
-                </div>
-            </article>
+                        </div>
+                    </div>                    
+                </article>
+
+            </a>
 
 
             <?php

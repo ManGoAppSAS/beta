@@ -680,7 +680,7 @@ if(isset($_POST['pago_vencido'])) $pago_vencido = $_POST['pago_vencido']; elseif
 
         <?php
         //consulto el total de componentes agregados
-        $consulta = $conexion->query("SELECT * FROM componentes WHERE tipo = 'comprado'");
+        $consulta = $conexion->query("SELECT * FROM componentes");
         $componentes = $consulta->num_rows;
         ?>
 
@@ -696,7 +696,7 @@ if(isset($_POST['pago_vencido'])) $pago_vencido = $_POST['pago_vencido']; elseif
 
                         <?php
                         //consulto los componentes              
-                        $consulta = $conexion->query("SELECT * FROM componentes WHERE tipo = 'comprado' ORDER BY fecha DESC LIMIT 2");
+                        $consulta = $conexion->query("SELECT * FROM componentes ORDER BY fecha DESC LIMIT 2");
 
                         if ($consulta->num_rows == 0)
                         {
@@ -729,7 +729,7 @@ if(isset($_POST['pago_vencido'])) $pago_vencido = $_POST['pago_vencido']; elseif
 
         <?php
         //consulto el total de componentes agregados
-        $consulta = $conexion->query("SELECT * FROM componentes WHERE tipo = 'producido'");
+        $consulta = $conexion->query("SELECT * FROM componentes_producidos");
         $componentes_producidos = $consulta->num_rows;
         ?>
 
@@ -745,7 +745,7 @@ if(isset($_POST['pago_vencido'])) $pago_vencido = $_POST['pago_vencido']; elseif
 
                         <?php
                         //consulto los componentes              
-                        $consulta = $conexion->query("SELECT * FROM componentes WHERE tipo = 'producido' ORDER BY fecha DESC LIMIT 2");
+                        $consulta = $conexion->query("SELECT * FROM componentes_producidos ORDER BY fecha DESC LIMIT 2");
 
                         if ($consulta->num_rows == 0)
                         {

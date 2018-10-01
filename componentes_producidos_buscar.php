@@ -20,18 +20,18 @@ if (isset($consultaBusqueda))
     $consulta_resaltada = "$consultaBusqueda";
 
     //consulto el proveedor previamente para la busqueda
-    $consulta_previa = $conexion->query("SELECT * FROM proveedores WHERE proveedor like '%$consultaBusqueda%'");
+    $consulta_previa = $conexion->query("SELECT * FROM locales WHERE local like '%$consultaBusqueda%'");
 
     if ($filas_previa = $consulta_previa->fetch_assoc())
     {
-        $proveedor = $filas_previa['id'];
+        $local = $filas_previa['id'];
     }
     else
     {
-        $proveedor = null;
+        $local = null;
     }
 
-    $consulta = mysqli_query($conexion, "SELECT * FROM componentes WHERE (unidad LIKE '%$consultaBusqueda%' or componente LIKE '%$consultaBusqueda%' or proveedor LIKE '$proveedor') and tipo = 'producido' ORDER BY componente");
+    $consulta = mysqli_query($conexion, "SELECT * FROM componentes_producidos WHERE (unidad LIKE '%$consultaBusqueda%' or componente LIKE '%$consultaBusqueda%' or productor LIKE '$local') ORDER BY componente");
 
 	//Obtiene la cantidad de filas que hay en la consulta
 	$filas = mysqli_num_rows($consulta);
@@ -87,6 +87,59 @@ if (isset($consultaBusqueda))
             {
                 $productor = "No se ha asignado un local productor";
             }
+
+            //consulto la composición de este componente producido
+            $consulta_composicion = $conexion->query("SELECT * FROM composiciones_componentes_producidos WHERE componente_producido = '$id' ORDER BY fecha DESC");
+            $total_composicion = $consulta_composicion->num_rows;
+
+            if ($total_composicion == 0)
+            {
+                $componentes = "sin composicion";
+            }
+            else
+            {
+                if ($total_composicion == 1)
+                {
+                    $componentes = "";
+                }
+                else
+                {
+                    $componentes = "";
+                }
+            }
+
+            if ($consulta_composicion->num_rows == 0)
+            {
+                $total_costo = 0;
+            }
+            else                 
+            {
+                $total_costo = 0;
+
+                while ($fila_composicion = $consulta_composicion->fetch_assoc())
+                {
+                    $id_componente_producido = $fila_composicion['componente_producido'];
+                    $componente_id = $fila_composicion['componente'];
+                    $cantidad = $fila_composicion['cantidad'];
+
+                    //consulto el componente
+                    $consulta_componente = $conexion->query("SELECT * FROM componentes WHERE id = $componente_id");
+
+                    if ($filas_componente = $consulta_componente->fetch_assoc())
+                    {
+                        $costo_unidad = $filas_componente['costo_unidad'];
+                    }
+                    else
+                    {
+                        $componente = "No se ha asignado un componente";
+                    }
+
+                    $subtotal_costo_unidad = $costo_unidad * $cantidad;
+
+                    $total_costo = $total_costo + $subtotal_costo_unidad;
+                }
+               
+            }
             ?>
 
             <a href="componentes_producidos_detalle.php?id=<?php echo "$id"; ?>&componente=<?php echo "$componente"; ?>">
@@ -101,6 +154,7 @@ if (isset($consultaBusqueda))
                             <h2 class="rdm-lista--titulo"><?php echo preg_replace("/$consultaBusqueda/i", "<span class='rdm-resaltado'>\$0</span>", ucfirst($componente)); ?></h2>
                             <h2 class="rdm-lista--texto-secundario"><?php echo preg_replace("/$consultaBusqueda/i", "<span class='rdm-resaltado'>\$0</span>", ucfirst($productor)); ?></h2>
                             <h2 class="rdm-lista--texto-valor">$<?php echo number_format($costo_unidad, 2, ",", "."); ?></h2>
+                            <h2 class="rdm-lista--texto-secundario"><span class="rdm-lista--texto-negativo"><?php echo ucfirst($componentes) ?></span></h2>
                         </div>
                     </div>
                     

@@ -19,7 +19,7 @@ if (isset($consultaBusqueda))
 {
     $consulta_resaltada = "$consultaBusqueda";
 
-    $consulta = mysqli_query($conexion, "SELECT * FROM proveedores WHERE proveedor LIKE '%$consultaBusqueda%' ORDER BY proveedor");
+    $consulta = mysqli_query($conexion, "SELECT * FROM proveedores WHERE proveedor LIKE '%$consultaBusqueda%' or documento LIKE '%$consultaBusqueda%' ORDER BY proveedor");
 
 	//Obtiene la cantidad de filas que hay en la consulta
 	$filas = mysqli_num_rows($consulta);

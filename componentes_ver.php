@@ -91,7 +91,7 @@ if ($eliminar == "si")
 
     <?php
     //consulto y muestro los componentes
-    $consulta = $conexion->query("SELECT * FROM componentes WHERE tipo = 'comprado' ORDER BY componente");
+    $consulta = $conexion->query("SELECT * FROM componentes ORDER BY componente");
 
     if ($consulta->num_rows == 0)
     {

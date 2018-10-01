@@ -31,7 +31,7 @@ if (isset($consultaBusqueda))
         $proveedor = null;
     }
 
-    $consulta = mysqli_query($conexion, "SELECT * FROM componentes WHERE (unidad LIKE '%$consultaBusqueda%' or componente LIKE '%$consultaBusqueda%' or proveedor LIKE '$proveedor') and tipo = 'comprado' ORDER BY componente");
+    $consulta = mysqli_query($conexion, "SELECT * FROM componentes WHERE (unidad LIKE '%$consultaBusqueda%' or componente LIKE '%$consultaBusqueda%' or proveedor LIKE '$proveedor') ORDER BY componente");
 
 	//Obtiene la cantidad de filas que hay en la consulta
 	$filas = mysqli_num_rows($consulta);
@@ -70,43 +70,11 @@ if (isset($consultaBusqueda))
 		{
 		  	$id = $fila['id'];
             $unidad = $fila['unidad'];
+            $unidad_compra = $fila['unidad_compra'];
             $componente = $fila['componente'];
             $proveedor = $fila['proveedor'];
             $costo_unidad = $fila['costo_unidad'];
-
-            //calculo la unidad maxima con base en la unidad
-            if ($unidad == "g")
-            {
-                $unidad_maxima = "k";
-            }
-            else
-            {
-                if ($unidad == "ml")
-                {
-                    $unidad_maxima = "l";
-                }
-                else
-                {
-                    if ($unidad == "mm")
-                    {
-                        $unidad_maxima = "m";
-                    }
-                    else
-                    {
-                        $unidad_maxima = "unid";
-                    }
-                }
-            }
-
-            //calculo el costro de la unidad maxima con base en el costo de la unidad
-            if ($unidad == "unid")
-            {
-                $costo_unidad_maxima = $costo_unidad;
-            }
-            else
-            {
-                $costo_unidad_maxima = $costo_unidad * 1000;
-            }
+            $costo_unidad_compra = $fila['costo_unidad_compra'];     
 
              //consulto el proveedor
             $consulta2 = $conexion->query("SELECT * FROM proveedores WHERE id = $proveedor");
@@ -132,7 +100,7 @@ if (isset($consultaBusqueda))
                         <div class="rdm-lista--contenedor">
                             <h2 class="rdm-lista--titulo"><?php echo preg_replace("/$consultaBusqueda/i", "<span class='rdm-resaltado'>\$0</span>", ucfirst($componente)); ?></h2>
                             <h2 class="rdm-lista--texto-secundario"><?php echo preg_replace("/$consultaBusqueda/i", "<span class='rdm-resaltado'>\$0</span>", ucfirst($proveedor)); ?></h2>
-                            <h2 class="rdm-lista--texto-valor">$<?php echo number_format($costo_unidad, 2, ",", "."); ?> x <?php echo ("$unidad"); ?></h2>
+                            <h2 class="rdm-lista--texto-valor">$<?php echo number_format($costo_unidad_compra, 2, ",", "."); ?> x <?php echo ("$unidad_compra"); ?></h2>
                         </div>
                     </div>
                     

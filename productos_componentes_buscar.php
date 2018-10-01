@@ -76,7 +76,6 @@ if (isset($consultaBusqueda))
             $unidad = $fila['unidad'];
             $componente = ucfirst($fila['componente']);
             $proveedor = $fila['proveedor'];
-            $productor = $fila['productor'];
             $costo_unidad = $fila['costo_unidad'];
 
             //consulto el proveedor
@@ -90,27 +89,9 @@ if (isset($consultaBusqueda))
             else
             {
                 $componente_origen = "No se ha asignado un proveedor";
-            }
-
-            //consulto el productor
-            $consulta_productor = $conexion->query("SELECT * FROM locales WHERE id = $productor");
-
-            if ($filas_productor = $consulta_productor->fetch_assoc())
-            {
-                $productor = ucfirst($filas_productor['local']);
-                $productor_tipo = ucfirst($filas_productor['tipo']);
-                $componente_origen = "Producido por $productor ($productor_tipo)";
-            }
-            else
-            {
-                
-            }
+            }            
 
             ?>
-            
-
-
-
 
             <a class="ancla" name="<?php echo $producto_id; ?>"></a>
                     

@@ -116,7 +116,7 @@ if (isset($consultaBusqueda))
             $producto_completo = "$producto, $categoria";
 
             //consulto la cantidad de componentes
-            $consulta_composicion = $conexion->query("SELECT * FROM composiciones WHERE producto = '$id'");
+            $consulta_composicion = $conexion->query("SELECT * FROM productos_composiciones WHERE producto = '$id'");
             $total_composicion = $consulta_composicion->num_rows;
 
             if ($total_composicion == 0)

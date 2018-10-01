@@ -164,11 +164,12 @@ if ($agregar == 'si')
             {
                 $costo = str_replace('.','',$costo);
 
-                $insercion = $conexion->query("INSERT INTO componentes values ('', '$ahora', '$sesion_id', 'unid', 'unid', '$producto', '$costo', '$costo', '0', '0', 'comprado')");
+                $insercion = $conexion->query("INSERT INTO componentes values ('', '$ahora', '$sesion_id', 'unid', 'unid', '$producto', '$costo', '$costo', '0')");
+
                 $componente_id = $conexion->insert_id;
 
                 //agrego la composición
-                $insercion = $conexion->query("INSERT INTO composiciones values ('', '$ahora', '$sesion_id', '$id', '$componente_id', '1')");
+                $insercion = $conexion->query("INSERT INTO productos_composiciones values ('', '$ahora', '$sesion_id', '$id', '$componente_id', '1')");
             }
             else
             {
@@ -178,7 +179,7 @@ if ($agregar == 'si')
                     $componente_id = $filas_componente['id'];
 
                     //agrego la composicion
-                    $insercion = $conexion->query("INSERT INTO composiciones values ('', '$ahora', '$sesion_id', '$id', '$componente_id', '1')");
+                    $insercion = $conexion->query("INSERT INTO productos_composiciones values ('', '$ahora', '$sesion_id', '$id', '$componente_id', '1')");
                 }
             }
         }    

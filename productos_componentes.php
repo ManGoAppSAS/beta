@@ -51,7 +51,7 @@ if ($fila_componente = $consulta_componente->fetch_assoc())
 //elimino el componente de la composición
 if ($eliminar_composicion == "si")
 {
-    $borrar = $conexion->query("DELETE FROM composiciones WHERE id = '$composicion_id'");
+    $borrar = $conexion->query("DELETE FROM productos_composiciones WHERE id = '$composicion_id'");
 
     if ($borrar)
     {
@@ -71,11 +71,11 @@ if ($agregar == 'si')
         $cantidad = 1;
     }
 
-    $consulta = $conexion->query("SELECT * FROM composiciones WHERE producto = '$id_producto' and componente = '$componente_id'");
+    $consulta = $conexion->query("SELECT * FROM productos_composiciones WHERE producto = '$id_producto' and componente = '$componente_id'");
 
     if ($consulta->num_rows == 0)
     {
-        $insercion = $conexion->query("INSERT INTO composiciones values ('', '$ahora', '$sesion_id', '$id_producto', '$componente_id', '$cantidad')");
+        $insercion = $conexion->query("INSERT INTO productos_composiciones values ('', '$ahora', '$sesion_id', '$id_producto', '$componente_id', '$cantidad')");
         
         $mensaje = "Componente <b>".ucfirst($componente)."</b> agregado a la composición</b>";
         $body_snack = 'onLoad="Snackbar()"';
@@ -99,7 +99,8 @@ if ($fila = $consulta->fetch_assoc())
     $id = $fila['id'];
     $categoria = $fila['categoria'];
     $producto = $fila['producto'];
-    $precio_bruto = $fila['precio'];                   
+    $precio_bruto = $fila['precio'];
+
 
     //consulto la categoria
     $consulta_categoria = $conexion->query("SELECT * FROM productos_categorias WHERE id = '$categoria'");           
@@ -169,7 +170,7 @@ else
 
         <?php
         //consulto y muestros la composición de este producto
-        $consulta = $conexion->query("SELECT * FROM composiciones WHERE producto = '$id' ORDER BY fecha DESC");
+        $consulta = $conexion->query("SELECT * FROM productos_composiciones WHERE producto = '$id' ORDER BY fecha DESC");
 
         if ($consulta->num_rows == 0)
         {
@@ -261,18 +262,7 @@ else
                     $id_componente_producido = $filas2['id'];
                     $unidad = $filas2['unidad'];
                     $componente = $filas2['componente'];
-                    $costo_unidad = $filas2['costo_unidad'];
-                    $tipo = $filas2['tipo'];
-
-                    if ($tipo == "producido")
-                    {
-                        $imagen = '<div class="rdm-lista--icono"><i class="zmdi zmdi-shape zmdi-hc-2x"></i></div>';
-
-                    }
-                    else
-                    {
-                        $imagen = '<div class="rdm-lista--icono"><i class="zmdi zmdi-widgets zmdi-hc-2x"></i></div>';
-                    }
+                    $costo_unidad = $filas2['costo_unidad'];                    
                 }
                 else
                 {
@@ -287,7 +277,7 @@ else
                 <article class="rdm-lista--item-sencillo">
                     <div class="rdm-lista--izquierda">
                         <div class="rdm-lista--contenedor">
-                            <?php echo "$imagen"; ?>
+                            <div class="rdm-lista--icono"><i class="zmdi zmdi-widgets zmdi-hc-2x"></i></div>
                         </div>
                         <div class="rdm-lista--contenedor">
                             <h2 class="rdm-lista--titulo"><?php echo ucfirst("$componente"); ?></h2>

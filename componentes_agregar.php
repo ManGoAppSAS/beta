@@ -53,14 +53,14 @@ if ($agregar == 'si')
 
     if ($consulta->num_rows == 0)
     {
-        //calculo la unidad con base a la unidad de compra
-        if ($unidad_compra == "k")
+        //calculo la unidad minima con base a la unidad de compra
+        if (($unidad_compra == "k") or ($unidad_compra == "arroba 12.5 k") or ($unidad_compra == "bulto 25 k") or ($unidad_compra == "bulto 50 k"))
         {
             $unidad = "g";
         }
         else
         {
-            if (($unidad_compra == "l") or ($unidad_compra == "botella 375 ml") or ($unidad_compra == "botella 750 ml") or ($unidad_compra == "botella 1500 ml") or ($unidad_compra == "garrafa 2000 ml"))
+        if (($unidad_compra == "l") or ($unidad_compra == "botella 375 ml") or ($unidad_compra == "botella 750 ml") or ($unidad_compra == "botella 1500 ml") or ($unidad_compra == "garrafa 2000 ml") or ($unidad_compra == "galon 3.7 l") or ($unidad_compra == "botella 5 l") or ($unidad_compra == "botellon 18 l") or ($unidad_compra == "botellon 20 l") or ($unidad_compra == "botella 3 l"))
             {
                 $unidad = "ml";
             }
@@ -72,7 +72,14 @@ if ($agregar == 'si')
                 }
                 else
                 {
-                    $unidad = $unidad_compra;
+                    if (($unidad_compra == "par") or ($unidad_compra == "trio") or ($unidad_compra == "decena") or ($unidad_compra == "docena") or ($unidad_compra == "quincena") or ($unidad_compra == "treintena") or ($unidad_compra == "centena"))
+                    {
+                        $unidad = "unid";
+                    }
+                    else
+                    {
+                        $unidad = $unidad_compra;
+                    }
                 }
             }
         }
@@ -108,14 +115,119 @@ if ($agregar == 'si')
                         }
                         else
                         {
-                            $costo_unidad = $costo_unidad_compra;
+                            if ($unidad_compra == "arroba 12.5 k")
+                            {
+                                $costo_unidad = $costo_unidad_compra / 12500;
+                            }
+                            else
+                            {
+                                if ($unidad_compra == "bulto 25 k")
+                                {
+                                    $costo_unidad = $costo_unidad_compra / 25000;
+                                }
+                                else
+                                {
+                                    if ($unidad_compra == "bulto 50 k")
+                                    {
+                                        $costo_unidad = $costo_unidad_compra / 50000;
+                                    }
+                                    else
+                                    {
+                                        if ($unidad_compra == "galon 3.7 l")
+                                        {
+                                            $costo_unidad = $costo_unidad_compra / 3785;
+                                        }
+                                        else
+                                        {
+                                            if ($unidad_compra == "botella 5 l")
+                                            {
+                                                $costo_unidad = $costo_unidad_compra / 5000;
+                                            }
+                                            else
+                                            {
+                                                if ($unidad_compra == "botellon 18 l")
+                                                {
+                                                    $costo_unidad = $costo_unidad_compra / 18000;
+                                                }
+                                                else
+                                                {
+                                                    if ($unidad_compra == "botellon 20 l")
+                                                    {
+                                                        $costo_unidad = $costo_unidad_compra / 20000;
+                                                    }
+                                                    else
+                                                    {
+                                                        if ($unidad_compra == "botella 3 l")
+                                                        {
+                                                            $costo_unidad = $costo_unidad_compra / 3000;
+                                                        }
+                                                        else
+                                                        {
+                                                            if ($unidad_compra == "par")
+                                                            {
+                                                                $costo_unidad = $costo_unidad_compra / 2;
+                                                            }
+                                                            else
+                                                            {
+                                                                if ($unidad_compra == "trio")
+                                                                {
+                                                                    $costo_unidad = $costo_unidad_compra / 3;
+                                                                }
+                                                                else
+                                                                {
+                                                                    if ($unidad_compra == "decena")
+                                                                    {
+                                                                        $costo_unidad = $costo_unidad_compra / 10;
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        if ($unidad_compra == "docena")
+                                                                        {
+                                                                            $costo_unidad = $costo_unidad_compra / 12;
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            if ($unidad_compra == "quincena")
+                                                                            {
+                                                                                $costo_unidad = $costo_unidad_compra / 15;
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                if ($unidad_compra == "treintena")
+                                                                                {
+                                                                                    $costo_unidad = $costo_unidad_compra / 30;
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    if ($unidad_compra == "centena")
+                                                                                    {
+                                                                                        $costo_unidad = $costo_unidad_compra / 100;
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        $costo_unidad = $costo_unidad_compra;
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
             }
         }        
 
-        $insercion = $conexion->query("INSERT INTO componentes values ('', '$ahora', '$sesion_id', '$unidad', '$unidad_compra', '$componente', '$costo_unidad', '$costo_unidad_compra', '$proveedor', '0', 'comprado')");
+        $insercion = $conexion->query("INSERT INTO componentes values ('', '$ahora', '$sesion_id', '$unidad', '$unidad_compra', '$componente', '$costo_unidad', '$costo_unidad_compra', '$proveedor')");
 
         $mensaje = "Componente <b>" . ucfirst($componente) . "</b> agregado";
         $body_snack = 'onLoad="Snackbar()"';
@@ -232,13 +344,30 @@ if ($agregar == 'si')
                 <option value="k">k</option>
                 <option value="l">l</option>
                 <option value="m">m</option>
-                <option value="">---------</option>             
+                <option value="">---------</option>
+                <option value="arroba 12.5 k">arroba 12.5 k</option>
+                <option value="bulto 25 k">bulto 25 k</option>
+                <option value="bulto 50 k">bulto 50 k</option>
+                <option value="">---------</option>
                 <option value="botella 375 ml">botella 375 ml</option>
                 <option value="botella 750 ml">botella 750 ml</option>
                 <option value="botella 1500 ml">botella 1500 ml</option>
                 <option value="garrafa 2000 ml">garrafa 2000 ml</option>
-                <<option value="">---------</option>
+                <option value="">---------</option>
+                <option value="galon 3.7 l">galon 3.7 l</option>
+                <option value="botella 3 l">botella 3 l</option>
+                <option value="botella 5 l">botella 5 l</option>
+                <option value="botellon 18 l">botellon 18 l</option>
+                <option value="botellon 20 l">botellon 20 l</option>
+                <option value="">---------</option>
                 <option value="unid">unid</option>
+                <option value="par">par</option>
+                <option value="trio">trio</option>
+                <option value="decena">decena</option>
+                <option value="docena">docena</option>
+                <option value="quincena">quincena</option>
+                <option value="treintena">treintena</option>
+                <option value="centena">centena</option>
             </select></p>
             <p class="rdm-formularios--ayuda">Unidad de compra del componente</p>
 

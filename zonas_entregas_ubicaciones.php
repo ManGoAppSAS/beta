@@ -294,23 +294,31 @@ else
 
 
 
-                <div class="rdm-tarjeta--cuerpo">                    
+                <div class="rdm-tarjeta--cuerpo">
+
+                --------------------------          
 
                     <?php 
                     //consulto y muestro los productos o servicios pedidos en esta zona
-                    $consulta_pro = $conexion->query("SELECT * FROM ventas_productos WHERE ubicacion_id = '$ubicacion_id' and local = '$sesion_local_id' and venta_id = '$venta_id' and (estado = 'confirmado' or estado = 'entregado') and zona = '$zona_id' ORDER BY fecha, ubicacion ASC");
+                    $consulta_pro = $conexion->query("SELECT distinct producto_id FROM ventas_productos WHERE ubicacion_id = '$ubicacion_id' and local = '$sesion_local_id' and venta_id = '$venta_id' and (estado = 'confirmado' or estado = 'entregado') and zona = '$zona_id' ORDER BY fecha, ubicacion ASC");
 
                     while ($fila_pro = $consulta_pro->fetch_assoc())
                     {
-                        $id = $fila_pro['id'];
-                        $producto = $fila_pro['producto_id'];
-                        $categoria = $fila_pro['categoria'];
-                        $estado = $fila_pro['estado'];
+                        $producto_id = $fila_pro['producto_id'];
 
-                        
+                        //consulto los datos del producto en la venta
+                        $consulta_producto_venta = $conexion->query("SELECT * FROM ventas_productos WHERE id = '$producto_id'");           
+
+                        if ($fila_producto_venta = $consulta_producto_venta->fetch_assoc()) 
+                        {
+                            $producto_id = $fila_producto_venta['id'];
+                            $producto = $fila_producto_venta['producto'];
+                        }
+
+
 
                         //consulto los datos del producto
-                        $consulta_producto = $conexion->query("SELECT * FROM productos WHERE id = '$producto'");           
+                        $consulta_producto = $conexion->query("SELECT * FROM productos WHERE id = '$producto_id'");           
 
                         if ($fila = $consulta_producto->fetch_assoc()) 
                         {
@@ -320,14 +328,12 @@ else
 
                         if ($estado == "entregado")
                         {
-                            $texto_pedido = '<p style="color: #009688"><strike>' . ucfirst($producto) . ' </strike></p>';                    
+                            $texto_pedido = '<p style="color: #009688"><strike>' . ucfirst($producto) . ' </strike></p>';
                         }
                         else
                         {
                             $texto_pedido = '<p style="color: none"><b>' . ucfirst($producto) . '</b></p>';
-                        }
-
-                        
+                        }                        
 
                         ?>
 
@@ -341,7 +347,7 @@ else
                     }   
                     ?>
 
-                    <div class="rdm-tarjeta--acciones-izquierda">            
+                    <div class="rdm-tarjeta--acciones-izquierda">
                         <a href="zonas_entregas_ubicaciones.php?entregar=si&venta_id=<?php echo $venta_id ?>&id=<?php echo $id ?>&ubicacion_id=<?php echo $ubicacion_id ?>&ubicacion=<?php echo $ubicacion ?>&zona_id=<?php echo "$zona_id";?>&zona=<?php echo "$zona";?>&atendido=<?php echo "$atendido";?>&producto=<?php echo "$producto";?>"><button class="rdm-boton--resaltado">Pedido listo</button></a>
                     </div>
 
@@ -357,9 +363,6 @@ else
     
 }
 ?>
-
-
-
 
 </div>
 

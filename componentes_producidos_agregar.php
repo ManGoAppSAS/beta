@@ -18,8 +18,11 @@ include ("sis/variables_sesion.php");
 //declaro las variables que pasan por formulario o URL
 if(isset($_POST['agregar'])) $agregar = $_POST['agregar']; elseif(isset($_GET['agregar'])) $agregar = $_GET['agregar']; else $agregar = null;
 
+if(isset($_POST['unidad_compra'])) $unidad_compra = $_POST['unidad_compra']; elseif(isset($_GET['unidad_compra'])) $unidad_compra = $_GET['unidad_compra']; else $unidad_compra = null;
 if(isset($_POST['unidad'])) $unidad = $_POST['unidad']; elseif(isset($_GET['unidad'])) $unidad = $_GET['unidad']; else $unidad = null;
+if(isset($_POST['cantidad'])) $cantidad = $_POST['cantidad']; elseif(isset($_GET['cantidad'])) $cantidad = $_GET['cantidad']; else $cantidad = null;
 if(isset($_POST['componente'])) $componente = $_POST['componente']; elseif(isset($_GET['componente'])) $componente = $_GET['componente']; else $componente = null;
+if(isset($_POST['preparacion'])) $preparacion = $_POST['preparacion']; elseif(isset($_GET['preparacion'])) $preparacion = $_GET['preparacion']; else $preparacion = null;
 if(isset($_POST['local'])) $local = $_POST['local']; elseif(isset($_GET['local'])) $local = $_GET['local']; else $local = 0;
 
 if(isset($_POST['mensaje'])) $mensaje = $_POST['mensaje']; elseif(isset($_GET['mensaje'])) $mensaje = $_GET['mensaje']; else $mensaje = null;
@@ -48,13 +51,37 @@ else
 //agregar el componente
 if ($agregar == 'si')
 {
-    $consulta = $conexion->query("SELECT * FROM componentes WHERE componente = '$componente' and productor = '$local' LIMIT 1");
+    $consulta = $conexion->query("SELECT * FROM componentes_producidos WHERE componente = '$componente' and productor = '$local' LIMIT 1");
 
     if ($consulta->num_rows == 0)
     {
-        $insercion = $conexion->query("INSERT INTO componentes values ('', '$ahora', '$sesion_id', 'unid', '$componente', '0', '0', '$local', 'producido')");
+        //calculo la unidad con base a la unidad de compra
+        if ($unidad_compra == "k")
+        {
+            $unidad = "g";
+        }
+        else
+        {
+        if ($unidad_compra == "l")
+            {
+                $unidad = "ml";
+            }
+            else
+            {
+                if ($unidad_compra == "m")
+                {
+                    $unidad = "mm";
+                }
+                else
+                {
+                    $unidad = $unidad_compra;
+                }
+            }
+        }        
 
-        $mensaje = "Componente <b>" . ucfirst($componente) . "</b> agregado";
+        $insercion = $conexion->query("INSERT INTO componentes_producidos values ('', '$ahora', '$sesion_id', 'unid', 'unid', '$componente', '0', '0', '$local', '$preparacion')");
+
+        $mensaje = "Componente producido <b>" . ucfirst($componente) . "</b> agregado";
         $body_snack = 'onLoad="Snackbar()"';
         $mensaje_tema = "aviso";
 
@@ -62,7 +89,7 @@ if ($agregar == 'si')
     }
     else
     {
-        $mensaje = "El componente <b>" . ucfirst($componente) . "</b> ya existe, no es posible agregarlo de nuevo";
+        $mensaje = "El componente producido <b>" . ucfirst($componente) . "</b> ya existe, no es posible agregarlo de nuevo";
         $body_snack = 'onLoad="Snackbar()"';
         $mensaje_tema = "error";
     }
@@ -158,7 +185,13 @@ if ($agregar == 'si')
             </select></p>
             <p class="rdm-formularios--ayuda">Local que produce el componente</p>
             
-                       
+            
+
+            
+
+            <p class="rdm-formularios--label"><label for="preparacion">Preparación</label></p>
+            <p><textarea id="preparacion" name="preparacion"><?php echo "$preparacion"; ?></textarea></p>
+            <p class="rdm-formularios--ayuda">Escribe la preparación o receta</p>
             
             <button type="submit" class="rdm-boton--fab" name="agregar" value="si"><i class="zmdi zmdi-check zmdi-hc-2x"></i></button>
         </form>

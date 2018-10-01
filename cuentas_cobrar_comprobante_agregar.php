@@ -30,6 +30,7 @@ if(isset($_POST['concepto'])) $concepto = $_POST['concepto']; elseif(isset($_GET
 if(isset($_POST['valor'])) $valor = $_POST['valor']; elseif(isset($_GET['valor'])) $valor = $_GET['valor']; else $valor = null;
 if(isset($_POST['local'])) $local = $_POST['local']; elseif(isset($_GET['local'])) $local = $_GET['local']; else $local = 0;
 if(isset($_POST['periodicidad'])) $periodicidad = $_POST['periodicidad']; elseif(isset($_GET['periodicidad'])) $periodicidad = $_GET['periodicidad']; else $periodicidad = 0;
+if(isset($_POST['observaciones'])) $observaciones = $_POST['observaciones']; elseif(isset($_GET['observaciones'])) $observaciones = $_GET['observaciones']; else $observaciones = null;
 
 if(isset($_POST['fecha'])) $fecha = $_POST['fecha']; elseif(isset($_GET['fecha'])) $fecha = $_GET['fecha']; else $fecha = date('Y-m-d');
 if(isset($_POST['hora'])) $hora = $_POST['hora']; elseif(isset($_GET['hora'])) $hora = $_GET['hora']; else $hora = date('H:i');
@@ -164,18 +165,14 @@ if ($editar == "si")
     <section class="rdm-formulario">
 
         <form action="cuentas_cobrar_detalle.php" method="post">
-            <input type="text" name="venta_id" value="<?php echo "$venta_id"; ?>" />
-            <input type="text" name="venta_consecutivo" value="<?php echo "$venta_consecutivo"; ?>" />
-            <input type="text" name="total_neto" value="<?php echo "$total_neto"; ?>" />
-            <input type="text" name="saldo_pendiente" value="<?php echo "$saldo_pendiente"; ?>" />
+            <input type="hidden" name="venta_id" value="<?php echo "$venta_id"; ?>" />
+            <input type="hidden" name="venta_consecutivo" value="<?php echo "$venta_consecutivo"; ?>" />
+            <input type="hidden" name="total_neto" value="<?php echo "$total_neto"; ?>" />
+            <input type="hidden" name="saldo_pendiente" value="<?php echo "$saldo_pendiente"; ?>" />
 
             <p class="rdm-formularios--label"><label for="valor">Valor*</label></p>
             <p><input type="tel" id="valor" name="valor" value="<?php echo "$valor"; ?>" spellcheck="false" required autofocus /></p>
             <p class="rdm-formularios--ayuda">Valor a pagar</p>
-
-            <p class="rdm-formularios--label"><label for="concepto">Concepto*</label></p>
-            <p><input type="text" id="concepto" name="concepto" value="<?php echo "$concepto"; ?>" spellcheck="false" required /></p>
-            <p class="rdm-formularios--ayuda">Concepto del comprobante</p>
 
             <p class="rdm-formularios--label"><label for="tipo_pago">Tipo de pago*</label></p>
             <p><select id="tipo_pago" name="tipo_pago" required>
@@ -233,7 +230,17 @@ if ($editar == "si")
                 }
                 ?>
             </select></p>
-            <p class="rdm-formularios--ayuda">Selecciona un tipo de pago</p>            
+            <p class="rdm-formularios--ayuda">Selecciona un tipo de pago</p>  
+
+            <p class="rdm-formularios--label"><label for="concepto">Concepto*</label></p>
+            <p><input type="text" id="concepto" name="concepto" value="<?php echo "$concepto"; ?>" spellcheck="false" required /></p>
+            <p class="rdm-formularios--ayuda">Concepto del comprobante</p>
+
+            <p class="rdm-formularios--label"><label for="observaciones">Observaciones</label></p>
+            <p><textarea id="observaciones" name="observaciones"><?php echo "$observaciones"; ?></textarea></p>
+            <p class="rdm-formularios--ayuda">Escribe observaciones para el comprobante</p>
+
+                      
             
             <button type="submit" class="rdm-boton--fab" name="agregar" value="si"><i class="zmdi zmdi-check zmdi-hc-2x"></i></button>
         </form>

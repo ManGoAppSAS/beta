@@ -22,8 +22,9 @@ if(isset($_POST['venta_id'])) $venta_id = $_POST['venta_id']; elseif(isset($_GET
 if(isset($_POST['venta_consecutivo'])) $venta_consecutivo = $_POST['venta_consecutivo']; elseif(isset($_GET['venta_consecutivo'])) $venta_consecutivo = $_GET['venta_consecutivo']; else $venta_consecutivo = null;
 
 if(isset($_POST['valor'])) $valor = $_POST['valor']; elseif(isset($_GET['valor'])) $valor = $_GET['valor']; else $valor = null;
-if(isset($_POST['concepto'])) $concepto = $_POST['concepto']; elseif(isset($_GET['concepto'])) $concepto = $_GET['concepto']; else $concepto = null;
 if(isset($_POST['tipo_pago'])) $tipo_pago = $_POST['tipo_pago']; elseif(isset($_GET['tipo_pago'])) $tipo_pago = $_GET['tipo_pago']; else $tipo_pago = null;
+if(isset($_POST['concepto'])) $concepto = $_POST['concepto']; elseif(isset($_GET['concepto'])) $concepto = $_GET['concepto']; else $concepto = null;
+if(isset($_POST['observaciones'])) $observaciones = $_POST['observaciones']; elseif(isset($_GET['observaciones'])) $observaciones = $_GET['observaciones']; else $observaciones = null;
 
 
 if(isset($_POST['mensaje'])) $mensaje = $_POST['mensaje']; elseif(isset($_GET['mensaje'])) $mensaje = $_GET['mensaje']; else $mensaje = null;
@@ -31,11 +32,22 @@ if(isset($_POST['body_snack'])) $body_snack = $_POST['body_snack']; elseif(isset
 if(isset($_POST['mensaje_tema'])) $mensaje_tema = $_POST['mensaje_tema']; elseif(isset($_GET['mensaje_tema'])) $mensaje_tema = $_GET['mensaje_tema']; else $mensaje_tema = null;
 ?>
 
+<?php 
+//consulto el tipo de pago enviado desde el formulario  
+$consulta_tipo_pago = $conexion->query("SELECT * FROM tipos_pagos WHERE id = '$tipo_pago'");           
+
+if ($fila = $consulta_tipo_pago->fetch_assoc()) 
+{    
+    $tipo_pago_id = ucfirst($fila['id']);
+    $tipo_pago = ucfirst($fila['tipo_pago']);
+}
+?>
+
 <?php
 //agrego el comprobante de ingreso
 if ($agregar == "si")
 {   
-    $insercion_comprobante = $conexion->query("INSERT INTO comprobantes_ingreso values ('', '$ahora', '$sesion_id', '$venta_id', '$valor', '')");
+    $insercion_comprobante = $conexion->query("INSERT INTO comprobantes_ingreso values ('', '$ahora', '$sesion_id', '$venta_id', '$valor', '$tipo_pago_id', '$tipo_pago', '$concepto', '$observaciones', '')");
 
     if ($insercion_comprobante)
     {
@@ -43,6 +55,29 @@ if ($agregar == "si")
         $body_snack = 'onLoad="Snackbar()"';
         $mensaje_tema = "aviso";
     }
+}
+?>
+
+<?php
+//consulto el total pagado en los comprobantes
+$consulta = $conexion->query("SELECT * FROM comprobantes_ingreso WHERE venta_id = '$venta_id' ORDER BY fecha");
+
+if ($consulta->num_rows == 0)
+{
+    $total_pagado = 0;
+}
+else
+{
+    $total_pagado = 0;
+
+    while ($fila = $consulta->fetch_assoc())
+    {        
+        $valor = $fila['valor'];
+
+        $total_pagado = $total_pagado + $valor;        
+    }
+
+
 }
 ?>
 
@@ -104,6 +139,10 @@ if ($agregar == "si")
             {
                 $usuario = $fila['correo'];
             }
+
+            $saldo_nuevo = $saldo_pendiente - $total_pagado;
+
+            $actualizar_saldo = $conexion->query("UPDATE ventas_datos SET saldo_pendiente = '$saldo_nuevo' WHERE id = '$venta_id'");
             ?>
 
             <section class="rdm-tarjeta">
@@ -111,6 +150,7 @@ if ($agregar == "si")
                 <div class="rdm-tarjeta--primario-largo">
                     <h1 class="rdm-tarjeta--titulo-largo">Pendiente: $ <?php echo number_format($saldo_pendiente, 2, ",", "."); ?></h1>
                     <h2 class="rdm-tarjeta--subtitulo-largo">A pagar: $ <?php echo number_format($total_neto, 2, ",", "."); ?></h2>
+                    <h2 class="rdm-tarjeta--subtitulo-largo">Total pagado: $ <?php echo number_format($total_pagado, 2, ",", "."); ?></h2>
                 </div>
 
                 <div class="rdm-tarjeta--cuerpo">
@@ -153,6 +193,8 @@ if ($agregar == "si")
         }
         else
         {
+            $total_pagado = 0;
+
             while ($fila = $consulta->fetch_assoc())
             {
                 $comprobante_id = $fila['id'];
@@ -160,6 +202,8 @@ if ($agregar == "si")
                 $hora = date('h:i a', strtotime($fila['fecha']));
                 $valor = $fila['valor'];
                 $consecutivo = $fila['consecutivo'];
+
+                $total_pagado = $total_pagado + $valor;
               
                 ?>
 
@@ -177,6 +221,8 @@ if ($agregar == "si")
                 
                 <?php
             }
+
+            echo "$total_pagado";
         }
         ?>
 

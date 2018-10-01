@@ -141,8 +141,7 @@ Autor: Danny Estrada
     padding: 0em 1.2em;
 }
 
-.rdm-tarjeta--acciones-izquierda, .rdm-tarjeta--acciones-derecha{
-    padding: 0.5em;
+.rdm-tarjeta--acciones-izquierda, .rdm-tarjeta--acciones-derecha{    
     box-sizing: border-box;
     text-align: left;
 }

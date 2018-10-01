@@ -222,6 +222,8 @@ if ($fila_permisos = $consulta_permisos->fetch_assoc())
         }
         ?>
 
+        
+
         <a class="ancla" name="cuentas_cobrar"></a>
         
         <a href="cuentas_cobrar_ver.php">

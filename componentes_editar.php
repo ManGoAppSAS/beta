@@ -159,13 +159,30 @@ else
                 <option value="k">k</option>
                 <option value="l">l</option>
                 <option value="m">m</option>
-                <option value="">---------</option>             
+                <option value="">---------</option>
+                <option value="arroba 12.5 k">arroba 12.5 k</option>
+                <option value="bulto 25 k">bulto 25 k</option>
+                <option value="bulto 50 k">bulto 50 k</option>
+                <option value="">---------</option>
                 <option value="botella 375 ml">botella 375 ml</option>
                 <option value="botella 750 ml">botella 750 ml</option>
                 <option value="botella 1500 ml">botella 1500 ml</option>
                 <option value="garrafa 2000 ml">garrafa 2000 ml</option>
-                <<option value="">---------</option>
+                <option value="">---------</option>
+                <option value="galon 3.7 l">galon 3.7 l</option>
+                <option value="botella 3 l">botella 3 l</option>
+                <option value="botella 5 l">botella 5 l</option>
+                <option value="botellon 18 l">botellon 18 l</option>
+                <option value="botellon 20 l">botellon 20 l</option>
+                <option value="">---------</option>
                 <option value="unid">unid</option>
+                <option value="par">par</option>
+                <option value="trio">trio</option>
+                <option value="decena">decena</option>
+                <option value="docena">docena</option>
+                <option value="quincena">quincena</option>
+                <option value="treintena">treintena</option>
+                <option value="centena">centena</option>
             </select></p>
             <p class="rdm-formularios--ayuda">Unidad de compra del componente</p>
 
