@@ -23,6 +23,7 @@ if(isset($_POST['venta_id'])) $venta_id = $_POST['venta_id']; elseif(isset($_GET
 if(isset($_POST['ubicacion'])) $ubicacion = $_POST['ubicacion']; elseif(isset($_GET['ubicacion'])) $ubicacion = $_GET['ubicacion']; else $ubicacion = null;
 if(isset($_POST['atendido'])) $atendido = $_POST['atendido']; elseif(isset($_GET['atendido'])) $atendido = $_GET['atendido']; else $atendido = null;
 if(isset($_POST['producto'])) $producto = $_POST['producto']; elseif(isset($_GET['producto'])) $producto = $_GET['producto']; else $producto = null;
+if(isset($_POST['producto_id'])) $producto_id = $_POST['producto_id']; elseif(isset($_GET['producto_id'])) $producto_id = $_GET['producto_id']; else $producto_id = null;
 if(isset($_POST['zona'])) $zona = $_POST['zona']; elseif(isset($_GET['zona'])) $zona = $_GET['zona']; else $zona = null;
 if(isset($_POST['zona_id'])) $zona_id = $_POST['zona_id']; elseif(isset($_GET['zona_id'])) $zona_id = $_GET['zona_id']; else $zona_id = null;
 
@@ -47,9 +48,21 @@ if ($entregar == "si")
 //entrego el producto o servicio del pedido
 if ($entregar_uno == "si")
 {
-    $actualizar = $conexion->query("UPDATE ventas_productos SET estado = 'entregado' WHERE venta_id = '$venta_id' and id = '$id'");
+    $actualizar = $conexion->query("UPDATE ventas_productos SET estado = 'entregado' WHERE venta_id = '$venta_id' and producto_id = '$producto_id'");
 
     $mensaje = "Producto <b>".ucfirst($producto)."</b> entregado exitosamente a <b>".ucfirst($atendido)."</b>";
+    $body_snack = 'onLoad="Snackbar()"';
+    $mensaje_tema = "aviso";
+}
+?>
+
+<?php
+//deshago la entrega del producto o servicio del pedido
+if ($entregar_uno == "no")
+{
+    $actualizar = $conexion->query("UPDATE ventas_productos SET estado = 'confirmado' WHERE venta_id = '$venta_id' and producto_id = '$producto_id'");
+
+    $mensaje = "Producto <b>".ucfirst($producto)."</b> devuelto exitosamente a <b>".ucfirst($zona)."</b>";
     $body_snack = 'onLoad="Snackbar()"';
     $mensaje_tema = "aviso";
 }
@@ -96,368 +109,309 @@ $total_productos = $consulta_productos->num_rows;
     </div>
 </header>
 
-<main class="rdm--contenedor-zona">
+<main class="rdm--contenedor-zona" >
 
 
 
-<div style="width: 100%; display: flex; justify-content: space-between;">
     
     
-<div>
-
-<?php
-//consulto y muestro los productos o servicios pedidos en esta zona
-$consulta = $conexion->query("SELECT distinct ubicacion_id FROM ventas_productos WHERE zona = '$zona_id' and local = '$sesion_local_id' and estado = 'confirmado' ORDER BY fecha ASC");
-
-if ($consulta->num_rows == 0)
-{
-    //header("location:zonas_entregas_entrada.php");
-
-    ?>
-
-    <div class="rdm--contenedor">
-        <section class="rdm-lista">
-
-            <article class="rdm-lista--item-sencillo">
-                <div class="rdm-lista--izquierda-sencillo">
-                    <div class="rdm-lista--contenedor">
-                        <div class="rdm-lista--icono"><i class="zmdi zmdi-assignment-o zmdi-hc-2x"></i></div>
-                    </div>
-                    <div class="rdm-lista--contenedor">
-                        <h2 class="rdm-lista--titulo">No hay pedidos</h2>
-                    </div>
-                </div>
-            </article>
-
-        </section>
-    </div>
-
-    
-
-    <?php
-}
-else                 
-{
-    
-    while ($fila = $consulta->fetch_assoc())
-    {                        
-        $ubicacion_id = $fila['ubicacion_id'];
-
-        //consulto los datos de la ubicacion
-        $consulta_ubicacion = $conexion->query("SELECT * FROM ubicaciones WHERE id = '$ubicacion_id'");           
-
-        if ($fila_ubicacion = $consulta_ubicacion->fetch_assoc()) 
-        {
-            $ubicacion_id = $fila_ubicacion['id'];
-            $ubicacion = $fila_ubicacion['ubicacion'];
-            $ubicada = $fila_ubicacion['ubicada'];
-            $tipo = $fila_ubicacion['tipo'];
-        }
-
-        //consulto los datos de la ubicacion dentro de la venta
-        $consulta_ubicacion_v = $conexion->query("SELECT * FROM ventas_productos WHERE ubicacion_id = '$ubicacion_id' and estado = 'confirmado'");
-
-        if ($fila_ubicacion_v = $consulta_ubicacion_v->fetch_assoc()) 
-        {                            
-            $usuario = $fila_ubicacion_v['usuario'];
-            $venta_id = $fila_ubicacion_v['venta_id'];
-
-            //consulto los datos de la venta
-            $consulta_venta = $conexion->query("SELECT * FROM ventas_datos WHERE id = '$venta_id'");
-
-            if ($fila_venta = $consulta_venta->fetch_assoc()) 
-            {                            
-                $cliente_id = $fila_venta['cliente_id'];
-                $observaciones = $fila_venta['observaciones'];
-
-                //consulto el cliente que tiene la venta
-                $consulta_cliente = $conexion->query("SELECT * FROM clientes WHERE id = '$cliente_id'");           
-
-                if ($fila_cliente = $consulta_cliente->fetch_assoc()) 
-                {
-                    $ubicacion_texto = ucwords($fila_cliente['nombre']);
-                }
-                else
-                {
-                    $ubicacion_texto = "$ubicacion";
-                }
-            }
-
-            //consulto el usuario que tiene la venta
-            $consulta_usuario = $conexion->query("SELECT * FROM usuarios WHERE id = '$usuario'");
-
-            if ($fila = $consulta_usuario->fetch_assoc()) 
-            {
-                $nombres = $fila['nombres'];
-                $apellidos = $fila['apellidos'];
-                $atendido = "".ucwords($nombres)." ".ucwords($apellidos)."";
-            }
-        }
-
-        //consulto el total de productos pedidos en la zona
-        $consulta_productos = $conexion->query("SELECT * FROM ventas_productos WHERE ubicacion_id = '$ubicacion_id' and local = '$sesion_local_id' and estado = 'confirmado' and zona = '$zona_id'");
-        $total_productos = $consulta_productos->num_rows;
-
-        if ($consulta_productos->num_rows == 0)
-        {
-            $cantidad = "";
-        }
-        else
-        {
-            if ($consulta_productos->num_rows == 1)
-            {
-                $cantidad = $consulta_productos->num_rows;
-            }
-            else
-            {
-                $cantidad = $consulta_productos->num_rows;
-            }
-        }
-
-        //consulto el ultimo pedido hecho
-        $consulta_ultimo = $conexion->query("SELECT * FROM ventas_productos WHERE ubicacion_id = '$ubicacion_id' and local = '$sesion_local_id' and estado = 'confirmado' and zona = '$zona_id' ORDER BY fecha DESC LIMIT 1");
-
-        while ($fila = $consulta_ultimo->fetch_assoc())
-        {
-            $fecha = date('d M', strtotime($fila['fecha']));
-            $hora = date('h:i a', strtotime($fila['fecha']));
-
-            //calculo el tiempo transcurrido
-            $fecha = date('Y-m-d H:i:s', strtotime($fila['fecha']));
-            include ("sis/tiempo_transcurrido.php");
-
-
-        }
-
-        //alerta y vibración si el pedido lleva menos de 10 segundos
-        if ($segundos_transcurridos < 13)
-        {               
-            ?>
-
-            <audio autoplay controls style="display: none;">
-              <source src="alerta.mp3" type="audio/mpeg">
-            </audio>
-
-            <script>
-            if (window.navigator && window.navigator.vibrate) {
-                   navigator.vibrate([100, 100, 100, 100, 100, 100, 100, 100, 100, 100]);
-            }
-            </script>
-
-
-            <script type="text/javascript">
-                window.onload = function(){
-                    Push.Permission.request();
-                }
-
-                Push.create('Notificación', {
-                    body: 'Nuevo pedido',
-                    icon: 'img/a1.jpg',
-                    link: '/#',
-                    timeout: 10000,
-                    vibrate: [200, 100, 200, 100, 200, 100, 200],
-                    onClick: function () {
-                        window.location = "zonas_entregas_ubicaciones.php?zona_id=<?php echo "$zona_id";?>&zona=<?php echo "$zona";?>";
-                        this.close();
-                    }
-                    
-                });
-                
-            </script>
+	<div>
+
+	<?php
+	//consulto y muestro las ubicaciones activas
+	$consulta = $conexion->query("SELECT distinct ubicacion_id FROM ventas_productos WHERE zona = '$zona_id' and local = '$sesion_local_id' and estado = 'confirmado' ORDER BY fecha ASC");
+
+	if ($consulta->num_rows == 0)
+	{
+	    //header("location:zonas_entregas_entrada.php");
+
+	    ?>
+
+	    <div class="rdm--contenedor">
+	        <section class="rdm-lista">
+
+	            <article class="rdm-lista--item-sencillo">
+	                <div class="rdm-lista--izquierda-sencillo">
+	                    <div class="rdm-lista--contenedor">
+	                        <div class="rdm-lista--icono"><i class="zmdi zmdi-assignment-o zmdi-hc-2x"></i></div>
+	                    </div>
+	                    <div class="rdm-lista--contenedor">
+	                        <h2 class="rdm-lista--titulo">No hay pedidos</h2>
+	                    </div>
+	                </div>
+	            </article>
+
+	        </section>
+	    </div>
+
+	    
+
+	    <?php
+	}
+	else                 
+	{
+	    
+	    while ($fila = $consulta->fetch_assoc())
+	    {                        
+	        $ubicacion_id = $fila['ubicacion_id'];
+
+	        //consulto los datos de la ubicacion
+	        $consulta_ubicacion = $conexion->query("SELECT * FROM ubicaciones WHERE id = '$ubicacion_id'");           
+
+	        if ($fila_ubicacion = $consulta_ubicacion->fetch_assoc()) 
+	        {
+	            $ubicacion_id = $fila_ubicacion['id'];
+	            $ubicacion = $fila_ubicacion['ubicacion'];
+	            $ubicada = $fila_ubicacion['ubicada'];
+	            $tipo = $fila_ubicacion['tipo'];
+	        }
+
+	        //consulto los datos de la ubicacion dentro de la venta
+	        $consulta_ubicacion_v = $conexion->query("SELECT * FROM ventas_productos WHERE ubicacion_id = '$ubicacion_id' and estado = 'confirmado'");
+
+	        if ($fila_ubicacion_v = $consulta_ubicacion_v->fetch_assoc()) 
+	        {                            
+	            $usuario = $fila_ubicacion_v['usuario'];
+	            $venta_id = $fila_ubicacion_v['venta_id'];
+
+	            //consulto los datos de la venta
+	            $consulta_venta = $conexion->query("SELECT * FROM ventas_datos WHERE id = '$venta_id'");
+
+	            if ($fila_venta = $consulta_venta->fetch_assoc()) 
+	            {                            
+	                $cliente_id = $fila_venta['cliente_id'];
+	                $observaciones = $fila_venta['observaciones'];
+
+	                //consulto el cliente que tiene la venta
+	                $consulta_cliente = $conexion->query("SELECT * FROM clientes WHERE id = '$cliente_id'");           
+
+	                if ($fila_cliente = $consulta_cliente->fetch_assoc()) 
+	                {
+	                    $ubicacion_texto = ucwords($fila_cliente['nombre']);
+	                }
+	                else
+	                {
+	                    $ubicacion_texto = "$ubicacion";
+	                }
+	            }
+
+	            //consulto el usuario que tiene la venta
+	            $consulta_usuario = $conexion->query("SELECT * FROM usuarios WHERE id = '$usuario'");
+
+	            if ($fila = $consulta_usuario->fetch_assoc()) 
+	            {
+	                $nombres = $fila['nombres'];
+	                $apellidos = $fila['apellidos'];
+
+	                $nombres = ucfirst(strtok($nombres, " "));
+                    $apellidos = ucfirst(strtok($apellidos, " "));
+
+	                $atendido = "".ucwords($nombres)." ".ucwords($apellidos)."";
+
+
+	            }
+	        }
+
+	        //consulto el total de productos pedidos en la zona
+	        $consulta_productos = $conexion->query("SELECT * FROM ventas_productos WHERE ubicacion_id = '$ubicacion_id' and local = '$sesion_local_id' and estado = 'confirmado' and zona = '$zona_id'");
+	        $total_productos = $consulta_productos->num_rows;
+
+	        if ($consulta_productos->num_rows == 0)
+	        {
+	            $cantidad = "";
+	        }
+	        else
+	        {
+	            if ($consulta_productos->num_rows == 1)
+	            {
+	                $cantidad = $consulta_productos->num_rows;
+	            }
+	            else
+	            {
+	                $cantidad = $consulta_productos->num_rows;
+	            }
+	        }
+
+	        //consulto el ultimo pedido hecho
+	        $consulta_ultimo = $conexion->query("SELECT * FROM ventas_productos WHERE ubicacion_id = '$ubicacion_id' and local = '$sesion_local_id' and estado = 'confirmado' and zona = '$zona_id' ORDER BY fecha DESC LIMIT 1");
+
+	        while ($fila = $consulta_ultimo->fetch_assoc())
+	        {
+	            $fecha = date('d M', strtotime($fila['fecha']));
+	            $hora = date('h:i a', strtotime($fila['fecha']));
+
+	            //calculo el tiempo transcurrido
+	            $fecha = date('Y-m-d H:i:s', strtotime($fila['fecha']));
+	            include ("sis/tiempo_transcurrido.php");
+
+
+	        }
+
+	        //alerta y vibración si el pedido lleva menos de 10 segundos
+	        if ($segundos_transcurridos < 13)
+	        {               
+	            ?>
+
+	            <audio autoplay controls style="display: none;">
+	              <source src="alerta.mp3" type="audio/mpeg">
+	            </audio>
+
+	            <script>
+	            if (window.navigator && window.navigator.vibrate) {
+	                   navigator.vibrate([100, 100, 100, 100, 100, 100, 100, 100, 100, 100]);
+	            }
+	            </script>
+
+
+	            <script type="text/javascript">
+	                window.onload = function(){
+	                    Push.Permission.request();
+	                }
+
+	                Push.create('Nuevo Pedido', {
+	                    body: '<?php echo ucfirst("$ubicacion_texto"); ?>\nEnviado por <?php echo ucfirst("$atendido"); ?>\nHace <?php echo "$tiempo_transcurrido"; ?>',
+	                    icon: 'https://www.mangoapp.co/a-recursos/img/sis/alerta.png',
+	                    link: 'zonas_entregas_ubicaciones.php?zona_id=<?php echo "$zona_id";?>&zona=<?php echo "$zona";?>',
+	                    timeout: 5000,
+	                    vibrate: [200, 100, 200, 100, 200, 100, 200],
+	                    onClick: function () {
+	                        window.location = "zonas_entregas_ubicaciones.php?zona_id=<?php echo "$zona_id";?>&zona=<?php echo "$zona";?>";
+	                        this.close();
+	                    }
+	                    
+	                });
+	                
+	            </script>
 
-            <?php
-            
-        }
+	            <?php
+	            
+	        }
 
-        if ($segundos_transcurridos < 26)
-        {
-            $item_color_fondo = "#FFEB3B";
-        }
-        else
-        {
-            $item_color_fondo = "#fff";
-        }
-                                
-        ?>        
+	        if ($segundos_transcurridos < 26)
+	        {
+	            $item_color_fondo = "#fff";
+	        }
+	        else
+	        {
+	            $item_color_fondo = "#fff";
+	        }
+	                                
+	        ?>        
 
-        
+	        
 
-            <section class="rdm-tarjeta--zona">
-                    
-                <div class="rdm-tarjeta--primario-largo">
-                    <h1 class="rdm-tarjeta--titulo-largo"><?php echo ucfirst("$ubicacion_texto"); ?></h1>
-                    <h2 class="rdm-tarjeta--subtitulo-largo">Hace <?php echo "$tiempo_transcurrido"; ?></h2>
-                    <h2 class="rdm-tarjeta--subtitulo-largo"><b><?php echo ucfirst("$atendido"); ?></b></h2>
-                    
-                    <p style="color: #F44336"><b><?php echo ucfirst("$observaciones"); ?></b></p>
-                </div>
+	            <section class="rdm-tarjeta--zona" style="background-color: <?php echo ($item_color_fondo); ?>">
+	                    
+	                <div class="rdm-tarjeta--primario-largo" style="margin-bottom: -1em; ">
+	                    <h1 class="rdm-tarjeta--titulo-largo"><?php echo ucfirst("$ubicacion_texto"); ?></h1>
+	                    <h2 class="rdm-tarjeta--subtitulo-largo"><?php echo ucfirst("$atendido"); ?></h2>
+	                    <h2 class="rdm-tarjeta--subtitulo-largo">Hace <?php echo "$tiempo_transcurrido"; ?></h2>
+	                </div>
 
 
 
-                <div class="rdm-tarjeta--cuerpo">
+	                <div class="rdm-tarjeta--cuerpo">
 
-                --------------------------          
+	                	<p style="color: #F44336"><em><?php echo ucfirst("$observaciones"); ?></em></p>
 
-                    <?php 
-                    //consulto y muestro los productos o servicios pedidos en esta zona
-                    $consulta_pro = $conexion->query("SELECT distinct producto_id FROM ventas_productos WHERE ubicacion_id = '$ubicacion_id' and local = '$sesion_local_id' and venta_id = '$venta_id' and (estado = 'confirmado' or estado = 'entregado') and zona = '$zona_id' ORDER BY fecha, ubicacion ASC");
+	                    <?php 
+	                    //consulto y muestro los productos o servicios pedidos en esta zona
+	                    $consulta_pro_dis = $conexion->query("SELECT distinct producto_id FROM ventas_productos WHERE ubicacion_id = '$ubicacion_id' and local = '$sesion_local_id' and venta_id = '$venta_id' and (estado = 'confirmado' or estado = 'entregado') and zona = '$zona_id' ORDER BY fecha, ubicacion ASC");
 
-                    while ($fila_pro = $consulta_pro->fetch_assoc())
-                    {
-                        $producto_id = $fila_pro['producto_id'];
+	                    while ($fila_pro_dis = $consulta_pro_dis->fetch_assoc())
+	                    {
+	                    	$producto_id = $fila_pro_dis['producto_id'];
 
-                        //consulto los datos del producto en la venta
-                        $consulta_producto_venta = $conexion->query("SELECT * FROM ventas_productos WHERE id = '$producto_id'");           
+	                    	//consulto los datos del producto
+	                        $consulta_producto = $conexion->query("SELECT * FROM ventas_productos WHERE producto_id = '$producto_id' and ubicacion_id = '$ubicacion_id' and local = '$sesion_local_id' and venta_id = '$venta_id' and (estado = 'confirmado' or estado = 'entregado') and zona = '$zona_id' ORDER BY fecha DESC");
 
-                        if ($fila_producto_venta = $consulta_producto_venta->fetch_assoc()) 
-                        {
-                            $producto_id = $fila_producto_venta['id'];
-                            $producto = $fila_producto_venta['producto'];
-                        }
+	                        if ($fila = $consulta_producto->fetch_assoc()) 
+	                        {
+	                            $producto_id = $fila['producto_id'];
+	                            $producto = $fila['producto'];
+	                            $categoria = $fila['categoria'];
+	                            $estado = $fila['estado'];
 
+	                            //entreo o devuelto segun su estado
+	                            if ($estado == "entregado")
+	                            {
+	                            	$entregar_uno = "no";
+	                            } 
+	                            else 
+	                            {
+	                            	$entregar_uno = "si";
+	                            }
 
+					            //consulto el total de productos agregados
+						        $consulta_total = $conexion->query("SELECT * FROM ventas_productos WHERE producto_id = '$producto_id' and ubicacion_id = '$ubicacion_id' and local = '$sesion_local_id' and venta_id = '$venta_id' and (estado = 'confirmado') and zona = '$zona_id'");
+						        $productos_total = $consulta_total->num_rows;
 
-                        //consulto los datos del producto
-                        $consulta_producto = $conexion->query("SELECT * FROM productos WHERE id = '$producto_id'");           
 
-                        if ($fila = $consulta_producto->fetch_assoc()) 
-                        {
-                            $producto_id = $fila['id'];
-                            $producto = $fila['producto'];
-                        }
+						        if ($estado == "entregado")
+		                        {
+		                            $texto_pedido = '<span style="color: #ccc;"><b><i class="zmdi zmdi-check"></i> ' . ucfirst($producto) . ' x ' . ucfirst($productos_total) . '</b></span>';                    
+		                        }
+		                        else
+		                        {
+		                            $texto_pedido = '<span><b>' . ucfirst($producto) . ' x ' . ucfirst($productos_total) . '</b></span>';
+		                        }	
 
-                        if ($estado == "entregado")
-                        {
-                            $texto_pedido = '<p style="color: #009688"><strike>' . ucfirst($producto) . ' </strike></p>';
-                        }
-                        else
-                        {
-                            $texto_pedido = '<p style="color: none"><b>' . ucfirst($producto) . '</b></p>';
-                        }                        
+	                        }
 
-                        ?>
+	                                                
 
-                        <a href="zonas_entregas_ubicaciones.php?entregar_uno=si&venta_id=<?php echo $venta_id ?>&id=<?php echo $id ?>&ubicacion_id=<?php echo $ubicacion_id ?>&ubicacion=<?php echo $ubicacion ?>&zona_id=<?php echo "$zona_id";?>&zona=<?php echo "$zona";?>&atendido=<?php echo "$atendido";?>&producto=<?php echo "$producto";?>">
+	                        ?>
 
-                            <?php echo "$texto_pedido"; ?>
+	                        <a href="zonas_entregas_ubicaciones.php?entregar_uno=<?php echo $entregar_uno ?>&venta_id=<?php echo $venta_id ?>&ubicacion_id=<?php echo $ubicacion_id ?>&ubicacion=<?php echo $ubicacion ?>&zona_id=<?php echo "$zona_id";?>&zona=<?php echo "$zona";?>&atendido=<?php echo "$atendido";?>&producto=<?php echo "$producto";?>&producto_id=<?php echo "$producto_id";?>">
 
-                        </a>
+                            	<p><?php echo "$texto_pedido"; ?></p> 
 
-                    <?php 
-                    }   
-                    ?>
+	                        </a>
 
-                    <div class="rdm-tarjeta--acciones-izquierda">
-                        <a href="zonas_entregas_ubicaciones.php?entregar=si&venta_id=<?php echo $venta_id ?>&id=<?php echo $id ?>&ubicacion_id=<?php echo $ubicacion_id ?>&ubicacion=<?php echo $ubicacion ?>&zona_id=<?php echo "$zona_id";?>&zona=<?php echo "$zona";?>&atendido=<?php echo "$atendido";?>&producto=<?php echo "$producto";?>"><button class="rdm-boton--resaltado">Pedido listo</button></a>
-                    </div>
+		                    <?php 
+		                    } 
 
 
-                </div>
 
-            </section>
 
 
+	                    
 
-        <?php
-    }
-    
-}
-?>
 
-</div>
 
 
 
 
-<div>
 
+	                      
+	                    ?>
 
-<?php
-//consulto y muestro los productos o servicios pedidos en esta zona
-$consulta = $conexion->query("SELECT distinct zona FROM ventas_productos WHERE zona = '$zona_id' and local = '$sesion_local_id' and estado = 'confirmado' ORDER BY fecha ASC");
+	                    <div class="rdm-tarjeta--acciones-izquierda">            
+	                        <a href="zonas_entregas_ubicaciones.php?entregar=si&venta_id=<?php echo $venta_id ?>&id=<?php echo $id ?>&ubicacion_id=<?php echo $ubicacion_id ?>&ubicacion=<?php echo $ubicacion ?>&zona_id=<?php echo "$zona_id";?>&zona=<?php echo "$zona";?>&atendido=<?php echo "$atendido";?>&producto=<?php echo "$producto";?>"><button class="rdm-boton--resaltado">Pedido listo</button></a>
+	                    </div>
 
-if ($consulta->num_rows == 0)
-{
-    //header("location:zonas_entregas_entrada.php");
 
-    ?>
+	                </div>
 
-    
+	            </section>
 
-    <?php
-}
-else                 
-{
-    
-    while ($fila = $consulta->fetch_assoc())
-    {                        
-        $zona = $fila['zona'];
 
-        //consulto los datos de la zona
-        $consulta_zona = $conexion->query("SELECT * FROM zonas_entregas WHERE id = '$zona'");           
 
-        if ($fila_zona = $consulta_zona->fetch_assoc()) 
-        {
-            $zona_id = $fila_zona['id'];
-            $zona = $fila_zona['zona'];
-        }     
-                                
-        ?>        
+	        <?php
+	    }
+	    
+	}
+	?>
 
-        
 
-            <section class="rdm-tarjeta--zona">
-                    
-                <div class="rdm-tarjeta--primario-largo">
-                    <h1 class="rdm-tarjeta--titulo-largo">Resúmen <?php echo ucfirst("$zona"); ?></h1>
-                </div>
 
-                <div class="rdm-tarjeta--cuerpo">
-                    <?php 
-                    //consulto y muestro los productos o servicios pedidos en esta zona
-                    $consulta_pro = $conexion->query("SELECT distinct producto_id FROM ventas_productos WHERE zona = '$zona_id' and local = '$sesion_local_id' and estado = 'confirmado' ORDER BY fecha, ubicacion ASC");
 
-                    while ($fila_pro = $consulta_pro->fetch_assoc())
-                    {
-                        $producto_id = $fila_pro['producto_id'];                       
+	</div>
 
-                        //consulto los datos del producto
-                        $consulta_producto = $conexion->query("SELECT * FROM productos WHERE id = '$producto_id'");           
 
-                        if ($fila = $consulta_producto->fetch_assoc()) 
-                        {
-                            $producto_id = $fila['id'];
-                            $producto = $fila['producto'];
-                        }
 
-                        //consulto el total de productos
-                        $consulta_productos = $conexion->query("SELECT * FROM ventas_productos WHERE zona = '$zona_id' and local = '$sesion_local_id' and estado = 'confirmado' and producto_id = '$producto_id'");
-                        $total_productos = $consulta_productos->num_rows;
 
-                        ?>
 
-                        <p><b><?php echo "$total_productos"; ?></b> <?php echo ucfirst($producto) ?></p>
-
-                    <?php 
-                    }   
-                    ?>
-
-
-                </div>
-
-            </section>
-
-
-
-        <?php
-    }
-    
-}
-?>
-
-</div>
-
-</div>
    
 
 </main>

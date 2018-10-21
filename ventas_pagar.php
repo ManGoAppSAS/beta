@@ -57,6 +57,8 @@ if(isset($_POST['pagar_propina'])) $pagar_propina = $_POST['pagar_propina']; els
 if(isset($_POST['propina'])) $propina = $_POST['propina']; elseif(isset($_GET['propina'])) $propina = $_GET['propina']; else $propina = null;
 if(isset($_POST['dinero'])) $dinero = $_POST['dinero']; elseif(isset($_GET['dinero'])) $dinero = $_GET['dinero']; else $dinero = null;
 
+if(isset($_POST['notificacion_descuento'])) $notificacion_descuento = $_POST['notificacion_descuento']; elseif(isset($_GET['notificacion_descuento'])) $notificacion_descuento = $_GET['notificacion_descuento']; else $notificacion_descuento = null;
+
 if(isset($_POST['mensaje'])) $mensaje = $_POST['mensaje']; elseif(isset($_GET['mensaje'])) $mensaje = $_GET['mensaje']; else $mensaje = null;
 if(isset($_POST['body_snack'])) $body_snack = $_POST['body_snack']; elseif(isset($_GET['body_snack'])) $body_snack = $_GET['body_snack']; else $body_snack = null;
 if(isset($_POST['mensaje_tema'])) $mensaje_tema = $_POST['mensaje_tema']; elseif(isset($_GET['mensaje_tema'])) $mensaje_tema = $_GET['mensaje_tema']; else $mensaje_tema = null;
@@ -119,6 +121,8 @@ if ($cambiar_descuento_personal == "si")
     $mensaje = 'Se cambió el descuento de <b>' . ucfirst($descuento_actual) . '</b> a <b>Personalizado</b>';
     $body_snack = 'onLoad="Snackbar()"';
     $mensaje_tema = "aviso";
+
+    $notificacion_descuento = "si";
 }
 ?>
 
@@ -147,8 +151,27 @@ if ($cambiar_descuento == "si")
     $mensaje = 'Se cambió el descuento de <b>' . ucfirst($descuento_actual) . '</b> a <b>' . ucfirst($descuento_nuevo) . '</b>';
     $body_snack = 'onLoad="Snackbar()"';
     $mensaje_tema = "aviso";
+
+    $notificacion_descuento = "si";
 }
 ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <?php
 //consulto los datos de la venta
@@ -437,6 +460,95 @@ if (strlen($venta_total) == 7 )
 }
 ?>
 
+
+
+
+
+<?php 
+//funcion de PHPMailer
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'phpmailer/src/PHPMailer.php';
+require 'phpmailer/src/SMTP.php';
+
+//si es solicitado envio el correo
+if ($notificacion_descuento == "si")
+{
+    $mail = new PHPMailer(true);                              
+    try {
+        //configuracion del servidor que envia el correo
+        $mail->SMTPDebug = 0;                                 
+        $mail->isSMTP();                                      
+        $mail->Host = 'mangoapp.co;mail.mangoapp.co';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'notificaciones@mangoapp.co';
+        $mail->Password = 'renacimiento';
+        $mail->SMTPSecure = 'ssl';
+        $mail->Port = 465;
+
+        //Enviado por
+        $mail->setFrom('notificaciones@mangoapp.co', ucfirst($sesion_local));
+
+        //consulto los correos de los usuarios tipo socio para enviarles el correo
+        $consulta_usuarios = $conexion->query("SELECT * FROM usuarios WHERE tipo = 'socio'");
+
+        if ($consulta_usuarios->num_rows == 0)
+        {
+
+        }
+        else
+        {
+            while ($fila_usuarios = $consulta_usuarios->fetch_assoc())
+            {
+                $correo = $fila_usuarios['correo'];
+
+                //Destinatario
+                $mail->addAddress($correo);
+            }
+        }
+
+
+        //Responder a
+        $mail->addReplyTo('notificaciones@mangoapp.co', 'ManGo! App');        
+
+        //Contenido del correo
+        $mail->isHTML(true);
+
+        //Asunto
+        $asunto = "Descuento " . $descuento_nuevo_porcentaje . "% en " . ucfirst($ubicacion) . " por " . ucfirst($sesion_nombres) . " " . ucfirst($sesion_apellidos);
+
+        //Cuerpo
+        $cuerpo = "<b>Venta No</b>: " . $venta_id . "</div><br>";
+        $cuerpo .= "<b>Ubicación</b>: " . ucfirst($ubicacion) . "</div><br>";
+        $cuerpo .= "<b>Valor de la venta</b>: $" . number_format($precio_neto_total, 0, ",", ".") . "</div><br>";
+        $cuerpo .= "<b>Descuento</b>: " . ucfirst($descuento_actual) ."</div><br>";
+        $cuerpo .= "<b>Valor del descuento</b>: $" . number_format($descuento_valor, 0, ",", ".") . " (" . $venta_descuento_porcentaje . "%)</div><br>";
+        $cuerpo .= "<b>Tipo de pago</b>: " . ucfirst($tipo_pago) . "</div><br>";
+        $cuerpo .= "<b>Agregado por</b>: " . ucfirst($sesion_nombres) . " " . ucfirst($sesion_apellidos) . "</div><br>";
+        $cuerpo .= "<b>Local</b>: " . ucfirst($sesion_local) . "</div><br>";
+        $cuerpo .= "<b>Fecha</b>: " . ucfirst($ahora) . "</div><br>";
+
+        //asigno asunto y cuerpo a las variables de la funcion
+        $mail->Subject = $asunto;
+        $mail->Body    = $cuerpo;
+
+        // Activo condificacción utf-8
+        $mail->CharSet = 'UTF-8';
+
+        //ejecuto la funcion y envio el correo
+        $mail->send();
+    
+    }
+    catch (Exception $e)
+    {
+        echo 'Mensaje no pudo ser enviado: ', $mail->ErrorInfo;
+    }
+}  
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -518,7 +630,7 @@ if (strlen($venta_total) == 7 )
                 {
                 ?>
                 
-                <p><input class="rdm-formularios--input-grande" type="<?php echo "$caja_tipo";?>" id="dinero" name="dinero" value="" placeholder="Dinero entregado" ></p>                
+                <p><input class="rdm-formularios--input-grande" type="<?php echo "$caja_tipo";?>" id="dinero" name="dinero" value="" placeholder="Dinero entregado" ></p>
 
                 <?php 
                 }

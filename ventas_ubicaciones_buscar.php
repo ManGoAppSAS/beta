@@ -102,14 +102,7 @@ if (isset($consultaBusqueda))
                             }
                             else
                             {
-                                if ($tipo == "domicilio")
-                                {
-                                    $imagen = '<div class="rdm-lista--icono"><i '.$estado_color.' class="zmdi zmdi-bike zmdi-hc-2x"></i></div>';
-                                }
-                                else
-                                {
-                                    $imagen = '<div class="rdm-lista--icono"><i '.$estado_color.' class="zmdi zmdi-seat zmdi-hc-2x"></i></div>';
-                                }
+                                $imagen = '<div class="rdm-lista--icono"><i '.$estado_color.' class="zmdi zmdi-seat zmdi-hc-2x"></i></div>';
                             }
                         }
                     }
@@ -138,8 +131,8 @@ if (isset($consultaBusqueda))
                         $apellidos = $fila['apellidos'];
                         
                         //tomo la primer palabra de las cadenas
-                        $nombres = strtok($nombres, " ");
-                        $apellidos = strtok($apellidos, " ");
+                        $nombres = ucfirst(strtok($nombres, " "));
+                        $apellidos = ucfirst(strtok($apellidos, " "));
                     }
 
                     $atendido = "Atendido por $nombres $apellidos";
@@ -153,7 +146,7 @@ if (isset($consultaBusqueda))
 
                     if ($fila_cliente = $consulta_cliente->fetch_assoc()) 
                     {
-                        $ubicacion_texto = ucwords($fila_cliente['nombre']);
+                        $ubicacion_texto = ucfirst($fila_cliente['nombre']);
                     }
                     else
                     {
@@ -167,7 +160,8 @@ if (isset($consultaBusqueda))
 
                 if ($consulta_venta_total->num_rows != 0)
                 {
-
+                    $venta_total = 0;
+                    
                     while ($fila_venta_total = $consulta_venta_total->fetch_assoc())
                     {
                         $precio = $fila_venta_total['precio_final'];
@@ -178,7 +172,7 @@ if (isset($consultaBusqueda))
                 }
                 else
                 {
-                   $venta_total = "$ 0"; 
+                   $venta_total = "$ 0,00"; 
                 }
 
                 $estilo_sencillo = "";
@@ -195,8 +189,9 @@ if (isset($consultaBusqueda))
                 $tiempo_transcurrido = "";
                 $venta_total = ""; 
                 $atendido = "libre";
-                $estilo_sencillo = "-sencillo";
             }
+
+
 
             if ($tipo == "persona")
             {
