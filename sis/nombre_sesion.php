@@ -37,13 +37,4 @@ $conexion = new mysqli($conexion_host, $conexion_user, $conexion_pass, $conexion
 //$conexion_pass = "8359856";
 //$conexion2_bd = "administrativo";
 //fin de la conexión con la base de datos
-
-//conexion local
-$conexion2_host = "localhost";
-$conexion2_user = "root";
-$conexion2_pass = "";
-$conexion2_bd = "administrativo";
-//fin de la conexión local
-
-$conexion2 = new mysqli($conexion2_host, $conexion2_user, $conexion2_pass, $conexion2_bd);
 ?>
